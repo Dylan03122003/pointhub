@@ -5,15 +5,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Question;
 import util.Authentication;
-import util.MyDispatcher;
 
 import java.io.IOException;
 
-import org.apache.catalina.User;
-
 import DAO.QuestionDAO;
-import DAO.UserDAO;
 
 public class CreateQuestionController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -30,8 +27,12 @@ public class CreateQuestionController extends HttpServlet {
 		int[] tagIDs = { 1, 2 };
 		String title = request.getParameter("title");
 		String questionContent = request.getParameter("question_content");
-		
-	
+
+		Question question = new Question(Authentication.getCurrentUserID(request), questionContent, title);
+
+		questionDAO.createQuestion(question, tagIDs);
+
+		response.sendRedirect("index.jsp");
 	}
 
 }

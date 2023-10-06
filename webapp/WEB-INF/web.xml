@@ -49,4 +49,24 @@
     <servlet-name>LogoutController</servlet-name>
     <url-pattern>/log-out</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>NewestQuestionController</display-name>
+    <servlet-name>NewestQuestionController</servlet-name>
+    <servlet-class>controller.NewestQuestionController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NewestQuestionController</servlet-name>
+    <url-pattern>/newest-questions</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>QuestionTabController</display-name>
+    <servlet-name>QuestionTabController</servlet-name>
+    <servlet-class>controller.QuestionTabController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>QuestionTabController</servlet-name>
+    <url-pattern>/question-tab</url-pattern>
+  </servlet-mapping>
 </web-app>

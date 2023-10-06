@@ -9,6 +9,10 @@
 <body>
 	<jsp:include page="navbar.jsp" />
 
-	<h1>Hello</h1>
+	<form action="question-tab" method="post">
+		<input type="submit" value="newest" name="tab" /> <input type="submit"
+			value="top" name="tab" /> <input type="submit" value="unanswered"
+			name="tab" />
+	</form>
 </body>
 </html>

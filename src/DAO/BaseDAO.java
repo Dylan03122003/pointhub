@@ -31,7 +31,6 @@ public class BaseDAO {
 	}
 
 	protected ResultSet executeQuery(String query, Object... params) throws SQLException {
-		System.out.println(params.toString());
 		PreparedStatement preparedStatement = connection.prepareStatement(query);
 		for (int i = 0; i < params.length; i++) {
 			preparedStatement.setObject(i + 1, params[i]);
