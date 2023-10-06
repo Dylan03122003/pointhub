@@ -1,5 +1,9 @@
+<%@page import="DAO.TagDAO"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,6 +29,10 @@
 <title>Post Edit</title>
 </head>
 
+<%
+TagDAO tagDAO = new TagDAO();
+ArrayList<String> tags = tagDAO.getAllTags();
+%>
 
 <body>
 	<jsp:include page="navbar.jsp" />
@@ -34,13 +42,9 @@
 			<form class="content" action="create-question" method="post">
 				<select name="tag" id="">
 					<option value="">Choose categories</option>
-					<option value="java">Java</option>
-					<option value="javascript">JavaScript</option>
-					<option value="reactjs">ReactJS</option>
-					<option value="c">C/C++</option>
-					<option value="c#">C#</option>
-					<option value="database">Database</option>
-					<option value="algorithm">Algorithm</option>
+					<c:forEach var="tag" items="<%=tags%>">
+						<option value="${tag}">${tag}</option>
+					</c:forEach>
 				</select> <input name="title" type="text"
 					placeholder="Type catching attention title" />
 
@@ -58,3 +62,4 @@
 	</div>
 </body>
 </html>
+

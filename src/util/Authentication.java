@@ -1,5 +1,6 @@
 package util;
 
+import DAO.UserDAO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -48,6 +49,24 @@ public class Authentication {
 		} else {
 			return true;
 		}
+	}
+
+	public static int getCurrentUserID(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		String email = null;
+
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if ("user_cookie".equals(cookie.getName())) {
+					email = cookie.getValue();
+					break;
+				}
+			}
+		}
+
+		UserDAO userDAO = new UserDAO();
+		return userDAO.getUserIDByEmail(email);
+
 	}
 
 }
