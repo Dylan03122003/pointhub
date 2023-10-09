@@ -57,4 +57,13 @@ public class BaseDAO {
 
 		return -1;
 	}
+
+	protected int executeUpdate(String query, Object... params) throws SQLException {
+		PreparedStatement preparedStatement = connection.prepareStatement(query,
+				PreparedStatement.RETURN_GENERATED_KEYS);
+		for (int i = 0; i < params.length; i++) {
+			preparedStatement.setObject(i + 1, params[i]);
+		}
+		return preparedStatement.executeUpdate();
+	}
 }

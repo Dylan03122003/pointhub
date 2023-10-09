@@ -32,7 +32,7 @@ public class CreateQuestionController extends HttpServlet {
 
 		questionDAO.createQuestion(question, tagIDs);
 
-		response.sendRedirect("index.jsp");
+		response.sendRedirect("newest-questions");
 	}
 
 }

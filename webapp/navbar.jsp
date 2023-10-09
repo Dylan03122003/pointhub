@@ -3,6 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ page import="model.User"%>
+<%@ page import="model.Question"%>
+
 <%@ page import="util.Authentication"%>
 
 <!DOCTYPE html>
@@ -12,53 +14,72 @@
 <title>Insert title here</title>
 
 <style>
-/* Basic styling for the navbar */
-ul.navbar {
-	list-style-type: none;
-	margin-bottom: 50px;
-	padding: 0;
-	background-color: #333; /* Background color for the navbar */
-	overflow: hidden;
+/* Reset default list styles and remove list bullets */
+.navbar-menu {
+	list-style: none;
+	padding: 20px;
+	margin: 0;
 }
 
-/* Style for navbar items */
-ul.navbar li {
-	float: left;
+/* Style navbar items */
+.navbar-menu li {
+	display: inline-block;
+	margin-right: 15px;
 }
 
-/* Style for navbar links */
-ul.navbar li a {
-	display: block;
-	color: white; /* Text color for navbar links */
-	text-align: center;
-	padding: 14px 16px; /* Spacing around navbar links */
+/* Style navbar links */
+.navbar-menu li a {
 	text-decoration: none;
+	color: #333;
+	font-weight: bold;
+	padding: 10px;
+	border-radius: 5px;
+	transition: background-color 0.3s, color 0.3s;
 }
 
-/* Change the link color when hovering over it */
-ul.navbar li a:hover {
-	background-color: #555; /* Background color when hovering */
+/* Hover effect for navbar links */
+.navbar-menu li a:hover {
+	background-color: #007bff;
+	color: #fff;
+}
+
+/* Style the username element */
+.username {
+	color: #007bff;
+	font-weight: bold;
 }
 </style>
 </head>
 
 <%
 boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
+String username = (String) Authentication.getCurrentUsername(request);
+
+
+
 %>
 
 <body>
-	<ul class="navbar">
-		<li><a href="/PointHubWebsite">Home</a></li>
+	<nav class="navbar">
+		<ul class="navbar-menu">
+			<li><a href="/PointHubWebsite">Home</a></li>
 
-		<c:if test="<%=!isLoggedIn%>">
-			<li><a href="log-in.jsp">Log in</a></li>
-			<li><a href="sign-up.jsp">Sign up</a></li>
-		</c:if>
+			<c:if test="<%=!isLoggedIn%>">
+				<li><a href="log-in.jsp">Log in</a></li>
+				<li><a href="sign-up.jsp">Sign up</a></li>
+			</c:if>
 
-		<c:if test="<%=isLoggedIn%>">
-			<li><a href="create-question.jsp">Ask a question</a></li>
-			<li><a href="log-out">Logout</a></li>
-		</c:if>
-	</ul>
+			<c:if test="<%=isLoggedIn%>">
+				<li><a href="create-question.jsp">Ask a question</a></li>
+				<li><a href="log-out">Logout</a></li>
+			</c:if>
+
+			<c:if test="<%=username != null%>">
+				<li class="username"><%=username%></li>
+			</c:if>
+		</ul>
+	</nav>
+
+
 </body>
 </html>

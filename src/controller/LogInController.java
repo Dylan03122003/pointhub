@@ -38,7 +38,7 @@ public class LogInController extends HttpServlet {
 			MyDispatcher.dispatch(request, response, "/log-in.jsp");
 		} else {
 			Authentication.setUserCookie(response, email);
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("newest-questions");
 		}
 
 	}

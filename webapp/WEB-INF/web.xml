@@ -2,8 +2,8 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" id="WebApp_ID" version="5.0">
   <display-name>PointHubWebsite</display-name>
   <welcome-file-list>
+    <welcome-file>newest-questions</welcome-file>
     <welcome-file>index.jsp</welcome-file>
-    <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.jsp</welcome-file>
@@ -68,5 +68,47 @@
   <servlet-mapping>
     <servlet-name>QuestionTabController</servlet-name>
     <url-pattern>/question-tab</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>QuestionDetailController</display-name>
+    <servlet-name>QuestionDetailController</servlet-name>
+    <servlet-class>controller.QuestionDetailController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>QuestionDetailController</servlet-name>
+    <url-pattern>/question-detail</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CommentController</display-name>
+    <servlet-name>CommentController</servlet-name>
+    <servlet-class>controller.CommentController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CommentController</servlet-name>
+    <url-pattern>/create-comment</url-pattern>
+    <url-pattern>/load-comment</url-pattern>
+    <url-pattern>/show-replies</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>VoteController</display-name>
+    <servlet-name>VoteController</servlet-name>
+    <servlet-class>controller.VoteController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VoteController</servlet-name>
+    <url-pattern>/vote-question</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ReplyController</display-name>
+    <servlet-name>ReplyController</servlet-name>
+    <servlet-class>controller.ReplyController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReplyController</servlet-name>
+    <url-pattern>/reply-comment</url-pattern>
   </servlet-mapping>
 </web-app>

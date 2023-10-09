@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Question;
+import util.MyDispatcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ public class NewestQuestionController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ArrayList<Question> questions = questionDAO.getNewestQuestions();
-		System.out.println(questions);
+		
+		request.setAttribute("question_list", questions);
+		MyDispatcher.dispatch(request, response, "/index.jsp");
 	}
 
 }

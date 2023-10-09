@@ -51,7 +51,7 @@ public class Authentication {
 		}
 	}
 
-	public static int getCurrentUserID(HttpServletRequest request) {
+	public static String getCurrentEmail(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
 		String email = null;
 
@@ -64,9 +64,20 @@ public class Authentication {
 			}
 		}
 
-		UserDAO userDAO = new UserDAO();
-		return userDAO.getUserIDByEmail(email);
+		return email;
+	}
 
+	public static int getCurrentUserID(HttpServletRequest request) {
+		String currentEmail = Authentication.getCurrentEmail(request);
+		UserDAO userDAO = new UserDAO();
+		return userDAO.getUserIDByEmail(currentEmail);
+
+	}
+
+	public static String getCurrentUsername(HttpServletRequest request) {
+		String currentEmail = Authentication.getCurrentEmail(request);
+		UserDAO userDAO = new UserDAO();
+		return userDAO.getUsernameByEmail(currentEmail);
 	}
 
 }
