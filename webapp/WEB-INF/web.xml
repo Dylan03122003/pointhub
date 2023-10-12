@@ -111,4 +111,24 @@
     <servlet-name>ReplyController</servlet-name>
     <url-pattern>/reply-comment</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>QuestionController</display-name>
+    <servlet-name>QuestionController</servlet-name>
+    <servlet-class>controller.QuestionController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>QuestionController</servlet-name>
+    <url-pattern>/report-question</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ReportController</display-name>
+    <servlet-name>ReportController</servlet-name>
+    <servlet-class>controller.ReportController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReportController</servlet-name>
+    <url-pattern>/question-reports</url-pattern>
+  </servlet-mapping>
 </web-app>

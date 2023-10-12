@@ -25,10 +25,11 @@ public class Question {
 		this.createdAt = createdAt;
 	}
 
-	public Question(int userID, String questionContent, String title) {
+	public Question(int userID, String questionContent, String title, String[] tagContents) {
 		this.userID = userID;
 		this.questionContent = questionContent;
 		this.title = title;
+		this.tagContents =  tagContents;
 	}
 
 	public Question(int userID, int questionID, String username, Date createdAt, String title, String questionContent,
@@ -54,6 +55,11 @@ public class Question {
 		this.upvotes = upvotes;
 		this.downvotes = downvotes;
 		this.isBookmarked = isBookmarked;
+	}
+	
+	
+
+	public Question() {
 	}
 
 	public int getQuestionID() {

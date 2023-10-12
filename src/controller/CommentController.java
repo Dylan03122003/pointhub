@@ -59,9 +59,11 @@ public class CommentController extends HttpServlet {
 		HttpSession session = request.getSession();
 		Question question = (Question) session
 				.getAttribute(StateName.QUESTION_DETAIL);
+		
 		int replyCommentSize = question.getReplyCommentSize(commentID);
+		
 		ArrayList<ReplyComment> replyComments = commentDAO
-				.getReplyComments(commentID, replyCommentSize + 1);
+				.getReplyComments(commentID, replyCommentSize + StateName.NUMBER_OF_REPLIES);
 		question.setReplyComments(commentID, replyComments);
 
 		session.setAttribute(StateName.QUESTION_DETAIL, question);

@@ -8,21 +8,17 @@ import java.util.ArrayList;
 
 import model.Comment;
 import model.Question;
+import model.QuestionReport;
 import model.ReplyComment;
 
 public class QuestionDAO extends BaseDAO {
-	public void createQuestion(Question question, int[] tagIDs) {
-		String createQuestionQuery = "INSERT INTO questions (user_id, question_content, title, created_at) VALUES (?, ?, ?, NOW());";
-		String insertQuestionTagsQuery = "INSERT INTO question_tags (question_id, tag_id) VALUES (?, ?);";
+	public void createQuestion(Question question) {
+		String createQuestionQuery = "INSERT INTO questions (user_id, question_content, title, tags, created_at) VALUES (?, ?, ?, ?, NOW());";
 
 		try {
-			int questionID = executeInsert(createQuestionQuery,
-					question.getUserID(), question.getQuestionContent(),
-					question.getTitle());
-
-			for (int tagID : tagIDs) {
-				executeInsert(insertQuestionTagsQuery, questionID, tagID);
-			}
+			executeUpdate(createQuestionQuery, question.getUserID(),
+					question.getQuestionContent(), question.getTitle(),
+					String.join(",", question.getTagContents()));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -33,10 +29,12 @@ public class QuestionDAO extends BaseDAO {
 
 		ArrayList<Question> questions = new ArrayList<Question>();
 
-		String query = "SELECT q.question_id, u.user_id, u.username, q.created_at AS createdAt,  q.title, q.question_content AS questionContent, GROUP_CONCAT(t.tag_content) AS tag_content "
-				+ "FROM  users u JOIN   questions q ON u.user_id = q.user_id LEFT JOIN "
-				+ "    question_tags qt ON q.question_id = qt.question_id LEFT JOIN "
-				+ "    tags t ON qt.tag_id = t.tag_id GROUP BY q.question_id ORDER BY q.created_at DESC;";
+		String query = "SELECT "
+				+ "q.question_id, u.user_id, u.username, q.created_at AS createdAt, "
+				+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
+				+ "FROM questions q JOIN users u ON q.user_id = u.user_id "
+				+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
+				+ "ORDER BY createdAt DESC";
 		try {
 			ResultSet result = executeQuery(query);
 			while (result.next()) {
@@ -68,19 +66,20 @@ public class QuestionDAO extends BaseDAO {
 		Question question = null;
 		// ArrayList<Comment> comments = new ArrayList<Comment>();
 
-		String query = "SELECT u.username AS username, q.created_at AS createdAt, q.title AS title, "
-				+ "q.question_content AS questionContent, GROUP_CONCAT(t.tag_content) AS tagContents, "
-				+ "IFNULL(upvotes, 0) AS upvotes, IFNULL(downvotes, 0) AS downvotes, EXISTS ( "
-				+ "    SELECT 1  FROM bookmarks b  WHERE b.user_id = ? AND b.question_id = q.question_id "
-				+ ") AS isBookmarked FROM questions q JOIN users u ON q.user_id = u.user_id "
-				+ "LEFT JOIN question_tags qt ON q.question_id = qt.question_id LEFT JOIN "
-				+ "tags t ON qt.tag_id = t.tag_id LEFT JOIN ( "
-				+ "    SELECT question_id, SUM(CASE WHEN vote_type = 'upvote' THEN 1 ELSE 0 END) AS upvotes "
-				+ "    FROM votes_question GROUP BY question_id "
-				+ ") AS upvote_counts ON q.question_id = upvote_counts.question_id LEFT JOIN ( "
-				+ "    SELECT question_id, SUM(CASE WHEN vote_type = 'downvote' THEN 1 ELSE 0 END) AS downvotes "
-				+ "    FROM votes_question  GROUP BY question_id ) AS downvote_counts ON q.question_id = "
-				+ " downvote_counts.question_id WHERE q.question_id = ?";
+		String query = "SELECT " + "u.username AS username, "
+				+ "q.created_at AS createdAt, " + "q.title AS title, "
+				+ "q.question_content AS questionContent, "
+				+ "q.tags AS tagContents, " + "IFNULL(upvotes, 0) AS upvotes, "
+				+ "IFNULL(downvotes, 0) AS downvotes, " + "EXISTS ("
+				+ "    SELECT 1 " + "    FROM bookmarks b "
+				+ "    WHERE b.user_id = ? "
+				+ "    AND b.question_id = q.question_id" + ") AS isBookmarked "
+				+ "FROM questions q " + "JOIN users u ON q.user_id = u.user_id "
+				+ "LEFT JOIN (SELECT question_id, SUM(CASE WHEN vote_type = 'upvote' THEN 1 ELSE 0 END) AS upvotes "
+				+ "           FROM votes_question GROUP BY question_id) AS upvote_counts ON q.question_id = upvote_counts.question_id "
+				+ "LEFT JOIN (SELECT question_id, SUM(CASE WHEN vote_type = 'downvote' THEN 1 ELSE 0 END) AS downvotes "
+				+ "           FROM votes_question GROUP BY question_id) AS downvote_counts ON q.question_id = downvote_counts.question_id "
+				+ "WHERE q.question_id = ?";
 
 		try {
 			ResultSet result = executeQuery(query, userID, questionID);
@@ -113,5 +112,63 @@ public class QuestionDAO extends BaseDAO {
 		return question;
 
 	}
+
+	public void reportQuestion(int questionID, int userID,
+			String reportContent) {
+		String query = "INSERT INTO report_questions (question_id, user_id, report_content) VALUES (?, ?, ?);";
+
+		try {
+			executeUpdate(query, questionID, userID, reportContent);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public ArrayList<QuestionReport> getQuestionReports(int rowsPerPage,
+			int currentPage) {
+
+		ArrayList<QuestionReport> questionReports = new ArrayList<QuestionReport>();
+
+		String query = "SELECT rq.report_id, rq.question_id, q.title, rq.user_id, u.username, rq.report_content "
+				+ "FROM report_questions rq "
+				+ "INNER JOIN questions q ON rq.question_id = q.question_id "
+				+ "INNER JOIN users u ON rq.user_id = u.user_id "
+				+ "LIMIT ? OFFSET ?;";
+
+		try {
+			ResultSet result = executeQuery(query, rowsPerPage,
+					currentPage - 1);
+
+			while (result.next()) {
+				int reportID = result.getInt("report_id");
+				int questionID = result.getInt("question_id");
+				String title = result.getString("title");
+				int userID = result.getInt("user_id");
+				String username = result.getString("username");
+				String reportContent = result.getString("report_content");
+
+				QuestionReport questionReport = new QuestionReport(reportID,
+						questionID, title, userID, username, reportContent);
+				questionReports.add(questionReport);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return questionReports;
+	}
+
+	public int getTotalQuestionReportsRecords() {
+		return getTotalRecords("report_questions");
+	}
+
+	// public static void main(String[] args) {
+	// QuestionDAO questionDAO = new QuestionDAO();
+	// // ArrayList<Question> newestQuetions =
+	// // questionDAO.getNewestQuestions();
+	// // Question questionDetail = questionDAO.getQuestionByID(7, 9);
+	//
+	// }
 
 }

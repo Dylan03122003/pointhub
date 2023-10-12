@@ -30,8 +30,7 @@
 </head>
 
 <%
-TagDAO tagDAO = new TagDAO();
-ArrayList<String> tags = tagDAO.getAllTags();
+
 %>
 
 <body>
@@ -42,9 +41,7 @@ ArrayList<String> tags = tagDAO.getAllTags();
 			<form class="content" action="create-question" method="post">
 				<select name="tag" id="">
 					<option value="">Choose categories</option>
-					<c:forEach var="tag" items="<%=tags%>">
-						<option value="${tag}">${tag}</option>
-					</c:forEach>
+				
 				</select> <input name="title" type="text"
 					placeholder="Type catching attention title" />
 

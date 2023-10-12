@@ -9,6 +9,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+
 <title>Pointhub</title>
 
 <style>
@@ -77,8 +81,7 @@
 </head>
 
 <%
-ArrayList<Question> questions = (ArrayList<Question>) request
-		.getAttribute("question_list");
+ArrayList<Question> questions = (ArrayList<Question>) request.getAttribute("question_list");
 %>
 
 <body>

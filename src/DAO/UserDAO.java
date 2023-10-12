@@ -35,4 +35,20 @@ public class UserDAO extends BaseDAO {
 		}
 		return null;
 	}
+	
+	public String getUserRoleByEmail(String email) {
+		String query = "SELECT role FROM users WHERE email = ?;";
+
+		try {
+			ResultSet result = executeQuery(query, email);
+			if (result.next()) {
+				String role = result.getString("role");
+				return role;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

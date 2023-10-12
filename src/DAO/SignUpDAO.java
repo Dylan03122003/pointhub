@@ -9,16 +9,14 @@ public class SignUpDAO extends BaseDAO {
 	public User signUp(User user) {
 		try {
 
-			String insertUserQuery = "INSERT INTO users (email, password, username) VALUES (?, ?, ?)";
-			int userID = executeInsert(insertUserQuery, user.getEmail(), user.getPassword(),
-					user.getLastName() + user.getFirstName());
+			String insertUserQuery = "INSERT INTO users (email, password, username, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
+			int userID = executeInsert(insertUserQuery, user.getEmail(),
+					user.getPassword(),
+					user.getLastName() + user.getFirstName(),
+					user.getFirstName(), user.getLastName());
 
-			String insertProfileQuery = "INSERT INTO user_profile (user_id, first_name, last_name) VALUES (?, ?, ?)";
-
-			executeInsert(insertProfileQuery, userID, user.getFirstName(), user.getLastName());
-
-			User userWithID = new User(userID, user.getFirstName(), user.getLastName(), user.getEmail(),
-					user.getPassword());
+			user.setUserID(userID);
+			User userWithID = user;
 
 			return userWithID;
 

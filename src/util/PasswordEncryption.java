@@ -35,5 +35,9 @@ public class PasswordEncryption {
 
 		return null;
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(PasswordEncryption.encryptPassword("123"));
+	}
 
 }

@@ -30,7 +30,6 @@ public class LogInController extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-
 		boolean loginSuccess = loginDAO.logIn(email, password);
 
 		if (!loginSuccess) {

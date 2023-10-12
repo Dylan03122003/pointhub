@@ -14,7 +14,6 @@ public class LogInDAO extends BaseDAO {
 
 	public boolean logIn(String email, String password) {
 		String encryptedPassword = PasswordEncryption.encryptPassword(password);
-
 		String query = "SELECT * FROM users WHERE email = ? and password = ?;";
 
 		try {

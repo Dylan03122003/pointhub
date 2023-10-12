@@ -32,6 +32,7 @@ public class ReplyComment {
 	}
 
 	public int getReplyID() {
+		
 		return replyID;
 	}
 

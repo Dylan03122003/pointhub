@@ -24,13 +24,13 @@ public class CreateQuestionController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		int[] tagIDs = { 1, 2 };
+		String[] tagContents = { "React", "Java" };
 		String title = request.getParameter("title");
 		String questionContent = request.getParameter("question_content");
 
-		Question question = new Question(Authentication.getCurrentUserID(request), questionContent, title);
+		Question question = new Question(Authentication.getCurrentUserID(request), questionContent, title, tagContents);
 
-		questionDAO.createQuestion(question, tagIDs);
+		questionDAO.createQuestion(question);
 
 		response.sendRedirect("newest-questions");
 	}

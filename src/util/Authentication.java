@@ -7,7 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class Authentication {
 
-	public static void setUserCookie(HttpServletResponse response, String email) {
+	public static void setUserCookie(HttpServletResponse response,
+			String email) {
 
 		Cookie cookie = new Cookie("user_cookie", email);
 
@@ -18,7 +19,8 @@ public class Authentication {
 		response.addCookie(cookie);
 	}
 
-	public static void deleteUserCookie(HttpServletRequest request, HttpServletResponse response) {
+	public static void deleteUserCookie(HttpServletRequest request,
+			HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
@@ -79,5 +81,12 @@ public class Authentication {
 		UserDAO userDAO = new UserDAO();
 		return userDAO.getUsernameByEmail(currentEmail);
 	}
+
+	public static String getCurrentUserRole(HttpServletRequest request) {
+		String currentEmail = Authentication.getCurrentEmail(request);
+		UserDAO userDAO = new UserDAO();
+		return userDAO.getUserRoleByEmail(currentEmail);
+	}
+	
 
 }

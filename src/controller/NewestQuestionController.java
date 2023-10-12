@@ -21,10 +21,10 @@ public class NewestQuestionController extends HttpServlet {
 		questionDAO = new QuestionDAO();
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		ArrayList<Question> questions = questionDAO.getNewestQuestions();
-		
+
 		request.setAttribute("question_list", questions);
 		MyDispatcher.dispatch(request, response, "/index.jsp");
 	}
