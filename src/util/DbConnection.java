@@ -23,6 +23,7 @@ public class DbConnection {
 
 	public static void main(String[] args) throws SQLException {
 		DbConnection.getConnection();
+		System.out.println("Hello World!");
 	}
 
 }
