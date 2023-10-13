@@ -95,3 +95,8 @@ function showToast(message) {
 		toast.classList.add('hidden');
 	}, 3000); // Hide the toast after 3 seconds
 }
+
+// Handle report question
+
+
+

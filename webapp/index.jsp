@@ -87,11 +87,13 @@ ArrayList<Question> questions = (ArrayList<Question>) request.getAttribute("ques
 <body>
 	<jsp:include page="navbar.jsp" />
 
-	<form action="question-tab" method="post">
-		<input type="submit" value="newest" name="tab" /> <input
-			type="submit" value="top" name="tab" /> <input type="submit"
-			value="unanswered" name="tab" />
-	</form>
+
+
+	<div>
+		<a href="newest-questions">Newest Questions</a> <a
+			href="top-questions">Top Questions</a>
+
+	</div>
 
 	<div class="card-container">
 		<c:forEach var="question" items="<%=questions%>">
