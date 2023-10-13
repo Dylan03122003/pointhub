@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="css/login_style.css">
 </head>
 <body>
 
@@ -16,11 +17,21 @@
 	<c:if test="${loginStatus == 'fail'}">
 		<h1>Incorrect email or password!</h1>
 	</c:if>
-	<form action="LogInController" method="post">
-		<input type="email" name="email" placeholder="email" /> <input
-			type="password" name="password" placeholder="password" />
-		<button type="submit">Log in</button>
-	</form>
+
+	<div class="login-form">
+		<form class="login" action="LogInController" method="post">
+			<h2>We've Missed You!</h2>
+			<p>More than 150 questions are waiting for your wise suggestions!</p>
+			<div class="form-group">
+				<input type="email" name="email" required> <label>Username</label>
+			</div>
+			<div class="form-group">
+				<input id="password" type="password" name="password" required>
+				<label>Password</label>
+			</div>
+			<button id="btn-login" type="submit">Log in</button>
+		</form>
+	</div>
 
 
 
