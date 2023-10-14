@@ -10,15 +10,24 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200&family=Roboto:wght@100;300;400;500;700&family=Rubik:wght@300;400;500;600&display=swap"
+	rel="stylesheet" />
+<script src="https://kit.fontawesome.com/e28a5c6413.js"
+	crossorigin="anonymous"></script>
+<!-- <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> -->
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+	rel="stylesheet" />
 
 
 <title>Pointhub</title>
 
 <style>
-.active-topic {
-	color: red;
-}
+
 </style>
 </head>
 
@@ -31,37 +40,51 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 <body>
 	<jsp:include page="navbar.jsp" />
 
-	<div>
-		<c:forEach var="topic" items="<%=topics%>">
-			<a href="questions?activeTopic=${topic.getTopicName()}"
-				class="${topic.getTopicName().equals(activeTopic) ? 'active-topic' : ''}">${topic.getTopicName()}</a>
-		</c:forEach>
-	</div>
+	<div class="right-small-container">
+		<div class="category category-container">
+			<c:forEach var="topic" items="<%=topics%>">
+				<a href="questions?activeTopic=${topic.getTopicName()}"
+					class="${topic.getTopicName().equals(activeTopic) ? 'active-topic' : ''}">${topic.getTopicName()}</a>
+			</c:forEach>
+		</div>
 
+		<div class="list-question">
+			<c:forEach var="question" items="<%=questions%>">
 
-	<div>
-		<c:forEach var="question" items="<%=questions%>">
-			<div style="border: 1px solid blue">
 				<a
 					href="<c:url value='/question-detail'>
                       <c:param name='question_id' value='${question.getQuestionID()}' />
                       <c:param name='user_id' value='${question.getUserID()}' />
-                  </c:url>">
+                  </c:url>"
+					class="question-item">
+					<div class="question-author">
+						<img
+							src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1965&q=80" />
+						<div class="question-author-name">
+							<h4>${question.getUsername()}</h4>
+							<p>${question.getCreatedAt()}</p>
+						</div>
+					</div>
 
-					<img style="width: 50px" alt=""
-					src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1965&q=80">
-					<h2>${question.getUsername()}</h2>
-					<h3>${question.getTitle()}</h5>
+					<div class="question-content">
+						<h3>${question.getTitle()}</h3>
 						<p>${question.getQuestionContent()}</p>
-						<div>
-							<c:forEach var="tag" items="${question.getTagContents()}">
-								<div>${tag}</div>
+					</div>
+
+					<div class="question-category">
+						
+						<c:forEach var="tag" items="${question.getTagContents()}">
+								<span>${tag}</span>
 							</c:forEach>
-						</div>s
-						<p>${question.getCreatedAt()}</p>
+					</div>
 				</a>
-			</div>
-		</c:forEach>
+			</c:forEach>
+		</div>
+		
+
 	</div>
+
+
+
 </body>
 </html>
