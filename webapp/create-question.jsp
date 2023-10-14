@@ -1,3 +1,5 @@
+<%@page import="DAO.TopicDAO"%>
+<%@page import="model.Topic"%>
 <%@page import="DAO.TagDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -30,7 +32,7 @@
 </head>
 
 <%
-
+ArrayList<Topic> topics = new TopicDAO().getTopics();
 %>
 
 <body>
@@ -39,15 +41,20 @@
 	<div class="container">
 		<div class="small-container">
 			<form class="content" action="create-question" method="post">
-				<select name="tag" id="">
-					<option value="">Choose categories</option>
+				<select required="required" name="questionTopic" id="">
+					<option value="">Choose one topic</option>
+					<c:forEach var="topic" items="<%=topics%>">
+						<option value="${topic.getTopicID()}">${topic.getTopicName()}</option>
+					</c:forEach>
+				</select> 
+				<input required="required" name="title" type="text"	placeholder="Type catching attention title" />
 				
-				</select> <input name="title" type="text"
-					placeholder="Type catching attention title" />
+				<input required="required" name="tags" type="text"	placeholder="Type tags (comma-separated)" />
 
 
-				<textarea name="question_content" id="second-input" cols="86"
-					rows="10" placeholder="Type your question"></textarea>
+				<textarea required="required" name="question_content"
+					id="second-input" cols="86" rows="10"
+					placeholder="Type your question"></textarea>
 
 				<div class="btn-toggle">
 					<button class="btn" type="submit">

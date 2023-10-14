@@ -106,9 +106,9 @@ public class QuestionController extends HttpServlet {
 
 	private void createQuestionHandler(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		String[] tagContents = {"HTML", "CSS", "JavaScript"};
-		int topicID = 2;
+		int topicID = Integer.parseInt(request.getParameter("questionTopic"));
 		String title = request.getParameter("title");
+		String[] tagContents = request.getParameter("tags").split(",");
 		String questionContent = request.getParameter("question_content");
 
 		questionDAO.createQuestion(Authentication.getCurrentUserID(request),
