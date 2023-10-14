@@ -37,14 +37,19 @@ public class ReportController extends HttpServlet {
 
 	private void getQuestionReportsHandler(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
+
+		int rowsPerPage = 2;
+
 		int currentPage = request.getParameter("page") == null
 				? 1
 				: Integer.parseInt(request.getParameter("page"));
 
-		ArrayList<QuestionReport> questionReports = questionDAO
-				.getQuestionReports(1, currentPage);
+	ArrayList<QuestionReport> questionReports = questionDAO
+				.getQuestionReports(rowsPerPage, currentPage);
 
-		int totalReportPages = questionDAO.getTotalQuestionReportsRecords();
+		double totalReportPages = (double) Math
+				.ceil((double) questionDAO.getTotalQuestionReportsRecords()
+						/ (double) rowsPerPage);
 
 		request.setAttribute("currentReportPage", currentPage);
 		request.setAttribute("totalReportPages", totalReportPages);

@@ -147,7 +147,10 @@ public class QuestionDAO extends BaseDAO {
 
 		ArrayList<QuestionReport> questionReports = new ArrayList<QuestionReport>();
 
-		String query = "SELECT rq.report_id, rq.question_id, q.title, rq.user_id, u.username, rq.report_content "
+		String query = "SELECT " + "rq.report_id, " + "rq.question_id, "
+				+ "q.title, " + "q.user_id AS reported_user_id, "
+				+ "rq.user_id AS reporting_user_id, "
+				+ "u.username AS reporting_username, " + "rq.report_content "
 				+ "FROM report_questions rq "
 				+ "INNER JOIN questions q ON rq.question_id = q.question_id "
 				+ "INNER JOIN users u ON rq.user_id = u.user_id "
@@ -155,18 +158,21 @@ public class QuestionDAO extends BaseDAO {
 
 		try {
 			ResultSet result = executeQuery(query, rowsPerPage,
-					currentPage - 1);
+					(currentPage - 1) * rowsPerPage);
 
 			while (result.next()) {
 				int reportID = result.getInt("report_id");
 				int questionID = result.getInt("question_id");
 				String title = result.getString("title");
-				int userID = result.getInt("user_id");
-				String username = result.getString("username");
+				int reportedUserID = result.getInt("reported_user_id");
+				int reportingUserID = result.getInt("reporting_user_id");
+				String reportingUsername = result
+						.getString("reporting_username");
 				String reportContent = result.getString("report_content");
 
 				QuestionReport questionReport = new QuestionReport(reportID,
-						questionID, title, userID, username, reportContent);
+						questionID, title, reportingUserID, reportedUserID,
+						reportingUsername, reportContent);
 				questionReports.add(questionReport);
 			}
 		} catch (SQLException e) {
