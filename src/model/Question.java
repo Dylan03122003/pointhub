@@ -15,9 +15,11 @@ public class Question {
 	private int upvotes;
 	private int downvotes;
 	private boolean isBookmarked;
+	private int topicID;
 	private ArrayList<Comment> comments = new ArrayList<Comment>();
 
-	public Question(int questionID, int userID, String questionContent, String title, Date createdAt) {
+	public Question(int questionID, int userID, String questionContent,
+			String title, Date createdAt) {
 		this.questionID = questionID;
 		this.userID = userID;
 		this.questionContent = questionContent;
@@ -25,15 +27,16 @@ public class Question {
 		this.createdAt = createdAt;
 	}
 
-	public Question(int userID, String questionContent, String title, String[] tagContents) {
+	public Question(int userID, String questionContent, String title,
+			String[] tagContents) {
 		this.userID = userID;
 		this.questionContent = questionContent;
 		this.title = title;
-		this.tagContents =  tagContents;
+		this.tagContents = tagContents;
 	}
 
-	public Question(int userID, int questionID, String username, Date createdAt, String title, String questionContent,
-			String[] tagContents) {
+	public Question(int userID, int questionID, String username, Date createdAt,
+			String title, String questionContent, String[] tagContents) {
 		this.userID = userID;
 		this.questionID = questionID;
 		this.username = username;
@@ -43,8 +46,10 @@ public class Question {
 		this.tagContents = tagContents;
 	}
 
-	public Question(int questionID, int userID, String username, String questionContent, String title, Date createdAt,
-			String[] tagContents, int upvotes, int downvotes, boolean isBookmarked) {
+	public Question(int questionID, int userID, String username,
+			String questionContent, String title, Date createdAt,
+			String[] tagContents, int upvotes, int downvotes,
+			boolean isBookmarked) {
 		this.questionID = questionID;
 		this.userID = userID;
 		this.username = username;
@@ -56,8 +61,6 @@ public class Question {
 		this.downvotes = downvotes;
 		this.isBookmarked = isBookmarked;
 	}
-	
-	
 
 	public Question() {
 	}
@@ -164,19 +167,29 @@ public class Question {
 		return -1;
 	}
 
-	public void setReplyComments(int commentID, ArrayList<ReplyComment> replyComments) {
+	public void setReplyComments(int commentID,
+			ArrayList<ReplyComment> replyComments) {
 		for (Comment comment : comments) {
 			if (commentID == comment.getCommentID()) {
 				comment.setReplyComments(replyComments);
 			}
 		}
 	}
+	public int getTopicID() {
+		return topicID;
+	}
+
+	public void setTopicID(int topicID) {
+		this.topicID = topicID;
+	}
 
 	@Override
 	public String toString() {
-		return "Question [questionID=" + questionID + ", userID=" + userID + ", username=" + username
-				+ ", questionContent=" + questionContent + ", title=" + title + ", createdAt=" + createdAt
-				+ ", tagContents=" + Arrays.toString(tagContents) + ", upvotes=" + upvotes + ", downvotes=" + downvotes
+		return "Question [questionID=" + questionID + ", userID=" + userID
+				+ ", username=" + username + ", questionContent="
+				+ questionContent + ", title=" + title + ", createdAt="
+				+ createdAt + ", tagContents=" + Arrays.toString(tagContents)
+				+ ", upvotes=" + upvotes + ", downvotes=" + downvotes
 				+ ", isBookmarked=" + isBookmarked + "]";
 	}
 

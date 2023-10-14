@@ -43,9 +43,11 @@ public class ReportController extends HttpServlet {
 
 		ArrayList<QuestionReport> questionReports = questionDAO
 				.getQuestionReports(1, currentPage);
+		
+		int totalReportPages = questionDAO.getTotalQuestionReportsRecords();
 
-		request.setAttribute("current_report_question_page", currentPage);
-
+		request.setAttribute("currentReportPage", currentPage);
+		request.setAttribute("totalReportPages", totalReportPages);
 		request.setAttribute("reports", questionReports);
 
 		MyDispatcher.dispatch(request, response, "question-reports.jsp");

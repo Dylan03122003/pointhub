@@ -7,7 +7,7 @@
 
 	<display-name>PointHubWebsite</display-name>
 	<welcome-file-list>
-		<welcome-file>newest-questions</welcome-file>
+		<welcome-file>questions</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>index.htm</welcome-file>
 		<welcome-file>default.html</welcome-file>
@@ -84,7 +84,7 @@
 	<servlet-mapping>
 		<servlet-name>QuestionController</servlet-name>
 		<url-pattern>/report-question</url-pattern>
-		<url-pattern>/newest-questions</url-pattern>
+		<url-pattern>/questions</url-pattern>
 		<url-pattern>/create-question</url-pattern>
 		<url-pattern>/question-detail</url-pattern>
 		<url-pattern>/vote-question</url-pattern>

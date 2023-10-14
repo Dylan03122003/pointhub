@@ -6,7 +6,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Question;
+import model.Topic;
 import util.Authentication;
+import util.CustomLog;
 import util.MyDispatcher;
 import util.StateName;
 
@@ -15,14 +17,17 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 import DAO.QuestionDAO;
+import DAO.TopicDAO;
 
 public class QuestionController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	QuestionDAO questionDAO;
+	TopicDAO topicDAO;
 
 	@Override
 	public void init() throws ServletException {
 		questionDAO = new QuestionDAO();
+		topicDAO = new TopicDAO();
 	}
 
 	@Override
@@ -30,8 +35,8 @@ public class QuestionController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String path = request.getServletPath();
 		switch (path) {
-			case "/newest-questions" :
-				getNewestQuestionsHandler(request, response);
+			case "/questions" :
+				getQuestions(request, response);
 				break;
 			case "/question-detail" :
 				getQuestionDetailHandler(request, response);
@@ -64,21 +69,36 @@ public class QuestionController extends HttpServlet {
 	private void reportQuestionHandler(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		String reportContent = request.getParameter("reportContent");
-		HttpSession session = request.getSession();
+		int questionID = Integer.parseInt(request.getParameter("questionID"));
 
-		Question currentQuestionDetail = (Question) session
-				.getAttribute(StateName.QUESTION_DETAIL);
-
-		questionDAO.reportQuestion(currentQuestionDetail.getQuestionID(),
+		questionDAO.reportQuestion(questionID,
 				Authentication.getCurrentUserID(request), reportContent);
 
 		response.sendRedirect("question-detail.jsp");
 
 	}
+	private void getQuestions(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String activeTopic = request.getParameter("activeTopic");
 
+		if (activeTopic == null)
+			activeTopic = "All topics";
+
+		ArrayList<Topic> topics = topicDAO.getTopics();
+		topics.add(new Topic(0, "All topics"));
+
+		request.setAttribute("topics", topics);
+		request.setAttribute("activeTopic", activeTopic);
+
+		getNewestQuestionsHandler(request, response);
+
+	}
 	private void getNewestQuestionsHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Question> questions = questionDAO.getNewestQuestions();
+		String activeTopic = (String) request.getAttribute("activeTopic");
+
+		ArrayList<Question> questions = questionDAO
+				.getNewestQuestions(activeTopic);
 
 		request.setAttribute("question_list", questions);
 		MyDispatcher.dispatch(request, response, "/index.jsp");
@@ -86,17 +106,15 @@ public class QuestionController extends HttpServlet {
 
 	private void createQuestionHandler(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		String[] tagContents = {"React", "Java"};
+		String[] tagContents = {"HTML", "CSS", "JavaScript"};
+		int topicID = 2;
 		String title = request.getParameter("title");
 		String questionContent = request.getParameter("question_content");
 
-		Question question = new Question(
-				Authentication.getCurrentUserID(request), questionContent,
-				title, tagContents);
+		questionDAO.createQuestion(Authentication.getCurrentUserID(request),
+				questionContent, title, tagContents, topicID);
 
-		questionDAO.createQuestion(question);
-
-		response.sendRedirect("newest-questions");
+		response.sendRedirect("questions");
 	}
 
 	private void getQuestionDetailHandler(HttpServletRequest request,

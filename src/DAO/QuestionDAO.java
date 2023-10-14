@@ -12,31 +12,48 @@ import model.QuestionReport;
 import model.ReplyComment;
 
 public class QuestionDAO extends BaseDAO {
-	public void createQuestion(Question question) {
-		String createQuestionQuery = "INSERT INTO questions (user_id, question_content, title, tags, created_at) VALUES (?, ?, ?, ?, NOW());";
+	public void createQuestion(int userID, String questionContent, String title,
+			String[] tags, int topicID) {
+		String createQuestionQuery = "INSERT INTO questions (user_id, question_content, title, tags, topic_id, created_at) VALUES (? ,?, ?, ?, ?, NOW());";
 
 		try {
-			executeUpdate(createQuestionQuery, question.getUserID(),
-					question.getQuestionContent(), question.getTitle(),
-					String.join(",", question.getTagContents()));
+			executeNonQuery(createQuestionQuery, userID, questionContent, title,
+					String.join(",", tags), topicID);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public ArrayList<Question> getNewestQuestions() {
+	public ArrayList<Question> getNewestQuestions(String topicName) {
 
 		ArrayList<Question> questions = new ArrayList<Question>();
-
-		String query = "SELECT "
-				+ "q.question_id, u.user_id, u.username, q.created_at AS createdAt, "
-				+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
-				+ "FROM questions q JOIN users u ON q.user_id = u.user_id "
-				+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
-				+ "ORDER BY createdAt DESC";
+		String query = null;
+		ResultSet result = null;
 		try {
-			ResultSet result = executeQuery(query);
+
+			if (topicName.equals("All topics")) {
+				query = "SELECT "
+						+ "q.question_id, u.user_id, u.username, q.created_at AS createdAt, "
+						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
+						+ "FROM questions q JOIN users u ON q.user_id = u.user_id "
+						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
+						+ "ORDER BY createdAt DESC";
+				result = executeQuery(query);
+
+			} else {
+				query = "SELECT q.question_id, u.user_id, u.username, q.created_at AS createdAt, "
+						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
+						+ "FROM questions q "
+						+ "JOIN users u ON q.user_id = u.user_id "
+						+ "JOIN topics t ON q.topic_id = t.topic_id "
+						+ "WHERE t.topic_name = ? "
+						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
+						+ "ORDER BY createdAt DESC";
+				result = executeQuery(query, topicName);
+
+			}
+
 			while (result.next()) {
 				int userID = result.getInt("user_id");
 				int questionID = result.getInt("question_id");
@@ -210,12 +227,14 @@ public class QuestionDAO extends BaseDAO {
 
 	}
 
-	// public static void main(String[] args) {
-	// QuestionDAO questionDAO = new QuestionDAO();
-	// // ArrayList<Question> newestQuetions =
-	// // questionDAO.getNewestQuestions();
-	// // Question questionDetail = questionDAO.getQuestionByID(7, 9);
-	//
-	// }
+	public static void main(String[] args) {
+		QuestionDAO questionDAO = new QuestionDAO();
+		// ArrayList<Question> newestQuetions =
+		// questionDAO.getNewestQuestions();
+		// Question questionDetail = questionDAO.getQuestionByID(7, 9);
+		String[] tags = {"javascript, css, html"};
+		questionDAO.createQuestion(9, "Please explain to me", "What is react?",
+				tags, 1);
+	}
 
 }

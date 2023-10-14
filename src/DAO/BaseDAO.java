@@ -84,9 +84,19 @@ public class BaseDAO {
 		}
 		return preparedStatement.executeUpdate();
 	}
+
+	protected void executeNonQuery(String query, Object... params)
+			throws SQLException {
+		PreparedStatement preparedStatement = connection.prepareStatement(query,
+				PreparedStatement.RETURN_GENERATED_KEYS);
+		for (int i = 0; i < params.length; i++) {
+			preparedStatement.setObject(i + 1, params[i]);
+		}
+		preparedStatement.executeUpdate();
+	}
 	
-	
-//	public static void main(String[] args) {
-//		System.out.println(new BaseDAO().getTotalRecords("report_questions"));
-//	}
+
+	// public static void main(String[] args) {
+	// System.out.println(new BaseDAO().getTotalRecords("report_questions"));
+	// }
 }

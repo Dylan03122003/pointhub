@@ -10,12 +10,19 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+.active {
+	color: red;
+}
+</style>
 </head>
 
 <%
 ArrayList<QuestionReport> reports = (ArrayList<QuestionReport>) request.getAttribute("reports");
-int currentPage = request.getAttribute("current_report_question_page") == null ? 1
-	: (int) request.getAttribute("current_report_question_page");
+int currentPage = request.getAttribute("currentReportPage") == null ? 1
+	: (int) request.getAttribute("currentReportPage");
+int totalReportPages = (int) request.getAttribute("totalReportPages");
+
 %>
 
 <body>
@@ -27,6 +34,11 @@ int currentPage = request.getAttribute("current_report_question_page") == null ?
 		</c:forEach>
 	</ul>
 	<a href="question-reports?page=<%=currentPage - 1%>">prev</a>
+	<c:forEach var="i" begin="1" end="<%=totalReportPages%>">
+		<a class="${i == currentPage ? 'active' : ''}"
+			href="question-reports?page=${i}">${i}</a>
+	</c:forEach>
+
 	<a href="question-reports?page=<%=currentPage + 1%>">next</a>
 
 </body>
