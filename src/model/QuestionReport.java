@@ -4,17 +4,23 @@ public class QuestionReport {
 	private int reportID;
 	private int questionID;
 	private String title;
-	private int userID;
-	private String username;
+	private int reportingUserID;
+	private int reportedUserID;
+	private String reportingUsername;
 	private String reportContent;
+	
+	
+	
 
 	public QuestionReport(int reportID, int questionID, String title,
-			int userID, String username, String reportContent) {
+			int reportingUserID, int reportedUserID, String reportingUsername,
+			String reportContent) {
 		this.reportID = reportID;
 		this.questionID = questionID;
 		this.title = title;
-		this.userID = userID;
-		this.username = username;
+		this.reportingUserID = reportingUserID;
+		this.reportedUserID = reportedUserID;
+		this.reportingUsername = reportingUsername;
 		this.reportContent = reportContent;
 	}
 
@@ -42,22 +48,6 @@ public class QuestionReport {
 		this.title = title;
 	}
 
-	public int getUserID() {
-		return userID;
-	}
-
-	public void setUserID(int userID) {
-		this.userID = userID;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public String getReportContent() {
 		return reportContent;
 	}
@@ -66,12 +56,37 @@ public class QuestionReport {
 		this.reportContent = reportContent;
 	}
 
+	public int getReportingUserID() {
+		return reportingUserID;
+	}
+
+	public void setReportingUserID(int reportingUserID) {
+		this.reportingUserID = reportingUserID;
+	}
+
+	public int getReportedUserID() {
+		return reportedUserID;
+	}
+
+	public void setReportedUserID(int reportedUserID) {
+		this.reportedUserID = reportedUserID;
+	}
+
+	public String getReportingUsername() {
+		return reportingUsername;
+	}
+
+	public void setReportingUsername(String reportingUsername) {
+		this.reportingUsername = reportingUsername;
+	}
+
 	@Override
 	public String toString() {
-		return "Report ID: " + reportID + "\n" + "Question ID: " + questionID
-				+ "\n" + "Title: " + title + "\n" + "User ID: " + userID + "\n"
-				+ "Username: " + username + "\n" + "Report Content: "
-				+ reportContent;
+		return "QuestionReport [reportID=" + reportID + ", questionID="
+				+ questionID + ", title=" + title + ", reportingUserID="
+				+ reportingUserID + ", reportedUserID=" + reportedUserID
+				+ ", reportingUsername=" + reportingUsername
+				+ ", reportContent=" + reportContent + "]";
 	}
 
 }
