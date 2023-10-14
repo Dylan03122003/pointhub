@@ -43,7 +43,7 @@ public class ReportController extends HttpServlet {
 
 		ArrayList<QuestionReport> questionReports = questionDAO
 				.getQuestionReports(1, currentPage);
-		
+
 		int totalReportPages = questionDAO.getTotalQuestionReportsRecords();
 
 		request.setAttribute("currentReportPage", currentPage);
