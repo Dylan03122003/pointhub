@@ -44,7 +44,7 @@ public class ReportController extends HttpServlet {
 				? 1
 				: Integer.parseInt(request.getParameter("page"));
 
-		ArrayList<QuestionReport> questionReports = questionDAO
+	ArrayList<QuestionReport> questionReports = questionDAO
 				.getQuestionReports(rowsPerPage, currentPage);
 
 		double totalReportPages = (double) Math
