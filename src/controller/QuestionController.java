@@ -30,6 +30,7 @@ public class QuestionController extends HttpServlet {
 		topicDAO = new TopicDAO();
 	}
 
+
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -39,7 +40,8 @@ public class QuestionController extends HttpServlet {
 				getQuestions(request, response);
 				break;
 			case "/question-detail" :
-				getQuestionDetailHandler(request, response);
+				getQuestionDetailTest(request, response);
+//				getQuestionDetailHandler(request, response);
 				break;
 			case "/vote-question" :
 				voteQuestionHandler(request, response);
@@ -64,6 +66,19 @@ public class QuestionController extends HttpServlet {
 
 		}
 
+	}
+	
+	private void getQuestionDetailTest(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		int questionID = Integer.parseInt(request.getParameter("question_id"));
+		int userID = Integer.parseInt(request.getParameter("user_id"));
+		
+		Question questionDetail = questionDAO.getQuestionByID(questionID, userID);
+
+	    // Set the question detail as an attribute in the request
+	    request.setAttribute("questionDetail", questionDetail);
+
+	    MyDispatcher.dispatch(request, response, "test-question-detail.jsp");
 	}
 
 	private void reportQuestionHandler(HttpServletRequest request,
@@ -127,6 +142,8 @@ public class QuestionController extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		session.setAttribute(StateName.QUESTION_DETAIL, questionDetail);
+		
+		
 
 		MyDispatcher.dispatch(request, response, "question-detail.jsp");
 	}

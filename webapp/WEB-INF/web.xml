@@ -3,8 +3,6 @@
 	xmlns="https://jakarta.ee/xml/ns/jakartaee"
 	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
 	id="WebApp_ID" version="5.0">
-
-
 	<display-name>PointHubWebsite</display-name>
 	<welcome-file-list>
 		<welcome-file>questions</welcome-file>
@@ -14,8 +12,6 @@
 		<welcome-file>default.jsp</welcome-file>
 		<welcome-file>default.htm</welcome-file>
 	</welcome-file-list>
-
-
 	<servlet>
 		<description></description>
 		<display-name>SignUpController</display-name>
@@ -26,7 +22,6 @@
 		<servlet-name>SignUpController</servlet-name>
 		<url-pattern>/SignUpController</url-pattern>
 	</servlet-mapping>
-
 	<servlet>
 		<description></description>
 		<display-name>LogInController</display-name>
@@ -37,8 +32,6 @@
 		<servlet-name>LogInController</servlet-name>
 		<url-pattern>/LogInController</url-pattern>
 	</servlet-mapping>
-
-
 	<servlet>
 		<description></description>
 		<display-name>LogoutController</display-name>
@@ -49,9 +42,6 @@
 		<servlet-name>LogoutController</servlet-name>
 		<url-pattern>/log-out</url-pattern>
 	</servlet-mapping>
-
-
-
 	<servlet>
 		<description></description>
 		<display-name>CommentController</display-name>
@@ -64,7 +54,6 @@
 		<url-pattern>/load-comment</url-pattern>
 		<url-pattern>/show-replies</url-pattern>
 	</servlet-mapping>
-
 	<servlet>
 		<description></description>
 		<display-name>ReplyController</display-name>
@@ -99,4 +88,5 @@
 		<servlet-name>ReportController</servlet-name>
 		<url-pattern>/question-reports</url-pattern>
 	</servlet-mapping>
+
 </web-app>
