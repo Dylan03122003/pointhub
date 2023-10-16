@@ -7,6 +7,17 @@ public class User {
 	private String username;
 	private String email;
 	private String password;
+    private String photo;
+    
+	 
+	
+
+	public User(int userID, String username, String email, String photo) {
+		this.userID = userID;
+		this.username = username;
+		this.email = email;
+		this.photo = photo;
+	}
 
 	public User(int userID, String firstName, String lastName, String email,
 			String password) {
@@ -74,6 +85,14 @@ public class User {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 	@Override
