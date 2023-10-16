@@ -85,24 +85,17 @@
     <servlet-name>ReportController</servlet-name>
     <url-pattern>/question-reports</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <description></description>
-    <display-name>UserListContrroller</display-name>
-    <servlet-name>UserListContrroller</servlet-name>
-    <servlet-class>controller.UserListContrroller</servlet-class>
+    <display-name>UserController</display-name>
+    <servlet-name>UserController</servlet-name>
+    <servlet-class>controller.UserController</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>UserListContrroller</servlet-name>
-    <url-pattern>/UserListContrroller</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>DeleteController</display-name>
-    <servlet-name>DeleteController</servlet-name>
-    <servlet-class>controller.DeleteController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>DeleteController</servlet-name>
-    <url-pattern>/DeleteController</url-pattern>
+    <servlet-name>UserController</servlet-name>
+    <url-pattern>/user-list</url-pattern>
+    <url-pattern>/delete-user</url-pattern>
+
   </servlet-mapping>
 </web-app>

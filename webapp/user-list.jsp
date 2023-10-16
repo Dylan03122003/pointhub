@@ -30,7 +30,7 @@
                     <td><%=user.getUsername()%></td>
                     <td><%=user.getEmail()%></td>
                     <td class="action-links">
-                        <a href="DeleteController?UserID=<%=user.getUserID()%>">Delete</a>
+                        <a href="delete-user?UserID=<%=user.getUserID()%>">Delete</a>
                     </td>
                 </tr>
                 <% } %>
