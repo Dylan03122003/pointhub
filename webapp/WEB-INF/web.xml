@@ -88,5 +88,4 @@
 		<servlet-name>ReportController</servlet-name>
 		<url-pattern>/question-reports</url-pattern>
 	</servlet-mapping>
-
 </web-app>

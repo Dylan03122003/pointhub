@@ -187,9 +187,9 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 					<form action="reply-comment" method="post" class="mt-5"
 						id="replyForm-${comment.getCommentID()}" style="display: none">
 						<input type="hidden" name="comment_id"
-							value="${comment.getCommentID()}" /> <input
-							type="hidden" name="user_id" value="${comment.getUserID()}" />
-						<input type="hidden" name="question_id"
+							value="${comment.getCommentID()}" /> <input type="hidden"
+							name="user_id" value="${comment.getUserID()}" /> <input
+							type="hidden" name="question_id"
 							value="${questionDetail.getQuestionID()}" />
 						<textarea name="replyContent" rows="3" cols="30"
 							class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
@@ -229,8 +229,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 										<span>4</span>
 									</div>
 									<button class="nested-reply-btn text-gray-600"
-										data-reply-id="${replyComment.getReplyID()}">
-										Reply</button>
+										data-reply-id="${replyComment.getReplyID()}">Reply</button>
 								</div>
 							</div>
 
@@ -238,9 +237,8 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 								style="display: none"
 								id="nestedReplyForm-${replyComment.getReplyID()}">
 								<input type="hidden" name="comment_id"
-									value="${comment.getCommentID()}" /> <input
-									type="hidden" name="user_id"
-									value="${replyComment.getUserID()}" /> <input
+									value="${comment.getCommentID()}" /> <input type="hidden"
+									name="user_id" value="${replyComment.getUserID()}" /> <input
 									type="hidden" name="question_id"
 									value="${questionDetail.getQuestionID()}" />
 								<textarea name="replyContent" rows="3" cols="30"
