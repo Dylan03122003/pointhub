@@ -13,11 +13,6 @@
 
 	<jsp:include page="navbar.jsp" />
 
-
-	<c:if test="${loginStatus == 'fail'}">
-		<h1>Incorrect email or password!</h1>
-	</c:if>
-
 	<div class="login-form">
 		<form class="login" action="LogInController" method="post">
 			<h2>We've Missed You!</h2>
@@ -29,6 +24,9 @@
 				<input id="password" type="password" name="password" required>
 				<label>Password</label>
 			</div>
+			<c:if test="${loginStatus == 'fail'}">
+				<h4 id="error" style="color: red;" >Incorrect email or password!</h4>
+			</c:if>
 			<button id="btn-login" type="submit">Log in</button>
 		</form>
 	</div>
