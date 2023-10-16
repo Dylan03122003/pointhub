@@ -88,5 +88,6 @@ public class Authentication {
 		return userDAO.getUserRoleByEmail(currentEmail);
 	}
 	
+	
 
 }

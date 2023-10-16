@@ -72,6 +72,7 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 			
 			<c:if test="<%=isAdmin%>">
 				<li><a href="question-reports">Question Reports</a></li>
+				<li><a href="UserListContrroller">UserList</a></li>
 			</c:if>
 
 			<c:if test="<%=isLoggedIn%>">
