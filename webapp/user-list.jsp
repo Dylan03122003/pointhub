@@ -1,41 +1,45 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page import="model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<%ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
- %>
+<%
+ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
+%>
 <body>
 	<jsp:include page="navbar.jsp" />
 
-<div class="table-container">
-        <table class="table-list">
-            <thead>
-                <tr>
-                    <th>Avatar</th>
-                    <th>Username</th>
-                    <th>Gmail</th>
-                    <th>Delete User</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (User user : users) { %>
-                <tr>
-                    <td><%=user.getPhoto()%></td>
-                    <td><%=user.getUsername()%></td>
-                    <td><%=user.getEmail()%></td>
-                    <td class="action-links">
-                        <a href="delete-user?UserID=<%=user.getUserID()%>">Delete</a>
-                    </td>
-                </tr>
-                <% } %>
-            </tbody>
-        </table>
-    </div>
+	<div class="table-container">
+		<table class="table-list">
+			<thead>
+				<tr>
+					<th>Avatar</th>
+					<th>Username</th>
+					<th>Gmail</th>
+					<th>Delete User</th>
+				</tr>
+			</thead>
+			<tbody>
+				<%
+				for (User user : users) {
+				%>
+				<tr>
+					<td><%=user.getPhoto()%></td>
+					<td><%=user.getUsername()%></td>
+					<td><%=user.getEmail()%></td>
+					<td class="action-links"><a
+						href="delete-user?UserID=<%=user.getUserID()%>">Delete</a></td>
+				</tr>
+				<%
+				}
+				%>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

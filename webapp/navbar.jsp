@@ -57,7 +57,6 @@ String username = (String) Authentication.getCurrentUsername(request);
 String role = (String) Authentication.getCurrentUserRole(request);
 
 boolean isAdmin = isLoggedIn && role.equals("admin");
-
 %>
 
 <body>
@@ -69,11 +68,11 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 				<li><a href="log-in.jsp">Log in</a></li>
 				<li><a href="sign-up.jsp">Sign up</a></li>
 			</c:if>
-			
+
 			<c:if test="<%=isAdmin%>">
 				<li><a href="question-reports">Question Reports</a></li>
 				<li><a href="user-list">UserList</a></li>
-				
+
 			</c:if>
 
 			<c:if test="<%=isLoggedIn%>">
