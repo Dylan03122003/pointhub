@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Sign up</title>
+<link rel="stylesheet" href="css/sign_up_style.css">
 </head>
 
 
@@ -13,21 +14,46 @@
 	<jsp:include page="navbar.jsp" />
 
 
-	<c:if test="${signUpStatus == 'fail'}">
-		<h1>Email already existed</h1>
-	</c:if>
-
-	<form id="signupForm" action="SignUpController" method="post">
-		<input type="text" name="firstName" placeholder="firstName" /> <input
-			type="text" name="lastName" placeholder="lastName" /> <input
-			type="email" name="email" placeholder="email" /> <input
-			type="password" name="password" id="password" placeholder="password" />
-		<input type="password" name="repeatedPassword" id="repeatedPassword"
-			placeholder="repeated password" />
-		<div id="passwordError" style="color: red; display: none;">Passwords
-			do not match. Please try again.</div>
-		<button type="submit">Sign up</button>
-	</form>
+	<div class="register-form">
+		<form class="register" id="signupForm" action="SignUpController"
+			method="post">
+			<h2>Join Our Website</h2>
+			<p>Get more features and priviliges by joining to the most
+				helpful community</p>
+			<div class="form-group">
+				<input type="text" name="firstName" required> <label>First
+					Name</label>
+			</div>
+			<div class="form-group">
+				<input type="text" name="lastName" required> <label>Last
+					Name</label>
+			</div>
+			<div id="email" class="form-group">
+				<input type="email" name="email" required> <label>Email</label>
+			</div>
+			<c:if test="${signUpStatus == 'fail'}">
+				<script>
+					function emailError() {
+						var email = document.getElementById("email");
+						email.style.margin = "0";
+					}
+					emailError();
+				</script>
+				<p class="error">* Email already existed.</p>
+			</c:if>
+			<div class="form-group">
+				<input type="password" name="password" id="password" required>
+				<label>Password</label>
+			</div>
+			<div id="password-note" class="form-group">
+				<input type="password" name="repeatedPassword" id="repeatedPassword"
+					required> <label>Repeat password</label>
+			</div>
+			<p class="error" id="passwordError" style="display: none;">*
+				Passwords do not match. Please try again.</p>
+			<button id="btn-register" type="submit">Sign up</button>
+		</form>
+	</div>
 	<script>
 		document.getElementById("signupForm").addEventListener(
 				"submit",
@@ -37,9 +63,11 @@
 							.getElementById("repeatedPassword").value;
 					var passwordError = document
 							.getElementById("passwordError");
+					var passInput = document.getElementById("password-note");
 
 					if (password !== repeatedPassword) {
 						passwordError.style.display = "block"; // Display the error message
+						passInput.style.margin = "0";
 						event.preventDefault(); // Prevent the form from submitting
 					} else {
 						passwordError.style.display = "none"; // Hide the error message if passwords match
