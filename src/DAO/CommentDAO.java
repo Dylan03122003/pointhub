@@ -9,16 +9,20 @@ import model.Comment;
 import model.ReplyComment;
 
 public class CommentDAO extends BaseDAO {
-	public void createComment(Comment comment) {
+	public int createComment(Comment comment) {
 		String insertSQL = "INSERT INTO comments (user_id, question_id, comment_content) VALUES (?, ?, ?)";
 
 		try {
 			int commentID = executeInsert(insertSQL, comment.getUserID(),
 					comment.getQuestionID(), comment.getCommentContent());
+
+			return commentID;
 		} catch (SQLException e) {
 
 			e.printStackTrace();
 		}
+
+		return -1;
 
 	}
 
@@ -129,9 +133,34 @@ public class CommentDAO extends BaseDAO {
 		return comment;
 	}
 
-	// public static void main(String[] args) {
-	// CommentDAO commentDAO = new CommentDAO();
-	// System.out.println(commentDAO.getNextReplies(11, 2, 6));
-	// }
+	public Comment getCommentByID(int questionID, int commentID) {
+		Comment comment = null;
+		String commentQuery = "SELECT c.comment_id, c.user_id, c.comment_content, c.created_at, u.username "
+				+ "FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.question_id = ? AND c.comment_id = ?";
+
+		ResultSet commentResult;
+		try {
+			commentResult = executeQuery(commentQuery, questionID, commentID);
+
+			if (commentResult.next()) {
+				int userIDFromDB = commentResult.getInt("user_id");
+				String commentContent = commentResult
+						.getString("comment_content");
+				Date createdAt = commentResult.getDate("created_at");
+				String username = commentResult.getString("username");
+				comment = new Comment(commentID, userIDFromDB, username,
+						questionID, commentContent, createdAt);
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return comment;
+	}
+
+//	 public static void main(String[] args) {
+//	 CommentDAO commentDAO = new CommentDAO();
+//	 }
 
 }

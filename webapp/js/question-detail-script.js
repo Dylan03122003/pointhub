@@ -52,7 +52,7 @@ const renderComment = (comment, currentUserID) => {
 
 
 	return `
-<div class= "mb-10">
+<div class= "comment-item mb-10" data-commentID="${comment.commentID}">
   <div class="flex items-center justify-start gap-3">
     <img
       src="https://images.unsplash.com/photo-1480429370139-e0132c086e2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80"
@@ -157,14 +157,8 @@ const viewMoreReplies = (commentID, repliesSize, currentUserID) => {
 	});
 
 }
-
-// commentContent
-// commentID
-// createdAt
-// questionID
-// replyComments
-// userID
-// username
+// Response return
+// commentContent, commentID, createdAt, questionID, replyComments, userID, username
 const getDefaultComments = (questionID, currentUserID) => {
 	$.ajax({
 		type: "GET",
@@ -177,12 +171,72 @@ const getDefaultComments = (questionID, currentUserID) => {
 			}
 
 			$("#comments-container").append(commentsTemplate);
+
+			$(".view-comments").data("commentsize", data.length);
 		},
 		error: function() {
 			alert("Failed to load data from the server.");
 		},
 	});
 };
+
+const viewMoreComments = (questionID, currentUserID, currentCommentSize) => {
+
+	const data = {
+		questionID: questionID,
+		currentCommentSize: currentCommentSize
+	}
+
+	$.ajax({
+		type: "POST",
+		url: "view-comments",
+		data: data,
+		dataType: "json",
+		success: function(data) {
+			if (data) {
+				const currentCommentItems = $(".comment-item");
+				const currentCommentIDs = []
+				currentCommentItems.each(function() {
+					const commentID = $(this).data("commentid");
+					currentCommentIDs.push(commentID);
+				});
+
+				if (!currentCommentIDs.includes(data.commentID)) {
+					const commentTemplate = renderComment(data, currentUserID);
+					$("#comments-container").append(commentTemplate);
+					$(".view-comments").data("commentsize", currentCommentSize + 1);
+				}
+
+			}
+
+		},
+		error: function() {
+			alert("Failed to load data from the server.");
+		},
+	});
+}
+
+const createComment = (questionID, currentUserID, commentContent) => {
+
+	const data = {
+		questionID: questionID,
+		commentContent: commentContent
+	}
+
+	$.ajax({
+		type: "POST",
+		url: "create-comment",
+		data: data,
+		dataType: "json",
+		success: function(data) {
+			const commentTemplate = renderComment(data, currentUserID);
+			$("#comments-container").append(commentTemplate);
+		},
+		error: function() {
+			alert("Failed to load data from the server.");
+		},
+	});
+}
 
 const closeModal = () => {
 	$(".reply-modal").removeClass("flex");
@@ -194,13 +248,14 @@ const openModal = () => {
 	$(".reply-modal").addClass("flex");
 }
 
+
+// START TO LISTEN FOR EVENTS ----------------------------------------------------------------------
 $(document).ready(function() {
 	const questionID = $("body").data("questionid");
 	const currentUserID = $("body").data("userid");
 
 	getDefaultComments(questionID, currentUserID);
-	
-	
+
 
 	// Handle replying comments ---------------------------------
 	$(document).on("click", ".reply-button", function() {
@@ -278,11 +333,13 @@ $(document).ready(function() {
 
 	// Handle commenting 
 	$(".comment-btn").click(function() {
-
+		const commentContent = $(".comment-content").val()
+		createComment(questionID, currentUserID, commentContent)
 	})
 
 	// Handle viewing more comments
 	$(".view-comments").click(function() {
-
+		const currentCommentSize = parseInt($(this).data("commentsize"));
+		viewMoreComments(questionID, currentUserID, currentCommentSize)
 	})
 });
