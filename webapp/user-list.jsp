@@ -7,20 +7,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!--<script src="https://cdn.tailwindcss.com"></script>  -->
-
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- links css, icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<link rel="stylesheet" href="css/user_list_style.css">
+<!-- Keep both style sections -->
 <style>
 .active {
-	color: red;
+    color: red;
 }
 
 .disabled {
-	pointer-events: none; /* Disable link interactions */
-	color: #999; /* Change the text color to a lighter gray */
-	cursor: not-allowed; /* Change the cursor style to not-allowed */
-}</style>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    pointer-events: none; /* Disable link interactions */
+    color: #999; /* Change the text color to a lighter gray */
+    cursor: not-allowed; /* Change the cursor style to not-allowed */
+}
+</style>
+<title>Document</title>
+
 </head>
 
 <%
