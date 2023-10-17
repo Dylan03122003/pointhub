@@ -88,8 +88,8 @@
 		<servlet-name>ReportController</servlet-name>
 		<url-pattern>/question-reports</url-pattern>
 	</servlet-mapping>
-	
-		<servlet>
+
+	<servlet>
 		<description></description>
 		<display-name>UserController</display-name>
 		<servlet-name>UserController</servlet-name>
@@ -99,5 +99,7 @@
 		<servlet-name>UserController</servlet-name>
 		<url-pattern>/user-list</url-pattern>
 		<url-pattern>/delete-user</url-pattern>
+		<url-pattern>/create-user</url-pattern>
+
 	</servlet-mapping>
 </web-app>

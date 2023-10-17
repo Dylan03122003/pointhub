@@ -3,6 +3,7 @@ package DAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 import model.User;
@@ -95,6 +96,25 @@ public class UserDAO extends BaseDAO {
 			ps.setInt(1, UserID);
 			ps.executeUpdate();
 		} catch (Exception e) {
+		}
+
+	}
+	public User createUser(User user) {
+		try {
+			String createUser = "INSERT INTO users (first_name,last_name,email,password,role,username) values (?,?,?,?,?,?)";
+			int userID = executeInsert(createUser, user.getFirstName(),
+					user.getLastName(), user.getEmail(), user.getPassword(),
+					user.getRole(), user.getLastName() + user.getFirstName());
+			User userWithID = new User(user.getFirstName(), user.getLastName(),
+					user.getEmail(), user.getPassword(), user.getRole());
+			return userWithID;
+
+		} catch (SQLIntegrityConstraintViolationException e) {
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 
 	}

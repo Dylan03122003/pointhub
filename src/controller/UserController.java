@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.User;
 import util.Authentication;
-
+import util.PasswordEncryption;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -37,7 +37,8 @@ public class UserController extends HttpServlet {
 			case "/delete-user" :
 				deleteUserByID(request, response);
 				break;
-			case "/vote-question" :
+			case "/create-user" :
+				createUserController(request, response);
 			default :
 
 		}
@@ -69,5 +70,27 @@ public class UserController extends HttpServlet {
 		userDAO.deleteUserByID(UserID);
 		listUser(request, response);
 	}
+	private void createUserController(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String email = request.getParameter("email");
+		String roleUser = request.getParameter("role");
+		String pass = request.getParameter("pass");
+		User newUser = new User(firstName, lastName, email,
+				PasswordEncryption.encryptPassword(pass), roleUser);
+		User userWithID = userDAO.createUser(newUser);
+		if (userWithID != null) {
+			request.setAttribute("createStatus", "Add User Successfully");
+			RequestDispatcher dispatcher = request
+					.getRequestDispatcher("/user-list");
+			dispatcher.forward(request, response);
+		} else {
+			request.setAttribute("createStatus", "Email is available");
+			RequestDispatcher dispatcher = request
+					.getRequestDispatcher("add-user.jsp");
+			dispatcher.forward(request, response);
+		}
 
+	}
 }

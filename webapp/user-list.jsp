@@ -1,5 +1,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page import="model.User"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,7 +15,7 @@ ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 %>
 <body>
 	<jsp:include page="navbar.jsp" />
-
+     <a href="add-user.jsp">Create User</a>
 	<div class="table-container">
 		<table class="table-list">
 			<thead>
