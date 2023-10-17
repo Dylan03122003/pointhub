@@ -86,9 +86,9 @@ public class UserController extends HttpServlet {
 					.getRequestDispatcher("/user-list");
 			dispatcher.forward(request, response);
 		} else {
-			request.setAttribute("createStatus", "Failed to Add User");
+			request.setAttribute("createStatus", "Email is available");
 			RequestDispatcher dispatcher = request
-					.getRequestDispatcher("AddUser.jsp");
+					.getRequestDispatcher("add-user.jsp");
 			dispatcher.forward(request, response);
 		}
 

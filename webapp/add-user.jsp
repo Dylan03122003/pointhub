@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +12,9 @@
 String addStatus = (String) request.getAttribute("createStatus");
 %>
 <body>
-	<h1><%=addStatus%></h1>
+	<jsp:include page="navbar.jsp" />
+     <c:if test="<%=addStatus!=null%>"><h1><%=addStatus%></h1></c:if>
+	
 	<form action="create-user" method="get">
 		<input type="text" name="firstName" placeholder="firstName"> <input
 			type="text" name="lastName" placeholder="lastName"> <input

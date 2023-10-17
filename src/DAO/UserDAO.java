@@ -112,7 +112,6 @@ public class UserDAO extends BaseDAO {
 		} catch (SQLIntegrityConstraintViolationException e) {
 			e.printStackTrace();
 			return null;
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
