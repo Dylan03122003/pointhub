@@ -1,0 +1,223 @@
+
+
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Poppins", sans-serif;
+	font-family: "Roboto", sans-serif;
+}
+
+.container {
+	justify-content: center;
+	display: flex;
+	gap: 100px;
+	padding: 50px 20px;
+	 
+}
+
+.Left-Form {
+	max-width: 800px;
+	height: 700px;
+	padding: 20px 80px;
+	background-color: #FFFFFF;
+	border: 1px solid #EAEAEA;
+	box-shadow: 0px 0px 5px 0px #0000000D;
+}
+
+.content input {
+	width: 100%;
+	border: 2px solid#e2ddd9;
+	border-radius: 4px;
+	height: 30px;
+}
+
+.content {
+	padding: 15px;
+}
+
+.content div {
+	margin-bottom: 10px;
+}
+
+.name input {
+	width: 280px;
+}
+
+.name {
+	display: flex;
+	gap: 40px;
+	text-align: center;
+	
+}
+
+.location input {
+	width: 190px;
+}
+
+.location {
+	text-align: center;
+	display: flex;
+	gap: 15px;
+}
+.btn-form{
+	display: flex;
+	justify-content: flex-end;
+	gap: 20px;
+}
+.btn-form button{
+	border: 1px solid  #EAEAEA;
+	width:95px;
+	height: 35px;
+	border-radius: 4px;
+}
+.btn-form .done{
+	background-color: #F48023 ;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.Right-Form {
+	
+	text-align: center;
+	max-width: 450px;
+	height: 580px;
+	padding: 10px 20px;
+	background-color: #FFFFFF;
+	border: 1px solid #EAEAEA;
+	box-shadow: 0px 0px 5px 0px #0000000D;
+
+}
+
+.Right-Form .User-Avatar img {
+	max-width: 350px;
+	
+	border-radius: 50%;
+	border: 6px solid #eaeaea;
+}
+.User-Avatar{
+	display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  text-align: center;
+	  padding: 10px 20px;
+}
+.User-Avatar span{
+	font-size: 20px;
+	font-weight: bold;
+	margin-top: 40px;
+}
+.Upload-Photo {
+	padding: 40px;
+}
+
+.Upload-Photo svg {
+	width: 30px;
+	color: #F48023;
+
+}
+
+.Upload-Photo span {
+	color: #F48023;
+	
+}
+
+.Upload-Photo .round input[type='file'] {
+	position: absolute;
+	transform: scale(1);
+	width: 32px;
+	height: 32px;
+	opacity: 0;
+}
+
+input[type=file]::-webkit-file-upload-button {
+	cursor: pointer;
+}
+@media (max-width: 768px) {
+  .container{
+	  flex-direction: column;
+	  align-items: center;
+	  
+  }
+  .Right-Form{
+	  order: 1;  
+	  width: 100%;
+	  padding: 10px;
+	  box-sizing: border-box;
+  }
+  .Left-Form{
+	  order: 2;
+	  width: 100%;
+	  padding: 10px;
+	  box-sizing: border-box;
+	  height: 980px;
+	  
+  }
+  .Left-Form input,
+  .Left-Form button{
+	  width: 100%;
+	  margin-bottom: 10px;
+  }
+  .name{
+	  display: block;
+	  text-align: start;
+  }
+  .location{
+	  display: block;
+	  text-align: start;
+  }
+  .User-Avatar img{
+	  width: 300px;
+  }
+}
+
+@media all and (min-width: 1101px) and (max-width: 1401px){
+	.container{
+		
+	}
+  .Right-Form{
+	  
+	  width:300px;
+	  padding: 10px;
+	  box-sizing: border-box;
+  }
+  .Right-Form img{
+	  width: 250px;
+  }
+  .Left-Form{
+	  width: 650px;
+	  padding: 10px;
+	  box-sizing: border-box;
+  }
+}
+@media all and (min-width: 768px) and (max-width: 1100px){
+	.container{
+		width: 100%;
+	}
+  .Right-Form{
+	  align-items: center;
+	  width:200px;
+	  padding: 10px;
+	  box-sizing: border-box;
+  }
+  .Right-Form img{
+	  width: 150px;
+  }
+  .name, .location{
+	  display: block;
+	  text-align: start;
+  }
+  .name input, .location input{
+	  width: 100%;
+  }
+  .Left-Form{
+	  align-items: center;
+	  width: 500px;
+	  height: 850px;
+	  padding: 10px;
+	  box-sizing: border-box;
+  }
+}
+
