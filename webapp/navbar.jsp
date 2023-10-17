@@ -16,9 +16,10 @@
 <style>
 /* Reset default list styles and remove list bullets */
 .navbar-menu {
-	list-style: none;
+	list-style : none;
 	padding: 20px;
 	margin: 0;
+	list-style: none;
 }
 
 /* Style navbar items */
