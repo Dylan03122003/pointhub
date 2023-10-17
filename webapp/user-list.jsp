@@ -34,34 +34,45 @@ ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 %>
 <body>
 	<jsp:include page="navbar.jsp" />
-     <a href="add-user.jsp">Create User</a>
-	<div class="table-container">
-		<table class="table-list">
-			<thead>
-				<tr>
-					<th>Avatar</th>
-					<th>Username</th>
-					<th>Gmail</th>
-					<th>Delete User</th>
-				</tr>
-			</thead>
-			<tbody>
-				<%
-				for (User user : users) {
-				%>
-				<tr>
-					<td><%=user.getPhoto()%></td>
-					<td><%=user.getUsername()%></td>
-					<td><%=user.getEmail()%></td>
-					<td class="action-links"><a
-						href="delete-user?UserID=<%=user.getUserID()%>">Delete</a></td>
-				</tr>
-				<%
-				}
-				%>
-			</tbody>
-		</table>
-	</div>
+	 <div class="userList">
+        <div class="searchItem">
+            <input type="text" placeholder="Search user name">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <a  class="btnAdd" href="add-user.jsp">ADD NEW+</a>
+        <div class="table-container">
+            <table class="table-list">
+                <thead>
+                    <tr>
+                        <th colspan="">Avatar</th>
+                        <th colspan="">Username</th>
+                        <th colspan="">Email</th>
+                        <th colspan="">Delete User</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (User user : users) { %>
+                        <tr class="row">
+                            <td>
+                                <img src="https://tse3.mm.bing.net/th?id=OIP.mZAmGUgA5X38lMzbgq1sTQHaHV&pid=Api&P=0&h=180"
+                                    alt="" srcset="">
+                            </td>
+                            <td>
+                                <%=user.getUsername()%>
+                            </td>
+                            <td>
+                                <%=user.getEmail()%>
+                            </td>
+                            <td class="action-links">
+                                <a href="delete-user?UserID=<%=user.getUserID()%>"><i class="fa-solid fa-user-minus"></i></a>
+                            </td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+	
 	<div class="mt-4">
 		<c:choose>
 			<c:when test="${currentUserPage > 1}">
