@@ -8,7 +8,7 @@ public class User {
 	private String email;
 	private String password;
     private String photo;
-    
+    private String role;
 	 
 	
 
@@ -93,6 +93,22 @@ public class User {
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public User(String firstName, String lastName,
+			String email, String password, String role) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.role = role;
 	}
 
 	@Override
