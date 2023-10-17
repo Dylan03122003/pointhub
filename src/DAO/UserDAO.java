@@ -8,6 +8,23 @@ import java.util.ArrayList;
 import model.User;
 
 public class UserDAO extends BaseDAO {
+
+	public String getUsernameByID(int id) {
+		String query = "SELECT username FROM users WHERE user_id = ?;";
+
+		try {
+			ResultSet result = executeQuery(query, id);
+			if (result.next()) {
+				String username = result.getString("username");
+				return username;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public int getUserIDByEmail(String email) {
 		String query = "SELECT * FROM users WHERE email = ?;";
 

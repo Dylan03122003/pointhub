@@ -8,7 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.google.gson.Gson;
 
@@ -32,16 +34,29 @@ public class CommentController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String path = request.getServletPath();
 		if (path == "/load-comment") {
-//			loadMoreCommentTest(request, response);
-			 loadMoreComment(request, response);
-		} else if (path == "/show-replies") {
-			showReplies(request, response);
+			// loadMoreCommentTest(request, response);
+			loadMoreComment(request, response);
+		} else if (path == "/view-default-comments") {
+			viewDefaultComments(request, response);
 		}
+
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
+		String path = request.getServletPath();
+		if (path == "/create-comment") {
+			createComment(request, response);
+		} else if (path == "/view-replies") {
+			viewReplies(request, response);
+		}
+
+	}
+
+	private void createComment(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		String commentContent = request.getParameter("comment");
 		int questionID = Integer.parseInt(request.getParameter("question_id"));
 
@@ -56,24 +71,45 @@ public class CommentController extends HttpServlet {
 				+ "&user_id=" + currentUserID + "");
 	}
 
-	private void loadMoreCommentTest(HttpServletRequest request,
+	private void viewDefaultComments(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		int questionID = Integer.parseInt(request.getParameter("question_id"));
-		int currentSize = Integer
-				.parseInt(request.getParameter("current_size"));
+		int questionID = Integer.parseInt(request.getParameter("questionID"));
+		ArrayList<Comment> comments = commentDAO.getComments(questionID, 2);
+		// int commentID = commentResult.getInt("comment_id");
+		// int userIDFromDB = commentResult.getInt("user_id");
+		// String commentContent = commentResult
+		// .getString("comment_content");
+		// Date createdAt = commentResult.getDate("created_at");
+		// String username = commentResult.getString("username");
+		// Comment comment = new Comment(commentID, userIDFromDB, username,
+		// questionID, commentContent, createdAt);
 
-		// Fetch additional comments from the database based on the questionID
-		// and currentSize
-		ArrayList<Comment> comments = commentDAO.getComments(questionID,
-				currentSize);
-
-		// Convert comments to JSON
 		String json = new Gson().toJson(comments);
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);
+
 	}
+
+	// private void loadMoreCommentTest(HttpServletRequest request,
+	// HttpServletResponse response) throws IOException {
+	// int questionID = Integer.parseInt(request.getParameter("question_id"));
+	// int currentSize = Integer
+	// .parseInt(request.getParameter("current_size"));
+	//
+	// // Fetch additional comments from the database based on the questionID
+	// // and currentSize
+	// ArrayList<Comment> comments = commentDAO.getComments(questionID,
+	// currentSize);
+	//
+	// // Convert comments to JSON
+	// String json = new Gson().toJson(comments);
+	//
+	// response.setContentType("application/json");
+	// response.setCharacterEncoding("UTF-8");
+	// response.getWriter().write(json);
+	// }
 
 	private void loadMoreComment(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -93,22 +129,29 @@ public class CommentController extends HttpServlet {
 		response.sendRedirect("question-detail.jsp");
 	}
 
-	private void showReplies(HttpServletRequest request,
+	private void viewReplies(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
+
 		int commentID = Integer.parseInt(request.getParameter("commentID"));
+		int currentRepliesSize;
+		if (request.getParameter("repliesSize") == null) {
+			currentRepliesSize = 0;
+		} else {
+			currentRepliesSize = Integer
+					.parseInt(request.getParameter("repliesSize"));
+		}
 
-		HttpSession session = request.getSession();
-		Question question = (Question) session
-				.getAttribute(StateName.QUESTION_DETAIL);
+		int defaultRepliesSize = 2;
 
-		int replyCommentSize = question.getReplyCommentSize(commentID);
+		ArrayList<ReplyComment> replies = commentDAO.getNextReplies(commentID,
+				defaultRepliesSize, currentRepliesSize);
+		
+		String json = new Gson().toJson(replies);
 
-		ArrayList<ReplyComment> replyComments = commentDAO.getReplyComments(
-				commentID, replyCommentSize + StateName.NUMBER_OF_REPLIES);
-		question.setReplyComments(commentID, replyComments);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 
-		session.setAttribute(StateName.QUESTION_DETAIL, question);
-		response.sendRedirect("question-detail.jsp");
 	}
 
 }

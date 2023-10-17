@@ -16,6 +16,7 @@
 	href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200&family=Roboto:wght@100;300;400;500;700&family=Rubik:wght@300;400;500;600&display=swap"
 	rel="stylesheet" />
 <link rel="stylesheet" href="question-detail-style.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="js/question-detail-script.js"></script>
 
@@ -50,15 +51,36 @@
 </head>
 
 <%
-Question question = (Question) session.getAttribute("questionDetail");
+Question question = (Question) request.getAttribute("questionDetail");
 boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 %>
 
-<body class="">
+<body class="" data-questionID="<%=question.getQuestionID()%>"
+	data-userID="<%=Authentication.getCurrentUserID(request)%>">
+	<!-- Reply Comment Form --------------------------------------------------------------------->
+	<div
+		class="reply-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center">
+		<div class="reply-container bg-white w-1/2 p-4 relative">
+			<h2 class="text-2xl font-bold mb-4">Reply to Comment</h2>
+			<form class="reply-form">
+				<div class="mb-4">
+					<label for="replyText"
+						class="block font-medium text-sm text-gray-700">Your
+						Reply:</label>
+					<textarea class="reply-content w-full border rounded p-2" rows="4"></textarea>
+				</div>
+				<input type="hidden" name="parentCommentId" value="123" />
+				<!-- Include the parent comment ID here -->
+				<button type="button"
+					class="reply-submit-btn bg-blue-500 text-white px-4 py-2 rounded">
+					Submit</button>
+			</form>
+			<button
+				class="modal-close bg-gray-300 text-gray-700 px-2 py-1 rounded absolute top-4 right-4"
+				data-dismiss="modal">&times;</button>
+		</div>
+	</div>
 
-	<!-- <button onclick="showToast('Your report has been saved!')" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded m-4">Show Toast</button>
-    <div id="toast" class="hidden bg-green-500 text-white fixed top-0 right-0 m-4 p-2 rounded shadow show">
-    </div> -->
 
 	<div id="modalOverlay" class="fixed inset-0 bg-black opacity-50 hidden"></div>
 
@@ -142,121 +164,21 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 		<div
 			class="bg-white mt-10 p-4 flex flex-col gap-2 items-center justify-center">
 			<h2 class="font-medium text-xl">Comment</h2>
-			<form class="w-full flex flex-col gap-4 justify-center items-end"
-				action="create-comment" method="post">
+			<form class="w-full flex flex-col gap-4 justify-center items-end">
 				<textarea name="comment"
 					class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
-				<input type="hidden" name="question_id"
-					value="${questionDetail.getQuestionID()}" />
-				<button class="px-4 py-1 rounded-md bg-orange-400 text-white"
+				<button
+					class="comment-btn px-4 py-1 rounded-md bg-orange-400 text-white"
 					type="submit">Comment</button>
 			</form>
 		</div>
 
 		<div class="p-10 mt-10 bg-white">
-			<c:forEach var="comment" items="<%=question.getComments()%>">
-				<div>
-					<div class="flex items-center justify-start gap-3 mb-5">
-						<img
-							src="https://images.unsplash.com/photo-1480429370139-e0132c086e2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80"
-							alt="" class="w-[50px] h-[50px] object-cover rounded-full" />
-						<div class="profile_info">
-							<a href="#">@${comment.getUsername()}</a>
-							<p>${comment.getCreatedAt()}</p>
-						</div>
-					</div>
-
-					<p class="mb-4">${comment.getCommentContent()}</p>
-
-					<div class="flex items-center justify-start gap-4">
-						<div>
-							<button class="text-yellow-600">Like</button>
-							<span>12</span>
-						</div>
-						<div>
-							<button class="text-yellow-600">Dislikes</button>
-							<span>12</span>
-						</div>
-						<button class="reply-button text-gray-600"
-							data-comment-id="${comment.getCommentID()}"
-							onclick="toggleReplyForm(${replyComment.getCommentID()})">
-							Reply</button>
-					</div>
-
-					<!-- Reply Form -->
-					<form action="reply-comment" method="post" class="mt-5"
-						id="replyForm-${comment.getCommentID()}" style="display: none">
-						<input type="hidden" name="comment_id"
-							value="${comment.getCommentID()}" /> <input type="hidden"
-							name="user_id" value="${comment.getUserID()}" /> <input
-							type="hidden" name="question_id"
-							value="${questionDetail.getQuestionID()}" />
-						<textarea name="replyContent" rows="3" cols="30"
-							class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-							placeholder="Write your reply"></textarea>
-						<button type="submit">Submit</button>
-					</form>
-
-					<a href="show-replies?commentID=${comment.getCommentID()}"
-						class="text-gray-600">View replies</a>
-
-					<div class="p-4">
-						<c:forEach var="replyComment"
-							items="${comment.getReplyComments()}">
-							<div
-								class="border-l-8 pl-5 p-2 mb-5 border border-solid border-blue-400">
-								<div class="flex items-center justify-start gap-3 mb-5">
-									<img
-										src="https://images.unsplash.com/photo-1480429370139-e0132c086e2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80"
-										alt="" class="w-[50px] h-[50px] object-cover rounded-full" />
-									<div class="profile_info">
-										<a href="#">@${replyComment.getUsername()}</a>
-										<p>${replyComment.getCreatedAt()}</p>
-									</div>
-								</div>
-								<p>
-									<a href="" class="font-medium">@${replyComment.getUsernameReply()}</a>
-									${replyComment.getReplyContent()}
-								</p>
-
-								<div class="flex items-center justify-start gap-4">
-									<div>
-										<button class="text-yellow-600">Like</button>
-										<span>3</span>
-									</div>
-									<div>
-										<button class="text-yellow-600">Dislikes</button>
-										<span>4</span>
-									</div>
-									<button class="nested-reply-btn text-gray-600"
-										data-reply-id="${replyComment.getReplyID()}">Reply</button>
-								</div>
-							</div>
-
-							<form action="reply-comment" method="post" class="reply-form"
-								style="display: none"
-								id="nestedReplyForm-${replyComment.getReplyID()}">
-								<input type="hidden" name="comment_id"
-									value="${comment.getCommentID()}" /> <input type="hidden"
-									name="user_id" value="${replyComment.getUserID()}" /> <input
-									type="hidden" name="question_id"
-									value="${questionDetail.getQuestionID()}" />
-								<textarea name="replyContent" rows="3" cols="30"
-									class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-									placeholder="Write your reply"></textarea>
-								<button type="submit">Submit</button>
-							</form>
-						</c:forEach>
-					</div>
-				</div>
-			</c:forEach>
-			<a class="text-gray-600" href="load-comment">View more comments</a>
+			<div id="comments-container"></div>
+			<button class="view-comments text-gray-600">View more
+				comments</button>
 		</div>
 	</div>
 
-	<script>
-     
-
-    </script>
 </body>
 </html>

@@ -9,8 +9,12 @@ import model.ReplyComment;
 import util.Authentication;
 
 import java.io.IOException;
+import java.util.Date;
+
+import com.google.gson.Gson;
 
 import DAO.CommentDAO;
+import DAO.UserDAO;
 
 /**
  * Servlet implementation class ReplyController
@@ -18,24 +22,48 @@ import DAO.CommentDAO;
 public class ReplyController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	CommentDAO commentDAO;
+	UserDAO userDAO;
 
 	@Override
 	public void init() throws ServletException {
 		commentDAO = new CommentDAO();
-		
+		userDAO = new UserDAO();
+
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		String replyContent = request.getParameter("replyContent");
-		int commentID = Integer.parseInt(request.getParameter("comment_id"));
-		int questionID = Integer.parseInt(request.getParameter("question_id"));
-		int userReplyID = Integer.parseInt(request.getParameter("user_id"));
+		int commentID = Integer.parseInt(request.getParameter("commentID"));
+		int questionID = Integer.parseInt(request.getParameter("questionID"));
+		int userReplyID = Integer.parseInt(request.getParameter("userReplyID"));
 		int currentUserID = Authentication.getCurrentUserID(request);
+        Date currentDate = new Date();
+		ReplyComment replyComment = new ReplyComment(commentID, currentUserID,
+				replyContent, userReplyID);
+		replyComment.setCreatedAt(currentDate);
 
-		commentDAO.replyComment(new ReplyComment(commentID, currentUserID, replyContent, userReplyID));
+		int replyID = commentDAO.replyComment(replyComment);
 
-		response.sendRedirect("question-detail?question_id=" + questionID + "&user_id=" + userReplyID + "");
+		String currentUsername = Authentication.getCurrentUsername(request);
+		String usernameReply = userDAO.getUsernameByID(userReplyID);
+
+		ReplyComment reply = new ReplyComment();
+		reply.setReplyID(replyID);
+		reply.setCommentID(commentID);
+		reply.setUserID(currentUserID);
+		reply.setUsername(currentUsername);
+		reply.setUserReplyID(userReplyID);
+		reply.setUsernameReply(usernameReply);
+		reply.setReplyContent(replyContent);
+		reply.setCreatedAt(currentDate);
+
+		String json = new Gson().toJson(reply);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
 
 	}
 

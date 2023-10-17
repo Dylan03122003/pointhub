@@ -30,6 +30,10 @@ public class ReplyComment {
 		this.replyContent = replyContent;
 		this.userReplyID = userReplyID;
 	}
+	
+	public ReplyComment() {
+		
+	}
 
 	public int getReplyID() {
 		
