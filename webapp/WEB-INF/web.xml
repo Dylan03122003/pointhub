@@ -51,7 +51,7 @@
 	<servlet-mapping>
 		<servlet-name>CommentController</servlet-name>
 		<url-pattern>/create-comment</url-pattern>
-		<url-pattern>/load-comment</url-pattern>
+		<url-pattern>/view-comments</url-pattern>
 		<url-pattern>/view-replies</url-pattern>
 		<url-pattern>/view-default-comments</url-pattern>
 	</servlet-mapping>

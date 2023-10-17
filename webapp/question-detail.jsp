@@ -165,11 +165,11 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 			class="bg-white mt-10 p-4 flex flex-col gap-2 items-center justify-center">
 			<h2 class="font-medium text-xl">Comment</h2>
 			<form class="w-full flex flex-col gap-4 justify-center items-end">
-				<textarea name="comment"
-					class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+				<textarea 
+					class="comment-content w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
 				<button
 					class="comment-btn px-4 py-1 rounded-md bg-orange-400 text-white"
-					type="submit">Comment</button>
+					type="button">Comment</button>
 			</form>
 		</div>
 

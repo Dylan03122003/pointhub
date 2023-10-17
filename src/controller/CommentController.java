@@ -33,10 +33,7 @@ public class CommentController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String path = request.getServletPath();
-		if (path == "/load-comment") {
-			// loadMoreCommentTest(request, response);
-			loadMoreComment(request, response);
-		} else if (path == "/view-default-comments") {
+		if (path == "/view-default-comments") {
 			viewDefaultComments(request, response);
 		}
 
@@ -51,38 +48,38 @@ public class CommentController extends HttpServlet {
 			createComment(request, response);
 		} else if (path == "/view-replies") {
 			viewReplies(request, response);
+		} else if (path == "/view-comments") {
+			viewComments(request, response);
 		}
 
 	}
 
 	private void createComment(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		String commentContent = request.getParameter("comment");
-		int questionID = Integer.parseInt(request.getParameter("question_id"));
+		String commentContent = request.getParameter("commentContent");
+		int questionID = Integer.parseInt(request.getParameter("questionID"));
 
 		int currentUserID = Authentication.getCurrentUserID(request);
 
 		Comment newComment = new Comment(currentUserID, questionID,
 				commentContent);
 
-		commentDAO.createComment(newComment);
+		int commentID = commentDAO.createComment(newComment);
 
-		response.sendRedirect("question-detail?question_id=" + questionID
-				+ "&user_id=" + currentUserID + "");
+		Comment createdComment = commentDAO.getCommentByID(questionID,
+				commentID);
+
+		String json = new Gson().toJson(createdComment);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 	}
 
 	private void viewDefaultComments(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		int questionID = Integer.parseInt(request.getParameter("questionID"));
 		ArrayList<Comment> comments = commentDAO.getComments(questionID, 2);
-		// int commentID = commentResult.getInt("comment_id");
-		// int userIDFromDB = commentResult.getInt("user_id");
-		// String commentContent = commentResult
-		// .getString("comment_content");
-		// Date createdAt = commentResult.getDate("created_at");
-		// String username = commentResult.getString("username");
-		// Comment comment = new Comment(commentID, userIDFromDB, username,
-		// questionID, commentContent, createdAt);
 
 		String json = new Gson().toJson(comments);
 
@@ -92,41 +89,22 @@ public class CommentController extends HttpServlet {
 
 	}
 
-	// private void loadMoreCommentTest(HttpServletRequest request,
-	// HttpServletResponse response) throws IOException {
-	// int questionID = Integer.parseInt(request.getParameter("question_id"));
-	// int currentSize = Integer
-	// .parseInt(request.getParameter("current_size"));
-	//
-	// // Fetch additional comments from the database based on the questionID
-	// // and currentSize
-	// ArrayList<Comment> comments = commentDAO.getComments(questionID,
-	// currentSize);
-	//
-	// // Convert comments to JSON
-	// String json = new Gson().toJson(comments);
-	//
-	// response.setContentType("application/json");
-	// response.setCharacterEncoding("UTF-8");
-	// response.getWriter().write(json);
-	// }
-
-	private void loadMoreComment(HttpServletRequest request,
+	private void viewComments(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 
-		HttpSession session = request.getSession();
+		int questionID = Integer.parseInt(request.getParameter("questionID"));
+		int currentCommentSize = Integer
+				.parseInt(request.getParameter("currentCommentSize"));
 
-		Question question = (Question) session
-				.getAttribute(StateName.QUESTION_DETAIL);
-		int currentCommentSize = question.getComments().size();
-
-		Comment loadedComment = commentDAO.getAComment(question.getQuestionID(),
+		Comment comment = commentDAO.getAComment(questionID,
 				currentCommentSize + 1);
-		if (loadedComment != null)
-			question.getComments().add(loadedComment);
 
-		session.setAttribute(StateName.QUESTION_DETAIL, question);
-		response.sendRedirect("question-detail.jsp");
+		String json = new Gson().toJson(comment);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
 	}
 
 	private void viewReplies(HttpServletRequest request,
@@ -145,7 +123,7 @@ public class CommentController extends HttpServlet {
 
 		ArrayList<ReplyComment> replies = commentDAO.getNextReplies(commentID,
 				defaultRepliesSize, currentRepliesSize);
-		
+
 		String json = new Gson().toJson(replies);
 
 		response.setContentType("application/json");
