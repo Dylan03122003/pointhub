@@ -16,7 +16,6 @@ html {
 }
 
 .userList {
-	font-size: 8.8px;
 	margin-top: 60px;
 	margin-bottom: 80px;
 }
@@ -29,8 +28,6 @@ html {
 	padding: 20px 36px;
 	box-sizing: border-box;
 	background-color: #fff;
-	/*	display: none;
-*/
 }
 
 .userList .searchItem i {
@@ -49,6 +46,12 @@ html {
 
 .userList .searchItem input::placeholder {
 	color: #90A0B7;
+}
+
+.userList .div-btn {
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .userList .btnAdd {
@@ -74,6 +77,7 @@ html {
 }
 
 .userList table {
+	border-spacing: 0px;
 	background-color: #fff;
 	margin: auto;
 	margin-top: 50px;
@@ -84,11 +88,11 @@ html {
 
 /* Cho trình duyệt WebKit */
 .table-container::-webkit-scrollbar {
-	height: 10px;
+	height: 8px;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-	background-color: #999;
+	background-color: #bdbdbd85;
 }
 
 .table-container::-webkit-scrollbar-thumb:hover {
@@ -99,15 +103,9 @@ html {
 	background-color: #ddd;
 }
 
-/* Cho trình duyệt Firefox */
-body {
-	scrollbar-width: thin;
-	scrollbar-color: #333 #ddd;
-}
-
 
 .userList table thead {
-	box-shadow: 0 0.5px 0 #EBEFF2;
+	box-shadow: 0 0.5px 0 #ced1d2;
 }
 
 .userList table tr {
@@ -117,7 +115,10 @@ body {
 	color: #323C47;
 	font-weight: 500;
 	box-sizing: border-box;
+}
 
+.userList table .row:hover {
+	background-color: #f4f4f4;
 }
 
 .userList table img {
@@ -129,4 +130,78 @@ body {
 
 .userList i {
 	cursor: pointer;
+}
+
+@media (min-width: 1600px) {
+
+	.userList .searchItem {
+		max-width: 1500px;
+		padding: 20px 36px;
+
+	}
+
+	.userList .searchItem input {
+		font-size: 16px;
+	}
+
+	.userList table {
+		margin-top: 50px;
+		width: 1500px;
+	}
+
+	.userList table tr {
+		font-size: 16px;
+		letter-spacing: 0.16px;
+		height: 66px;
+	}
+
+	.userList .div-btn {
+		max-width: 1500px;
+	}
+
+	.userList .btnAdd {
+		font-size: 15px;
+	}
+}
+
+/*---------------------------------------*/
+.mt-4 {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	display: flex;
+	height: max-content;
+	justify-content: right;
+	background-color: #fff;
+	padding: 7px 0;
+	padding-right: 5px;
+}
+
+
+.disabled,
+.ml-2,
+.text-blue-500 {
+	display: block;
+	border-radius: 3px;
+	padding: 10px 10px;
+	color: #000;
+}
+
+.disabled {
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.active {
+	color: red;
+	padding: 10px 10px;
+}
+
+.ml-2:hover {
+	background-color: #e0e0e0;
+}
+
+.disabled:hover {
+	background-color: #e0e0e0;
 }
