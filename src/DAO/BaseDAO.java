@@ -43,6 +43,20 @@ public class BaseDAO {
 
 		return -1;
 	}
+	protected int getTotalRecordsUser() {
+		String query = "SELECT COUNT(*) AS total_records FROM users WHERE role <> 'admin' " ;
+		try {
+			ResultSet result = executeQuery(query);
+			if (result.next()) {
+				return result.getInt("total_records");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
+
 
 	protected ResultSet executeQuery(String query, Object... params)
 			throws SQLException {

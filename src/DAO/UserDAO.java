@@ -57,20 +57,26 @@ public class UserDAO extends BaseDAO {
 		return null;
 	}
 
-	public ArrayList<User> getAllUser() {
+	public ArrayList<User> getUsers(int rowsPerPage, int currentPage ) {
 		ArrayList<User> user = new ArrayList<>();
+		String query = "SELECT * FROM users WHERE role <> 'admin' "
+				+ "LIMIT  ?  OFFSET ? ;";
+
 		try {
-			PreparedStatement ps = connection.prepareStatement(
-					"Select * From users WHERE role <> 'admin'");
+			PreparedStatement ps = connection.prepareStatement(query);
+			ps.setInt(1, rowsPerPage);
+			ps.setInt(2, (currentPage - 1) * rowsPerPage);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				int userID = rs.getInt("user_id");
 				String userName = rs.getString("username");
 				String email = rs.getString("email");
 				String photo = rs.getString("photo");
-				user.add(new User(userID, userName, email, photo));
+				User users = new User(userID, userName, email, photo);
+				user.add(users);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return user;
 	}
@@ -117,5 +123,8 @@ public class UserDAO extends BaseDAO {
 			return null;
 		}
 
+	}
+	public int getTotalUsers() {
+		return getTotalRecordsUser();
 	}
 }

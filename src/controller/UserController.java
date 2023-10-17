@@ -13,6 +13,7 @@ import util.PasswordEncryption;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import DAO.BaseDAO;
 import DAO.UserDAO;
 
 /**
@@ -39,6 +40,9 @@ public class UserController extends HttpServlet {
 				break;
 			case "/create-user" :
 				createUserController(request, response);
+				break;
+			case "/" :
+
 			default :
 
 		}
@@ -54,8 +58,21 @@ public class UserController extends HttpServlet {
 		if ((!userDAO.isAdmin(Authentication.getCurrentUserID(request)))) {
 		} else {
 			if (userDAO.isAdmin(Authentication.getCurrentUserID(request))) {
-				ArrayList<User> users = userDAO.getAllUser();
+				int rowsPerPage = 2;
+
+				int currentPage = request.getParameter("page") == null
+						? 1
+						: Integer.parseInt(request.getParameter("page"));
+				double totalUserPages = (double) Math
+						.ceil((double) userDAO.getTotalUsers()
+								/ (double) rowsPerPage);
+				
+				
+				ArrayList<User> users = userDAO.getUsers(rowsPerPage,
+						currentPage);
 				request.setAttribute("users", users);
+				request.setAttribute("currentUserPage", currentPage);
+				request.setAttribute("totalUserPages", totalUserPages);
 				RequestDispatcher dispatcher = request
 						.getRequestDispatcher("user-list.jsp");
 				dispatcher.forward(request, response);
@@ -93,4 +110,5 @@ public class UserController extends HttpServlet {
 		}
 
 	}
+
 }
