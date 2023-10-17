@@ -22,28 +22,35 @@ public class CommentDAO extends BaseDAO {
 
 	}
 
-	public void replyComment(ReplyComment replyComment) {
-		String insertSQL = "INSERT INTO replies (comment_id, user_id, user_reply_id, reply_content) VALUES (?, ?, ?, ?)";
+	public int replyComment(ReplyComment replyComment) {
+		String insertSQL = "INSERT INTO replies (comment_id, user_id, user_reply_id, reply_content, created_at) VALUES (?, ?, ?, ?, ?)";
 		try {
-			executeInsert(insertSQL, replyComment.getCommentID(),
+			int replyID = executeInsert(insertSQL, replyComment.getCommentID(),
 					replyComment.getUserID(), replyComment.getUserReplyID(),
-					replyComment.getReplyContent());
+					replyComment.getReplyContent(),
+					replyComment.getCreatedAt());
+
+			return replyID;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
+		return -1;
+
 	}
 
-	public ArrayList<ReplyComment> getReplyComments(int commentID, int limit) {
+	public ArrayList<ReplyComment> getNextReplies(int commentID, int limit,
+			int currentRepliesSize) {
 		ArrayList<ReplyComment> replyComments = new ArrayList<ReplyComment>();
 
 		String query = "SELECT r.reply_id, r.user_id, r.reply_content, r.user_reply_id, r.created_at, u.username AS username, ur.username AS usernameReply "
 				+ "FROM replies r INNER JOIN users u ON r.user_id = u.user_id "
 				+ "LEFT JOIN users ur ON r.user_reply_id = ur.user_id "
-				+ "WHERE r.comment_id = ? " + "LIMIT ?;";
+				+ "WHERE r.comment_id = ? " + "LIMIT ? OFFSET ?";
 		try {
-			ResultSet result = executeQuery(query, commentID, limit);
+			ResultSet result = executeQuery(query, commentID, limit,
+					(currentRepliesSize - limit) + limit);
 			while (result.next()) {
 				int replyID = result.getInt("reply_id");
 				int userID = result.getInt("user_id");
@@ -124,10 +131,7 @@ public class CommentDAO extends BaseDAO {
 
 	// public static void main(String[] args) {
 	// CommentDAO commentDAO = new CommentDAO();
-	// ArrayList<Comment> comments = commentDAO.getComments(3, 3);
-	//// System.out.println(comments);
-	// Comment comment = commentDAO.getAComment(3, 3);
-	// System.out.println(comment);
+	// System.out.println(commentDAO.getNextReplies(11, 2, 6));
 	// }
 
 }
