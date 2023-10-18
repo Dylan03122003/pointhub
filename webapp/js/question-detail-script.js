@@ -6,7 +6,7 @@ const renderReply = (reply, currentUserID) => {
 >
   <div class="flex items-center justify-start gap-3 mb-5">
     <img
-      src="https://images.unsplash.com/photo-1480429370139-e0132c086e2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80"
+      src="img/${reply.userPhoto}"
       alt=""
       class="w-[50px] h-[50px] object-cover rounded-full"
     />
@@ -54,7 +54,7 @@ const renderComment = (comment, currentUserID) => {
 <div class= "comment-item mb-10" data-commentID="${comment.commentID}">
   <div class="flex items-center justify-start gap-3">
     <img
-      src="https://images.unsplash.com/photo-1480429370139-e0132c086e2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80"
+      src="img/${comment.userPhoto}"
       alt=""
       class="w-[50px] h-[50px] object-cover rounded-full"
     />
@@ -305,7 +305,7 @@ $(document).ready(function() {
 	});
 
 	// Handle closing modal ---------------------------------
-	$(".modal-close").click(function() {
+	$(".modal-close-btn").click(function() {
 		$(".reply-modal").removeClass("flex");
 		$(".reply-modal").addClass("hidden");
 	});

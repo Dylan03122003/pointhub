@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import DAO.QuestionDAO;
 import DAO.TopicDAO;
 
@@ -73,7 +75,6 @@ public class QuestionController extends HttpServlet {
 
 		Question questionDetail = questionDAO.getQuestionByID(questionID,
 				userID);
-		
 
 		request.setAttribute("questionDetail", questionDetail);
 
@@ -85,10 +86,12 @@ public class QuestionController extends HttpServlet {
 		String reportContent = request.getParameter("reportContent");
 		int questionID = Integer.parseInt(request.getParameter("questionID"));
 
-		questionDAO.reportQuestion(questionID,
+		boolean isReported = questionDAO.reportQuestion(questionID,
 				Authentication.getCurrentUserID(request), reportContent);
-
-		response.sendRedirect("question-detail.jsp");
+		String json = new Gson().toJson(isReported);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 
 	}
 	private void getQuestions(HttpServletRequest request,
@@ -135,21 +138,27 @@ public class QuestionController extends HttpServlet {
 		String voteType = request.getParameter("voteType");
 		int questionID = Integer.parseInt(request.getParameter("questionId"));
 		int currentUserID = Authentication.getCurrentUserID(request);
+		boolean isVoted = false;
+		String json;
 		try {
 			questionDAO.voteQuestion(currentUserID, questionID, voteType);
 		} catch (SQLIntegrityConstraintViolationException e) {
-			e.printStackTrace();
-			request.setAttribute("violated_unique_vote", true);
-			MyDispatcher.dispatch(request, response,
-					"question-detail?question_id=" + questionID + "&user_id="
-							+ currentUserID + "");
+			System.out.println("User have already voted");
+			isVoted = false;
+			json = new Gson().toJson(isVoted);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json);
 			return;
 		} catch (Exception e) {
 			System.out.println("global Exception: ");
 			e.printStackTrace();
 		}
-		response.sendRedirect("question-detail?question_id=" + questionID
-				+ "&user_id=" + currentUserID + "");
+		isVoted = true;
+		json = new Gson().toJson(isVoted);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 	}
 
 }

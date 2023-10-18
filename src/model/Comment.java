@@ -7,6 +7,7 @@ public class Comment {
 	private int commentID;
 	private int userID;
 	private String username;
+	private String userPhoto;
 	private int questionID;
 	private String commentContent;
 	private Date createdAt;
@@ -94,10 +95,25 @@ public class Comment {
 		this.replyComments = replyComments;
 	}
 
+
+	public String getUserPhoto() {
+		return userPhoto;
+	}
+
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
+	}
+
 	@Override
 	public String toString() {
-		return "Comment [commentID=" + commentID + ", userID=" + userID + ", username=" + username + ", questionID="
-				+ questionID + ", commentContent=" + commentContent + ", createdAt=" + createdAt + "]";
+		return "Comment [commentID=" + commentID + ", userID=" + userID
+				+ ", username=" + username + ", userPhoto=" + userPhoto
+				+ ", questionID=" + questionID + ", commentContent="
+				+ commentContent + ", createdAt=" + createdAt
+				+ ", replyComments=" + replyComments + "]";
 	}
+	
+
+	
 
 }

@@ -48,7 +48,7 @@ public class CommentDAO extends BaseDAO {
 			int currentRepliesSize) {
 		ArrayList<ReplyComment> replyComments = new ArrayList<ReplyComment>();
 
-		String query = "SELECT r.reply_id, r.user_id, r.reply_content, r.user_reply_id, r.created_at, u.username AS username, ur.username AS usernameReply "
+		String query = "SELECT r.reply_id, r.user_id, r.reply_content, r.user_reply_id, r.created_at, u.username AS username, u.photo , ur.username AS usernameReply "
 				+ "FROM replies r INNER JOIN users u ON r.user_id = u.user_id "
 				+ "LEFT JOIN users ur ON r.user_reply_id = ur.user_id "
 				+ "WHERE r.comment_id = ? " + "LIMIT ? OFFSET ?";
@@ -63,10 +63,12 @@ public class CommentDAO extends BaseDAO {
 				Date createdAt = result.getDate("created_at");
 				String username = result.getString("username");
 				String usernameReply = result.getString("usernameReply");
+				String userPhoto = result.getString("photo");
 
 				ReplyComment replyComment = new ReplyComment(replyID, commentID,
 						userID, username, replyContent, userReplyID,
 						usernameReply, createdAt);
+				replyComment.setUserPhoto(userPhoto);
 				replyComments.add(replyComment);
 			}
 		} catch (SQLException e) {
@@ -79,7 +81,7 @@ public class CommentDAO extends BaseDAO {
 
 	public ArrayList<Comment> getComments(int questionID, int commentLimit) {
 		ArrayList<Comment> comments = new ArrayList<Comment>();
-		String commentQuery = "SELECT c.comment_id, c.user_id, c.comment_content, c.created_at, u.username "
+		String commentQuery = "SELECT c.comment_id, c.user_id, c.comment_content, c.created_at, u.username, u.photo "
 				+ "FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.question_id = ? LIMIT ?";
 
 		ResultSet commentResult;
@@ -94,8 +96,12 @@ public class CommentDAO extends BaseDAO {
 						.getString("comment_content");
 				Date createdAt = commentResult.getDate("created_at");
 				String username = commentResult.getString("username");
+				String userPhoto = commentResult.getString("photo");
+				
 				Comment comment = new Comment(commentID, userIDFromDB, username,
 						questionID, commentContent, createdAt);
+				
+				comment.setUserPhoto(userPhoto);
 
 				comments.add(comment);
 			}
@@ -108,7 +114,7 @@ public class CommentDAO extends BaseDAO {
 
 	public Comment getAComment(int questionID, int ordinal) {
 		Comment comment = null;
-		String commentQuery = "SELECT c.comment_id, c.user_id, c.comment_content, c.created_at, u.username "
+		String commentQuery = "SELECT c.comment_id, c.user_id, c.comment_content, c.created_at, u.username, u.photo "
 				+ "FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.question_id = ? LIMIT 1 OFFSET ?";
 
 		ResultSet commentResult;
@@ -122,8 +128,10 @@ public class CommentDAO extends BaseDAO {
 						.getString("comment_content");
 				Date createdAt = commentResult.getDate("created_at");
 				String username = commentResult.getString("username");
+				String userPhoto = commentResult.getString("photo");
 				comment = new Comment(commentID, userIDFromDB, username,
 						questionID, commentContent, createdAt);
+				comment.setUserPhoto(userPhoto);
 
 			}
 		} catch (SQLException e) {

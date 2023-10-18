@@ -19,6 +19,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="js/question-detail-script.js"></script>
+<script defer type="module" src="js/main-question-detail.js"></script>
+
 
 <style>
 .modal {
@@ -57,6 +59,11 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 
 <body class="" data-questionID="<%=question.getQuestionID()%>"
 	data-userID="<%=Authentication.getCurrentUserID(request)%>">
+
+	<!-- Toast --------------------------------------------------------------------->
+	<div id="toast"
+		class="fixed top-0 right-0 p-4 m-4 text-white rounded-md shadow-lg hidden"></div>
+
 	<!-- Reply Comment Form --------------------------------------------------------------------->
 	<div
 		class="reply-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center">
@@ -76,45 +83,42 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 					Submit</button>
 			</form>
 			<button
-				class="modal-close bg-gray-300 text-gray-700 px-2 py-1 rounded absolute top-4 right-4"
+				class="modal-close-btn bg-gray-300 text-gray-700 px-2 py-1 rounded absolute top-4 right-4"
 				data-dismiss="modal">&times;</button>
 		</div>
 	</div>
 
 
-	<div id="modalOverlay" class="fixed inset-0 bg-black opacity-50 hidden"></div>
+	<div id="report-overlay"
+		class="fixed inset-0 bg-black opacity-50 hidden"></div>
 
-	<!-- Modal Container -->
-	<div id="customModal"
-		class="fixed inset-0 flex items-center justify-center hidden">
-		<div class="modal-content bg-white p-4 rounded-lg shadow-lg w-1/2">
-			<span id="closeModalButton"
+	<!-- Report Modal ----------------------------------------------------------------------------------------------->
+	<div id="report-modal"
+		class="fixed inset-0 hidden items-center justify-center">
+		<div
+			class="report-content-container modal-content bg-white p-4 rounded-lg shadow-lg w-1/2">
+			<span id="report-close-btn"
 				class="text-3xl absolute top-0 right-0 m-2 cursor-pointer text-gray-600 hover:text-gray-800">&times;</span>
 			<h2 class="text-2xl font-semibold mb-4">Report</h2>
 
-			<form id="reportForm" action="report-question" method="post">
-				<input type="hidden" name="questionID"
-					value="<%=question.getQuestionID()%>" />
-				<textarea name="reportContent"
-					class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
-				<input id="submitBtn"
-					class="px-4 py-1 bg-blue-400 rounded-md text-white" type="submit" />
+			<form id="reportForm">
+				<textarea
+					class="report-textarea w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+				<input
+					class="report-submit-btn px-4 py-1 bg-blue-400 rounded-md text-white"
+					type="button" value="Submit" />
 			</form>
 		</div>
 	</div>
 
-	<!-- <c:if test="${violated_unique_vote}">
-      <h2>You have already voted this question!</h2>
-    </c:if> -->
 	<jsp:include page="navbar.jsp" />
 
 	<div class="w-[320px] sm:w-[600px] md:w-[800px] lg:w-[1000px] mx-auto">
 		<div class="p-10 bg-white">
 			<div class="flex item-center justify-between">
 				<div class="flex items-center justify-start gap-3">
-					<img
-						src="img/<%=question.getUserPhoto()%>"
-						alt="" class="w-[50px] h-[50px] object-cover rounded-full" />
+					<img src="img/<%=question.getUserPhoto()%>" alt=""
+						class="w-[50px] h-[50px] object-cover rounded-full" />
 					<div class="profile_info">
 						<p>
 							@<%=question.getUsername()%></p>
@@ -122,8 +126,8 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 					</div>
 				</div>
 				<div class="sm:block hidden">
-					<button id="openModalButton"
-						class="bg-red-400 text-white px-4 py-1 rounded-md">
+					<button
+						class="report-btn bg-red-400 text-white px-4 py-1 rounded-md">
 						Report</button>
 					<button
 						class="${questionDetail.isBookmarked() ? 'red-button' : 'white-button'}  bg-orange-400 text-white px-4 py-1 rounded-md">
@@ -144,16 +148,15 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 			</div>
 
 			<div class="mt-10 flex items-center gap-2">
-				<a class=""
-					href="vote-question?questionId=<%=question.getQuestionID()%>&voteType=upvote">Upvote</a>
-				<p><%=question.getVotesSum()%></p>
+				<button class="upvote-btn">Upvote</button>
+				<p class="votes-sum"><%=question.getVotesSum()%></p>
 
-				<a
-					href="vote-question?questionId=<%=question.getQuestionID()%>&voteType=downvote">Downvote</a>
+				<button class="downvote-btn"
+					href="vote-question?questionId=<%=question.getQuestionID()%>&voteType=downvote">Downvote</button>
 			</div>
 			<div class="flex gap-4">
 				<button
-					class="mt-10 sm:hidden block bg-red-400 text-white px-4 py-1 rounded-md">
+					class="report-btn mt-10 sm:hidden block bg-red-400 text-white px-4 py-1 rounded-md">
 					Report</button>
 				<button
 					class="${questionDetail.isBookmarked() ? 'red-button' : 'white-button'} mt-10 sm:hidden block bg-orange-400 text-white px-4 py-1 rounded-md">
@@ -165,8 +168,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 			class="bg-white mt-10 p-4 flex flex-col gap-2 items-center justify-center">
 			<h2 class="font-medium text-xl">Comment</h2>
 			<form class="w-full flex flex-col gap-4 justify-center items-end">
-				<textarea 
-				    required="required"
+				<textarea required="required"
 					class="comment-content w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
 				<button
 					class="comment-btn px-4 py-1 rounded-md bg-orange-400 text-white"
