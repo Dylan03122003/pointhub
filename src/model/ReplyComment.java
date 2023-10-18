@@ -7,6 +7,7 @@ public class ReplyComment {
 	private int commentID;
 	private int userID;
 	private String username;
+	private String userPhoto;
 	private String replyContent;
 	private int userReplyID;
 	private String usernameReply;
@@ -104,6 +105,14 @@ public class ReplyComment {
 	public String toString() {
 		return "ReplyComment [replyID=" + replyID + ", commentID=" + commentID + ", userID=" + userID
 				+ ", replyContent=" + replyContent + ", userReplyID=" + userReplyID + ", createdAt=" + createdAt + "]";
+	}
+
+	public String getUserPhoto() {
+		return userPhoto;
+	}
+
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
 	}
 
 }

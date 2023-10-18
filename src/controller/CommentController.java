@@ -18,6 +18,7 @@ import model.Comment;
 import model.Question;
 import model.ReplyComment;
 import util.Authentication;
+import util.CustomLog;
 import util.StateName;
 
 public class CommentController extends HttpServlet {
@@ -80,7 +81,6 @@ public class CommentController extends HttpServlet {
 			HttpServletResponse response) throws IOException {
 		int questionID = Integer.parseInt(request.getParameter("questionID"));
 		ArrayList<Comment> comments = commentDAO.getComments(questionID, 2);
-
 		String json = new Gson().toJson(comments);
 
 		response.setContentType("application/json");

@@ -127,15 +127,19 @@ public class QuestionDAO extends BaseDAO {
 
 	}
 
-	public void reportQuestion(int questionID, int userID,
+	public boolean reportQuestion(int questionID, int userID,
 			String reportContent) {
 		String query = "INSERT INTO report_questions (question_id, user_id, report_content) VALUES (?, ?, ?);";
 
 		try {
 			executeUpdate(query, questionID, userID, reportContent);
+
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return false;
 
 	}
 
