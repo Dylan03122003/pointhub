@@ -22,12 +22,12 @@ html {
 	<jsp:include page="navbar.jsp" />
 
 	<div class="login-form">
-	<img alt="" src="img/login1.png">
+	<img alt="" src="img/login.jpg">
 		<form class="login" action="LogInController" method="post">
 			<h2>We've Missed You!</h2>
 			<p>More than 150 questions are waiting for your wise suggestions!</p>
 			<div class="form-group">
-				<input type="email" name="email" required> <label>Username</label>
+				<input type="email" name="email" required> <label>Email</label>
 			</div>
 			<div class="form-group">
 				<input id="password" type="password" name="password" required>
