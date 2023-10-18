@@ -10,6 +10,25 @@ import model.User;
 
 public class UserDAO extends BaseDAO {
 
+	public User getUserProfile(int userID) {
+		String query = "SELECT email, username, photo FROM users WHERE user_id = ?";
+		User user = new User();
+		try {
+			ResultSet result = executeQuery(query, userID);
+			if (result.next()) {
+				String email = result.getString("email");
+				String username = result.getString("username");
+				String photo = result.getString("photo");
+				user.setEmail(email);
+				user.setUsername(username);
+				user.setPhoto(photo);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return user;
+	}
+
 	public String getUsernameByID(int id) {
 		String query = "SELECT username FROM users WHERE user_id = ?;";
 
@@ -74,7 +93,7 @@ public class UserDAO extends BaseDAO {
 		return null;
 	}
 
-	public ArrayList<User> getUsers(int rowsPerPage, int currentPage ) {
+	public ArrayList<User> getUsers(int rowsPerPage, int currentPage) {
 		ArrayList<User> user = new ArrayList<>();
 		String query = "SELECT * FROM users WHERE role <> 'admin' "
 				+ "LIMIT  ?  OFFSET ? ;";
