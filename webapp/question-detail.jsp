@@ -166,6 +166,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 			<h2 class="font-medium text-xl">Comment</h2>
 			<form class="w-full flex flex-col gap-4 justify-center items-end">
 				<textarea 
+				    required="required"
 					class="comment-content w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
 				<button
 					class="comment-btn px-4 py-1 rounded-md bg-orange-400 text-white"
