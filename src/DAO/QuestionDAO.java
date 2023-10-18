@@ -34,7 +34,7 @@ public class QuestionDAO extends BaseDAO {
 
 			if (topicName.equals("All topics")) {
 				query = "SELECT "
-						+ "q.question_id, u.user_id, u.username, q.created_at AS createdAt, "
+						+ "q.question_id, u.user_id, u.username, u.photo, q.created_at AS createdAt, "
 						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
 						+ "FROM questions q JOIN users u ON q.user_id = u.user_id "
 						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
@@ -42,7 +42,7 @@ public class QuestionDAO extends BaseDAO {
 				result = executeQuery(query);
 
 			} else {
-				query = "SELECT q.question_id, u.user_id, u.username, q.created_at AS createdAt, "
+				query = "SELECT q.question_id, u.user_id, u.username, u.photo, q.created_at AS createdAt, "
 						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
 						+ "FROM questions q "
 						+ "JOIN users u ON q.user_id = u.user_id "
@@ -63,8 +63,11 @@ public class QuestionDAO extends BaseDAO {
 				String questionContent = result.getString("questionContent");
 				String[] tagContents = result.getString("tag_content")
 						.split(",");
-				questions.add(new Question(userID, questionID, username,
-						createdAt, title, questionContent, tagContents));
+				String photo = result.getString("photo");
+				Question question = new Question(userID, questionID, username,
+						createdAt, title, questionContent, tagContents);
+				question.setUserPhoto(photo);
+				questions.add(question);
 			}
 
 			return questions;
@@ -76,14 +79,11 @@ public class QuestionDAO extends BaseDAO {
 
 	}
 
-	// Retrieve user photo, username, createdAt (question), title,
-	// questionContent, tags, vote, bookmark
 	public Question getQuestionByID(int questionID, int userID) {
 
 		Question question = null;
-		// ArrayList<Comment> comments = new ArrayList<Comment>();
 
-		String query = "SELECT " + "u.username AS username, "
+		String query = "SELECT " + "u.username AS username, u.photo, "
 				+ "q.created_at AS createdAt, " + "q.title AS title, "
 				+ "q.question_content AS questionContent, "
 				+ "q.tags AS tagContents, " + "IFNULL(upvotes, 0) AS upvotes, "
@@ -110,17 +110,14 @@ public class QuestionDAO extends BaseDAO {
 				int upvotes = result.getInt("upvotes");
 				int downvotes = result.getInt("downvotes");
 				boolean isBookmarked = result.getBoolean("isBookmarked");
+				String userPhoto = result.getString("photo");
 
 				question = new Question(questionID, userID, username,
 						questionContent, title, createdAt, tagContents, upvotes,
 						downvotes, isBookmarked);
+				question.setUserPhoto(userPhoto);
 
 			}
-
-			CommentDAO commentDAO = new CommentDAO();
-			ArrayList<Comment> comments = commentDAO.getComments(questionID, 1);
-
-			question.setComments(comments);
 
 		} catch (SQLException e) {
 			System.out.println("in DAO");

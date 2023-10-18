@@ -39,8 +39,7 @@ public class QuestionController extends HttpServlet {
 				getQuestions(request, response);
 				break;
 			case "/question-detail" :
-				getQuestionDetailTest(request, response);
-				// getQuestionDetailHandler(request, response);
+				getQuestionDetailHandler(request, response);
 				break;
 			case "/vote-question" :
 				voteQuestionHandler(request, response);
@@ -67,7 +66,7 @@ public class QuestionController extends HttpServlet {
 
 	}
 
-	private void getQuestionDetailTest(HttpServletRequest request,
+	private void getQuestionDetailHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int questionID = Integer.parseInt(request.getParameter("question_id"));
 		int userID = Integer.parseInt(request.getParameter("user_id"));
@@ -75,7 +74,6 @@ public class QuestionController extends HttpServlet {
 		Question questionDetail = questionDAO.getQuestionByID(questionID,
 				userID);
 		
-
 
 		request.setAttribute("questionDetail", questionDetail);
 
@@ -115,7 +113,6 @@ public class QuestionController extends HttpServlet {
 
 		ArrayList<Question> questions = questionDAO
 				.getNewestQuestions(activeTopic);
-
 		request.setAttribute("question_list", questions);
 		MyDispatcher.dispatch(request, response, "/index.jsp");
 	}
@@ -131,20 +128,6 @@ public class QuestionController extends HttpServlet {
 				questionContent, title, tagContents, topicID);
 
 		response.sendRedirect("questions");
-	}
-
-	private void getQuestionDetailHandler(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		int questionID = Integer.parseInt(request.getParameter("question_id"));
-		int userID = Integer.parseInt(request.getParameter("user_id"));
-
-		Question questionDetail;
-		questionDetail = questionDAO.getQuestionByID(questionID, userID);
-
-		HttpSession session = request.getSession();
-		session.setAttribute(StateName.QUESTION_DETAIL, questionDetail);
-
-		MyDispatcher.dispatch(request, response, "question-detail.jsp");
 	}
 
 	private void voteQuestionHandler(HttpServletRequest request,

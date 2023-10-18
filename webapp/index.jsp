@@ -59,7 +59,7 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 					class="question-item">
 					<div class="question-author">
 						<img
-							src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1965&q=80" />
+							src="img/${question.getUserPhoto()}" />
 						<div class="question-author-name">
 							<h4>${question.getUsername()}</h4>
 							<p>${question.getCreatedAt()}</p>
