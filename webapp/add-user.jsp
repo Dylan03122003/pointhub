@@ -20,19 +20,19 @@
 <%
 String addStatus = (String) request.getAttribute("createStatus");
 %>
-
+<style>
+.createUser .noteError {
+	color: red;
+}
+</style>
 <body>
 	<jsp:include page="navbar.jsp" />
-
-	<c:if test="<%=addStatus != null%>">
-		<h1><%=addStatus%></h1>
-	</c:if>
 
 	<div class="createUser">
 		<img id="background"
 			src="https://i.pinimg.com/564x/ee/e2/79/eee279c7d9b4c4e5fc060a9f9bb61c5f.jpg"
 			alt="" srcset="">
-		<form action="create-user" method="get">
+		<form action="create-user" id="create-user" method="get">
 			<h1 class="heading">User Information</h1>
 			<div class="row">
 				<div class="input-item">
@@ -62,20 +62,28 @@ String addStatus = (String) request.getAttribute("createStatus");
 				<div class="input-item">
 					<p>Password</p>
 					<div class="password-item">
-						<input id="password" type="password" required> <i
-							class="fa-regular fa-eye" onclick="hide()"></i> <i
-							class="fa-regular fa-eye-slash" onclick="deleteHide()"></i>
+						<input id="password" type="password" name="pass" required>
+						<i data="password" class="fa-regular fa-eye" onclick="hide(event)"></i>
+						<i data="password" class="fa-regular fa-eye-slash"
+							onclick="deleteHide(event)"></i>
 					</div>
 				</div>
 				<div class="input-item">
 					<p>Repeat pasword</p>
 					<div class="password-item">
-						<input id="password" type="password" name="pass" required>
-						<i class="fa-regular fa-eye" onclick="hide()"></i> <i
-							class="fa-regular fa-eye-slash" onclick="deleteHide()"></i>
+						<input id="repeatPassword" type="password" required> <i
+							data="repeatPassword" class="fa-regular fa-eye reOpenEye"
+							onclick="hide(event)"></i> <i data="repeatPassword"
+							class="fa-regular fa-eye-slash reCloseEye"
+							onclick="deleteHide(event)"></i>
 					</div>
 				</div>
 			</div>
+			<c:if test="<%=addStatus != null%>">
+					<p class="noteError">* <%=addStatus%></p>
+				</c:if>
+				<p class="error noteError" id="passwordError" style="display: none;">*
+					Passwords do not match. Please try again.</p>
 			<div class="btn">
 				<button id="btn-cancel" type="reset">Cancel</button>
 				<button id="btn-submit" type="submit">
@@ -93,21 +101,61 @@ String addStatus = (String) request.getAttribute("createStatus");
 		</form>
 	</div>
 	<script>
+		/*  add eye hide password */
 		let password = document.getElementById('password');
+		let rePass = document.getElementById('repeatPassword');
 		let openEye = document.querySelector('.fa-eye');
+		let reOpenEye = document.querySelector('.reOpenEye');
 		let closeEye = document.querySelector('.fa-eye-slash');
-		function deleteHide() {
-			console.log(password.type);
-			password.type = "text";
-			closeEye.style.display = "none";
-			openEye.style.display = "block";
+		let reCloseEye = document.querySelector('.reCloseEye');
+
+		function deleteHide(element) {
+			// console.log(password.type);
+			console.log(element.target.getAttribute('data'));
+			let data = element.target.getAttribute('data');
+			if (data == "password") {
+				password.type = "text";
+				closeEye.style.display = "none";
+				openEye.style.display = "block";
+			} else {
+				rePass.type = "text";
+				reCloseEye.style.display = "none";
+				reOpenEye.style.display = "block";
+			}
+
 		}
-		function hide() {
-			console.log(password.type);
-			password.type = "password";
-			closeEye.style.display = "block";
-			openEye.style.display = "none";
+		function hide(element) {
+			// console.log(password.type);
+			console.log(element.target.getAttribute('data'));
+			let data = element.target.getAttribute('data');
+			if (data == "password") {
+				password.type = "password";
+				closeEye.style.display = "block";
+				openEye.style.display = "none";
+			} else {
+				rePass.type = "password";
+				reCloseEye.style.display = "block";
+				reOpenEye.style.display = "none";
+			}
 		}
+		/* add check pass  */
+
+		document.getElementById("create-user").addEventListener(
+				"submit",
+				function(event) {
+					var password = document.getElementById("password").value;
+					var repeatedPassword = document
+							.getElementById("repeatPassword").value;
+					var passwordError = document
+							.getElementById("passwordError");
+					if (password !== repeatedPassword) {
+						passwordError.style.display = "block"; // Display the error message
+						event.preventDefault(); // Prevent the form from submitting
+					} else {
+						passwordError.style.display = "none"; // Hide the error message if passwords match
+					}
+/* 					event.preventDefault();
+ */				});
 	</script>
 </body>
 </html>
