@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -8,6 +7,7 @@ public class Question {
 	private int questionID;
 	private int userID;
 	private String username;
+	private String userPhoto;
 	private String title;
 	private String questionContent;
 	private Date createdAt;
@@ -16,7 +16,6 @@ public class Question {
 	private int downvotes;
 	private boolean isBookmarked;
 	private int topicID;
-	private ArrayList<Comment> comments = new ArrayList<Comment>();
 
 	public Question(int questionID, int userID, String questionContent,
 			String title, Date createdAt) {
@@ -149,32 +148,7 @@ public class Question {
 		return this.upvotes - this.downvotes;
 	}
 
-	public ArrayList<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(ArrayList<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public int getReplyCommentSize(int commentID) {
-		for (Comment comment : comments) {
-			if (commentID == comment.getCommentID()) {
-				return comment.getReplyComments().size();
-			}
-		}
-
-		return -1;
-	}
-
-	public void setReplyComments(int commentID,
-			ArrayList<ReplyComment> replyComments) {
-		for (Comment comment : comments) {
-			if (commentID == comment.getCommentID()) {
-				comment.setReplyComments(replyComments);
-			}
-		}
-	}
+	
 	public int getTopicID() {
 		return topicID;
 	}
@@ -183,14 +157,26 @@ public class Question {
 		this.topicID = topicID;
 	}
 
+
+	public String getUserPhoto() {
+		return userPhoto;
+	}
+
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
+	}
+
 	@Override
 	public String toString() {
 		return "Question [questionID=" + questionID + ", userID=" + userID
-				+ ", username=" + username + ", questionContent="
-				+ questionContent + ", title=" + title + ", createdAt="
-				+ createdAt + ", tagContents=" + Arrays.toString(tagContents)
-				+ ", upvotes=" + upvotes + ", downvotes=" + downvotes
-				+ ", isBookmarked=" + isBookmarked + "]";
+				+ ", username=" + username + ", userPhoto=" + userPhoto
+				+ ", title=" + title + ", questionContent=" + questionContent
+				+ ", createdAt=" + createdAt + ", tagContents="
+				+ Arrays.toString(tagContents) + ", upvotes=" + upvotes
+				+ ", downvotes=" + downvotes + ", isBookmarked=" + isBookmarked
+				+ ", topicID=" + topicID + "]";
 	}
+	
+	
 
 }
