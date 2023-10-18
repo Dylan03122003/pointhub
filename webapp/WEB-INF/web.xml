@@ -101,6 +101,7 @@
 		<url-pattern>/user-list</url-pattern>
 		<url-pattern>/delete-user</url-pattern>
 		<url-pattern>/create-user</url-pattern>
+		<url-pattern>/view-my-profile</url-pattern>
 
 
 	</servlet-mapping>

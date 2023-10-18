@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.User;
 import util.Authentication;
+import util.MyDispatcher;
 import util.PasswordEncryption;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,8 +42,9 @@ public class UserController extends HttpServlet {
 			case "/create-user" :
 				createUserController(request, response);
 				break;
-			case "/" :
-
+			case "/view-my-profile" :
+				viewMyProfile(request, response);
+				break;
 			default :
 
 		}
@@ -81,6 +83,17 @@ public class UserController extends HttpServlet {
 		}
 
 	}
+	
+	private void viewMyProfile(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		int currentUserID = Authentication.getCurrentUserID(request);
+		User user = userDAO.getUserProfile(currentUserID);
+		
+		request.setAttribute("userProfile", user);
+		
+		MyDispatcher.dispatch(request, response, "user-profile.jsp");
+	}
+	
 	private void deleteUserByID(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int UserID = Integer.parseInt(request.getParameter("UserID"));

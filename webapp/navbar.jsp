@@ -78,6 +78,7 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 
 			<c:if test="<%=isLoggedIn%>">
 				<li><a href="create-question.jsp">Ask a question</a></li>
+				<li><a href="view-my-profile">View profile</a></li>
 				<li><a href="log-out">Logout</a></li>
 			</c:if>
 
