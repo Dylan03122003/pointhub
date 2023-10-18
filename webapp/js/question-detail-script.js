@@ -2,8 +2,7 @@
 
 const renderReply = (reply, currentUserID) => {
 	return `
-  <div
-  class="border-l-8 pl-5 p-2 mb-5 border border-solid border-blue-400"
+  <div data-replyid="${reply.replyID}" class="reply-item border-l-8 pl-5 p-2 mb-5 border border-solid border-blue-400"
 >
   <div class="flex items-center justify-start gap-3 mb-5">
     <img
@@ -140,16 +139,24 @@ const viewMoreReplies = (commentID, repliesSize, currentUserID) => {
 		url: "view-replies",
 		data: data,
 		success: function(data) {
-			let replyTemplates = "";
-			for (const reply of data) {
-				replyTemplates += renderReply(reply, currentUserID)
-			}
 
 			const repliesContainer = $(`.replies-container[data-commentID="${commentID}"]`);
+
+			const replyItems = repliesContainer.find(".reply-item");
+
+			const currentReplyIDs = []
+
+			replyItems.each(function() {
+				const replyID = $(this).data("replyid");
+				currentReplyIDs.push(replyID);
+			});
+
+			let replyTemplates = "";
+			for (const reply of data) {
+				if (!currentReplyIDs.includes(reply.replyID)) replyTemplates += renderReply(reply, currentUserID)
+			}
+
 			repliesContainer.append(replyTemplates)
-
-
-
 		},
 		error: function() {
 			alert("Failed to view replies.");
@@ -231,6 +238,7 @@ const createComment = (questionID, currentUserID, commentContent) => {
 		success: function(data) {
 			const commentTemplate = renderComment(data, currentUserID);
 			$("#comments-container").append(commentTemplate);
+			$(".comment-content").val("")
 		},
 		error: function() {
 			alert("Failed to load data from the server.");
@@ -286,7 +294,6 @@ $(document).ready(function() {
 	$(document).on("click", ".view-replies-btn", function() {
 		const commentID = $(this).data("commentid");
 		const repliesSize = Number.parseInt($(this).data("repliessize"));
-
 		viewMoreReplies(commentID, repliesSize, currentUserID);
 
 		let currentRepliesSize = parseInt($(this).data("repliessize"));
@@ -325,16 +332,17 @@ $(document).ready(function() {
 		const viewRepliesBtn = $(`.view-replies-btn[data-commentID="${commentID}"]`)
 
 		// THERE IS A BUG HERE
-		let currentRepliesSize = parseInt(viewRepliesBtn.data("repliessize"));
-		currentRepliesSize += 1;
-		viewRepliesBtn.data("repliessize", currentRepliesSize);
+		//let currentRepliesSize = parseInt(viewRepliesBtn.data("repliessize"));
+		//currentRepliesSize += 1;
+		//viewRepliesBtn.data("repliessize", currentRepliesSize);
 
 	});
 
 	// Handle commenting 
 	$(".comment-btn").click(function() {
 		const commentContent = $(".comment-content").val()
-		createComment(questionID, currentUserID, commentContent)
+		if (commentContent.trim())
+			createComment(questionID, currentUserID, commentContent)
 	})
 
 	// Handle viewing more comments
