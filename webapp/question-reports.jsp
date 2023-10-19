@@ -57,7 +57,7 @@
 					<td class="px-6 py-4">
 						<div class="flex items-center">
 							<img
-								src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1965&q=80"
+								src="img/${report.getUserPhoto()}"
 								alt="User 1" class="w-12 h-12 object-cover rounded-full">
 							<h3 class="ml-4">${report.getReportingUsername()}</h3>
 						</div>

@@ -1,0 +1,220 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&family=Roboto:wght@100;400&display=swap');
+
+* {
+	transition: 0.2s linear;
+}
+
+html {
+	background: #FAFAFA;
+	/* font-size: 62.5%; */
+	font-family: 'Roboto', sans-serif;
+
+}
+
+.viewProfile {
+	font-family: 'Roboto', sans-serif;
+	position: relative;
+	margin: auto;
+	margin-top: 70px;
+	box-sizing: border-box;
+	width: fit-content;
+}
+
+.viewProfile .profile {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 64px;
+}
+
+.viewProfile .profile img {
+	width: 300px;
+	height: 271px;
+	flex-shrink: 0;
+	object-fit: cover;
+	border-radius: 35px;
+}
+
+.viewProfile .profile #username {
+	font-size: 30px;
+	font-weight: 600;
+	letter-spacing: 1px;
+}
+
+.viewProfile .profile #contact {
+	margin: 20px 0;
+	font-size: 23px;
+	font-weight: 600;
+	letter-spacing: 1px;
+}
+
+.viewProfile .profile #email {
+	margin: 20px 0;
+	font-size: 14px;
+}
+
+.viewProfile .profile #email span {
+	font-weight: 600;
+}
+
+.viewProfile .profile .logo-social {
+	gap: 13px;
+	display: flex;
+	font-size: 16px;
+	margin: 20px 0;
+}
+
+.viewProfile .profile .logo-social a {
+	color: #000;
+}
+
+.viewProfile .profile .stats {
+	display: flex;
+	width: 600px;
+	height: 70px;
+	align-items: center;
+	justify-content: space-around;
+	background-color: #FFBF8C;
+	border-radius: 25px;
+}
+
+.viewProfile .profile .stats span {
+	font-weight: 800;
+	display: flex;
+	gap: 1rem;
+	font-size: 15px;
+}
+
+.viewProfile .profile .stats i {
+	font-size: 18px;
+}
+
+#btn-update {
+	position: absolute;
+	top: 0;
+	right: 0;
+	color: #fff;
+	text-decoration: none;
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 12px 13px;
+	letter-spacing: 0.5px;
+	background-color: #F48023;
+	border-radius: 5px;
+}
+
+/* ------ BODY ----- */
+.body-item {
+	margin-top: 30px;
+	width: 100%;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	font-size: 18px;
+	border-radius: 5px;
+	border-top: none;
+}
+
+.profile-nav ul {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	gap: 2px;
+	padding: 3px 0 0 0;
+	list-style-type: none;
+	background-color: #ffbf8c63;
+	border-radius: 5px;
+}
+
+.profile-nav ul li {
+	background-color: #FFBF8C;
+	font-weight: 600;
+	color: #333;
+	padding: 10px 20px;
+	border-radius: 3px;
+	box-shadow: 0 0.5px 1.5px rgba(0, 0, 0, 0.1);
+	box-shadow: 2px 1px 5px 0px rgba(0, 0, 0, 0.15);
+}
+
+.body-item .content {
+	display: none;
+}
+
+.body-item #posts-nav {
+	opacity: 0.5;
+}
+
+.body-item #about {
+	display: block;
+}
+
+.body-item #about p {
+	padding: 5px 15px;
+	max-width: 850px;
+	font-size: 16px;
+	line-height: 30px;
+	margin-left: 5px;
+}
+
+@media (max-width: 1010px) {
+	.viewProfile .profile .stats {
+		width: 100%;
+	}
+}
+
+/* --------------------------------------------------------------------------------------- */
+/* Style for the card container */
+.card-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 20px;
+	/* padding: 20px; */
+}
+
+/* Style for each card */
+.card {
+	width: 100%;
+	border: 1px solid #ccc;
+	/* border-left: 0.8rem solid #999; */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	overflow: hidden;
+	text-decoration: none;
+}
+
+/* Style for the card body (question details) */
+.card-body {
+	padding: 15px;
+}
+
+/* Style for the card title (question title) */
+.card-title {
+	color: #555D7B;
+	margin: 0;
+	font-size: 18px;
+	margin-bottom: 0.5rem;
+}
+
+/* Style for the card text (question content) */
+.card-text {
+	font-size: 14px;
+	color: #333;
+}
+
+/* Style for the card tags (tag contents) */
+.card-tags {
+	font-size: 12px;
+	color: #555;
+	margin-top: 10px;
+	display: flex;
+	gap: 5px;
+}
+
+/* Style for the card footer (created date) */
+.card-footer {
+	background-color: #f8f8f8;
+	padding: 10px;
+	text-align: center;
+	color: #555;
+	font-size: 12px;
+}

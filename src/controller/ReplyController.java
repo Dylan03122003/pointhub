@@ -39,7 +39,7 @@ public class ReplyController extends HttpServlet {
 		int questionID = Integer.parseInt(request.getParameter("questionID"));
 		int userReplyID = Integer.parseInt(request.getParameter("userReplyID"));
 		int currentUserID = Authentication.getCurrentUserID(request);
-        Date currentDate = new Date();
+		Date currentDate = new Date();
 		ReplyComment replyComment = new ReplyComment(commentID, currentUserID,
 				replyContent, userReplyID);
 		replyComment.setCreatedAt(currentDate);
@@ -47,8 +47,9 @@ public class ReplyController extends HttpServlet {
 		int replyID = commentDAO.replyComment(replyComment);
 
 		String currentUsername = Authentication.getCurrentUsername(request);
-		User user =userDAO.getUserProfile(currentUserID);
-		
+		User user = userDAO.getUserProfile(userReplyID); // HERE
+		User currentUserProfile = userDAO.getUserProfile(currentUserID); // HERE
+
 		ReplyComment reply = new ReplyComment();
 		reply.setReplyID(replyID);
 		reply.setCommentID(commentID);
@@ -58,14 +59,13 @@ public class ReplyController extends HttpServlet {
 		reply.setUsernameReply(user.getUsername());
 		reply.setReplyContent(replyContent);
 		reply.setCreatedAt(currentDate);
-		reply.setUserPhoto(user.getPhoto());
+		reply.setUserPhoto(currentUserProfile.getPhoto());
 
 		String json = new Gson().toJson(reply);
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);
-
 
 	}
 

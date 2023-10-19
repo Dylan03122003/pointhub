@@ -9,6 +9,8 @@ public class QuestionReport {
 	private String reportingUsername;
 	private String reportContent;
 	
+	private String userPhoto;
+	
 	
 	
 
@@ -87,6 +89,14 @@ public class QuestionReport {
 				+ reportingUserID + ", reportedUserID=" + reportedUserID
 				+ ", reportingUsername=" + reportingUsername
 				+ ", reportContent=" + reportContent + "]";
+	}
+
+	public String getUserPhoto() {
+		return userPhoto;
+	}
+
+	public void setUserPhoto(String userPhoto) {
+		this.userPhoto = userPhoto;
 	}
 
 }
