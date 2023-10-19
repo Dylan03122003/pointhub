@@ -16,7 +16,7 @@ User user = (User) request.getAttribute("userProfile");
 <body>
 	<jsp:include page="navbar.jsp" />
 
-	<a href="update-profile?userID=<%=user.getUserID()%>">Update</a>
+	<a href="retrieve-profile?userID=<%=user.getUserID()%>">Update</a>
 
 	<h2>
 		Email:

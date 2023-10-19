@@ -19,6 +19,7 @@
 boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 String username = (String) Authentication.getCurrentUsername(request);
 String role = (String) Authentication.getCurrentUserRole(request);
+User userProfile = (User) request.getAttribute("userProfile");
 
 boolean isAdmin = isLoggedIn && role.equals("admin");
 %>
@@ -27,73 +28,79 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 	<div class="container">
 
 		<div class="Left-Form">
-			<form class="content" action="update-userProfile" method="post">
-				<div>
-					<label class="sr-only" for="InputUsername">Username</label><br>
-					<input type="text" name="username">
-				</div>
+			<form class="content" action="update-profile" method="post">
 
 				<div>
 					<label class="sr-only" for="InputEmail">Email</label><br> <input
-						type="email" id="InputEmail" name="email">
+						type="email" id="InputEmail" name="email"
+						value="<%=userProfile.getEmail()%>">
 				</div>
 
 				<div class="name">
 					<div>
 						<label class="sr-only" for="InputFirstname">FirstName</label><br>
-						<input type="text" id="InputFirstname" name="firstname">
+						<input type="text" id="InputFirstname" name="firstname"
+							value="<%=userProfile.getFirstName()%>">
 					</div>
 
 					<div>
 						<label class="sr-only" for="InputLastname">LastName</label><br>
-						<input type=text id="InputLastname" name="lastname">
+						<input type=text id="InputLastname" name="lastname"
+							value="<%=userProfile.getLastName()%>">
 					</div>
 				</div>
 
 				<div>
 					<label class="sr-only" for="InputAbout">About</label><br> <input
-						type="text" id="InputAbout" name="about">
+						type="text" id="InputAbout" name="about"
+						value="<%=userProfile.getAbout()%>">
 				</div>
 
 				<div>
 					<label class="sr-only" for="InputFaceLink">Facebook</label><br>
-					<input type="text" id="InputFacelink" name="facebook-link">
+					<input type="text" id="InputFacelink" name="facebook-link"
+						value="<%=userProfile.getFacebookLink()%>">
 				</div>
 
 				<div>
 					<label class="sr-only" for="InputTwitterlink">Twitter</label><br>
-					<input type="text" id="InputTwitterlink" name="twitter-link">
+					<input type="text" id="InputTwitterlink" name="twitter-link"
+						value="<%=userProfile.getTwitterLink()%>">
 				</div>
 
 				<div>
 					<label class="sr-only" for="InputInstagramlink">Instagram</label><br>
-					<input type="text" id="InputInstagramlink" name="about">
+					<input type="text" id="InputInstagramlink" name="about"
+						value="<%=userProfile.getInstagramLink()%>">
 				</div>
 
 				<div>
 					<label class="sr-only" for="InputGithublink">Github</label><br>
-					<input type="text" name="github-link">
+					<input type="text" name="github-link"
+						value="<%=userProfile.getGithubLink()%>">
 				</div>
 				<div class="location">
 					<div>
 						<label class="sr-only" for="InputWard">Ward</label><br> <input
-							type="text" name="ward">
+							type="text" name="ward" value="<%=userProfile.getWard()%>">
 					</div>
 
 					<div>
 						<label class="sr-only" for="InputDistrict">District</label><br>
-						<input type="text" name="district">
+						<input type="text" name="district"
+							value="<%=userProfile.getDistrict()%>">
 					</div>
 
 
 					<div>
 						<label class="sr-only" for="InputProvince">Province</label><br>
-						<input type="text" name="province">
+						<input type="text" name="province"
+							value="<%=userProfile.getProvince()%>">
 					</div>
 				</div>
 
 				<div class="btn-form">
-					<button class="cancle" type="reset">Cancle</button>
+					<button class="cancle" type="reset">Cancel</button>
 					<button class="done" type="submit">
 						<svg xmlns="http://www.w3.org/2000/svg" height="30"
 							viewBox="0 -960 960 960" width="20" fill="white">
@@ -108,26 +115,48 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 		</div>
 		<div class="Right-Form">
 			<div class="User-Avatar">
-				<img src="img/User.png" alt="">
-				<!--<c:if test="<%=username != null%>">
-					 <span class="username">@<%=username%></span>
-				</c:if> -->
-				<span>@MinhThuan</span>
+				<img id="userAvatar" src="img/<%=userProfile.getPhoto()%>" alt="">
+				<span>@<%=userProfile.getLastName() + userProfile.getFirstName() %></span>
 			</div>
 
-			<div class="Upload-Photo">
+			<form class="Upload-Photo" action="update-photo" method="post" enctype="multipart/form-data">
 				<span>Upload New Photo</span>
 				<div class="round">
-					<input type="file">
+					<input type="file" name="photo" id="fileInput"
+						onchange="displaySelectedImage()">
 					<svg xmlns="http://www.w3.org/2000/svg" height="30"
 						viewBox="0 -960 960 960" width="30" fill="#F48023">
 						<path
 							d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h357l-80 80H200v560h560v-278l80-80v358q0 33-23.5 56.5T760-120H200Zm280-360ZM360-360v-170l367-367q12-12 27-18t30-6q16 0 30.5 6t26.5 18l56 57q11 12 17 26.5t6 29.5q0 15-5.5 29.5T897-728L530-360H360Zm481-424-56-56 56 56ZM440-440h56l232-232-28-28-29-28-231 231v57Zm260-260-29-28 29 28 28 28-28-28Z" /></svg>
 				</div>
-			</div>
+				
+				<button type="submit">Submit</button>
+			</form>
 		</div>
 
 
 	</div>
+
+	<script>
+		function displaySelectedImage() {
+			// Get the <img> element and the <input> element by their IDs
+			var userAvatar = document.getElementById("userAvatar");
+			var fileInput = document.getElementById("fileInput");
+
+			// Check if a file is selected
+			if (fileInput.files && fileInput.files[0]) {
+				var reader = new FileReader();
+
+				// When the file is loaded, set the src attribute of the <img> element
+				reader.onload = function(e) {
+					userAvatar.src = e.target.result;
+				};
+
+				// Read the selected file as a data URL
+				reader.readAsDataURL(fileInput.files[0]);
+			}
+		}
+	</script>
+
 </body>
 </html>
