@@ -12,6 +12,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link
 	href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200&family=Roboto:wght@100;300;400;500;700&family=Rubik:wght@300;400;500;600&display=swap"
 	rel="stylesheet" />
@@ -112,6 +113,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 	</div>
 
 	<jsp:include page="navbar.jsp" />
+	
 
 	<div class="w-[320px] sm:w-[600px] md:w-[800px] lg:w-[1000px] mx-auto">
 		<div class="p-10 bg-white">
