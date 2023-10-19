@@ -92,9 +92,10 @@ body {
 }
 
 .Right-Form .User-Avatar img {
-	max-width: 300px;
-	object-fit: contain;
+	width: 300px;
+	height: 300px;
 	border-radius: 50%;
+	object-fit: cover;
 	border: 6px solid #eaeaea;
 }
 
@@ -109,7 +110,7 @@ body {
 .User-Avatar span {
 	font-size: 20px;
 	font-weight: bold;
-	margin-top: 40px;
+	margin-top: 30px;
 }
 
 .Upload-Photo {
@@ -121,6 +122,17 @@ body {
 	color: #F48023;
 
 }
+.Upload-Photo button{
+	background-color: #F48023;
+	color: white;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	border: 1px solid #EAEAEA;
+	width: 80px;
+	height: 30px;
+}
+
 
 .Upload-Photo span {
 	color: #F48023;
@@ -180,6 +192,7 @@ input[type=file]::-webkit-file-upload-button {
 
 	.User-Avatar img {
 		width: 300px;
+		height: 300px;
 	}
 }
 
@@ -194,7 +207,10 @@ input[type=file]::-webkit-file-upload-button {
 	}
 
 	.Right-Form img {
-		width: 250px;
+		max-width: 200px;
+		max-height: 200px;
+		object-fit: contain;
+		border: 6px solid #eaeaea;
 	}
 
 	.Left-Form {
@@ -217,7 +233,8 @@ input[type=file]::-webkit-file-upload-button {
 	}
 
 	.Right-Form img {
-		width: 150px;
+		max-width: 150px;
+		max-height: 150px;
 	}
 
 	.name,
