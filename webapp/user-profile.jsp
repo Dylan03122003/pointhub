@@ -16,6 +16,8 @@ User user = (User) request.getAttribute("userProfile");
 <body>
 	<jsp:include page="navbar.jsp" />
 
+	<a href="retrieve-profile?userID=<%=user.getUserID()%>">Update</a>
+
 	<h2>
 		Email:
 		<%=user.getEmail()%></h2>
@@ -24,6 +26,18 @@ User user = (User) request.getAttribute("userProfile");
 		<%=user.getUsername()%></h2>
 	<img alt="" src="img/<%=user.getPhoto()%>">
 
+	<a href="<%=user.getFacebookLink()%>">facebook</a>
+	<a href="<%=user.getTwitterLink()%>">twitter</a>
+	<a href="<%=user.getInstagramLink()%>">instagram</a>
+	<a href="<%=user.getGithubLink()%>">github</a>
+
+	<p>
+		total questions:
+		<%=user.getTotalQuestions()%></p>
+
+	<p>
+		about:
+		<%=user.getAbout()%></p>
 
 </body>
 </html>

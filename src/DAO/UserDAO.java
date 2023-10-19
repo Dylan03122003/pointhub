@@ -11,22 +11,87 @@ import model.User;
 public class UserDAO extends BaseDAO {
 
 	public User getUserProfile(int userID) {
-		String query = "SELECT email, username, photo FROM users WHERE user_id = ?";
-		User user = new User();
+		String query = "SELECT u.email, u.username, u.photo, "
+				+ "u.about, sa.facebook_link, sa.twitter_link, "
+				+ "sa.instagram_link, sa.github_link, "
+				+ "COUNT(q.question_id) AS total_questions FROM users u "
+				+ "LEFT JOIN social_accounts sa ON u.user_id = sa.user_id "
+				+ "LEFT JOIN questions q ON u.user_id = q.user_id "
+				+ "WHERE u.user_id = ?";
+
 		try {
 			ResultSet result = executeQuery(query, userID);
 			if (result.next()) {
 				String email = result.getString("email");
 				String username = result.getString("username");
 				String photo = result.getString("photo");
-				user.setEmail(email);
-				user.setUsername(username);
-				user.setPhoto(photo);
+				String about = result.getString("about");
+				String facebookLink = result.getString("facebook_link");
+				String twitterLink = result.getString("twitter_link");
+				String instagramLink = result.getString("instagram_link");
+				String githubLink = result.getString("github_link");
+				int totalQuestions = result.getInt("total_questions");
+				User user = new User(userID, username, email, photo, about,
+						facebookLink, twitterLink, instagramLink, githubLink,
+						totalQuestions);
+
+				return user;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		return user;
+		return null;
+	}
+
+	public User getUserProfileForUpdate(int userID) {
+		String query = "SELECT u.email, u.first_name, u.last_name, u.photo, u.about, sa.facebook_link, sa.twitter_link, sa.instagram_link, sa.github_link, l.ward, l.district, l.province, COUNT(q.question_id) AS total_questions "
+				+ "FROM users u "
+				+ "LEFT JOIN social_accounts sa ON u.user_id = sa.user_id "
+				+ "LEFT JOIN questions q ON u.user_id = q.user_id "
+				+ "LEFT JOIN locations l ON u.location_id = l.location_id "
+				+ "WHERE u.user_id = ?";
+
+		try {
+			ResultSet resultSet = executeQuery(query, userID);
+			if (resultSet.next()) {
+				String email = resultSet.getString("email");
+				String firstName = resultSet.getString("first_name");
+				String lastName = resultSet.getString("last_name");
+				String photo = resultSet.getString("photo");
+				String about = resultSet.getString("about");
+				String facebookLink = resultSet.getString("facebook_link");
+				String twitterLink = resultSet.getString("twitter_link");
+				String instagramLink = resultSet.getString("instagram_link");
+				String githubLink = resultSet.getString("github_link");
+				String ward = resultSet.getString("ward");
+				String district = resultSet.getString("district");
+				String province = resultSet.getString("province");
+				int totalQuestions = resultSet.getInt("total_questions");
+				User user = new User(userID, firstName, lastName, email, photo,
+						about, facebookLink, twitterLink, instagramLink,
+						githubLink, totalQuestions, ward, district, province);
+				return user;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public boolean updateUserPhoto(String fileName, int userID) {
+        String updatePhotoQuery = "UPDATE users SET photo = ? WHERE user_id = ?";
+        
+        try {
+			executeUpdate(updatePhotoQuery, fileName, userID);
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+
 	}
 
 	public String getUsernameByID(int id) {

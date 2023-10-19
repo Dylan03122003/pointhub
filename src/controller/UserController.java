@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import model.User;
 import util.Authentication;
 import util.MyDispatcher;
@@ -17,9 +18,7 @@ import java.util.ArrayList;
 import DAO.BaseDAO;
 import DAO.UserDAO;
 
-/**
- * Servlet implementation class UserController
- */
+
 public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -45,6 +44,12 @@ public class UserController extends HttpServlet {
 			case "/view-my-profile" :
 				viewMyProfile(request, response);
 				break;
+			case "/retrieve-profile" :
+				retrieveProfile(request, response);
+				break;
+			case "/update-profile" :
+				updateProfile(request, response);
+				break;
 			default :
 
 		}
@@ -52,7 +57,34 @@ public class UserController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		String path = request.getServletPath();
+		switch (path) {
+			case "/update-profile" :
+				updateProfile(request, response);
+				break;
+			
+			default :
 
+		}
+	}
+	
+
+
+	private void retrieveProfile(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		int userID = Integer.parseInt(request.getParameter("userID"));
+		
+		User user = userDAO.getUserProfileForUpdate(userID);
+		
+		request.setAttribute("userProfile", user);
+		
+		MyDispatcher.dispatch(request, response, "update-userProfile.jsp");
+		
+	}
+	
+	private void updateProfile(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("hello");
 	}
 
 	private void listUser(HttpServletRequest request,
@@ -68,8 +100,7 @@ public class UserController extends HttpServlet {
 				double totalUserPages = (double) Math
 						.ceil((double) userDAO.getTotalUsers()
 								/ (double) rowsPerPage);
-				
-				
+
 				ArrayList<User> users = userDAO.getUsers(rowsPerPage,
 						currentPage);
 				request.setAttribute("users", users);
@@ -83,17 +114,16 @@ public class UserController extends HttpServlet {
 		}
 
 	}
-	
+
 	private void viewMyProfile(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int currentUserID = Authentication.getCurrentUserID(request);
 		User user = userDAO.getUserProfile(currentUserID);
-		
 		request.setAttribute("userProfile", user);
-		
+
 		MyDispatcher.dispatch(request, response, "user-profile.jsp");
 	}
-	
+
 	private void deleteUserByID(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int UserID = Integer.parseInt(request.getParameter("UserID"));

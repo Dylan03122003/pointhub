@@ -151,7 +151,7 @@ public class QuestionDAO extends BaseDAO {
 		String query = "SELECT " + "rq.report_id, " + "rq.question_id, "
 				+ "q.title, " + "q.user_id AS reported_user_id, "
 				+ "rq.user_id AS reporting_user_id, "
-				+ "u.username AS reporting_username, " + "rq.report_content "
+				+ "u.username AS reporting_username, u.photo, " + "rq.report_content "
 				+ "FROM report_questions rq "
 				+ "INNER JOIN questions q ON rq.question_id = q.question_id "
 				+ "INNER JOIN users u ON rq.user_id = u.user_id "
@@ -170,10 +170,12 @@ public class QuestionDAO extends BaseDAO {
 				String reportingUsername = result
 						.getString("reporting_username");
 				String reportContent = result.getString("report_content");
+				String userPhoto = result.getString("photo");
 
 				QuestionReport questionReport = new QuestionReport(reportID,
 						questionID, title, reportingUserID, reportedUserID,
 						reportingUsername, reportContent);
+				questionReport.setUserPhoto(userPhoto);
 				questionReports.add(questionReport);
 			}
 		} catch (SQLException e) {
