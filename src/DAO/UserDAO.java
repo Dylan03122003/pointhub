@@ -11,22 +11,36 @@ import model.User;
 public class UserDAO extends BaseDAO {
 
 	public User getUserProfile(int userID) {
-		String query = "SELECT email, username, photo FROM users WHERE user_id = ?";
-		User user = new User();
+		String query = "SELECT u.email, u.username, u.photo, "
+				+ "u.about, sa.facebook_link, sa.twitter_link, "
+				+ "sa.instagram_link, sa.github_link, "
+				+ "COUNT(q.question_id) AS total_questions FROM users u "
+				+ "LEFT JOIN social_accounts sa ON u.user_id = sa.user_id "
+				+ "LEFT JOIN questions q ON u.user_id = q.user_id "
+				+ "WHERE u.user_id = ?";
+
 		try {
 			ResultSet result = executeQuery(query, userID);
 			if (result.next()) {
 				String email = result.getString("email");
 				String username = result.getString("username");
 				String photo = result.getString("photo");
-				user.setEmail(email);
-				user.setUsername(username);
-				user.setPhoto(photo);
+				String about = result.getString("about");
+				String facebookLink = result.getString("facebook_link");
+				String twitterLink = result.getString("twitter_link");
+				String instagramLink = result.getString("instagram_link");
+				String githubLink = result.getString("github_link");
+				int totalQuestions = result.getInt("total_questions");
+				User user = new User(userID, username, email, photo, about,
+						facebookLink, twitterLink, instagramLink, githubLink,
+						totalQuestions);
+
+				return user;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		return user;
+		return null;
 	}
 
 	public String getUsernameByID(int id) {
