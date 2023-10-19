@@ -53,7 +53,7 @@ ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 					%>
 					<tr class="row">
 						<td><img
-							src="https://tse3.mm.bing.net/th?id=OIP.mZAmGUgA5X38lMzbgq1sTQHaHV&pid=Api&P=0&h=180"
+							src="img/<%=user.getPhoto()%>"
 							alt="" srcset=""></td>
 						<td><%=user.getUsername()%></td>
 						<td><%=user.getEmail()%></td>
