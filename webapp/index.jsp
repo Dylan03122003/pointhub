@@ -23,7 +23,6 @@
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
 	rel="stylesheet" />
 
-
 <title>Pointhub</title>
 
 <style>
@@ -41,7 +40,7 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 	<jsp:include page="navbar.jsp" />
 
 	<div class="right-small-container">
-		<div class="category category-container">
+		<div class="category category-container" style="padding-top: 40px">
 			<c:forEach var="topic" items="<%=topics%>">
 				<a href="questions?activeTopic=${topic.getTopicName()}"
 					class="${topic.getTopicName().equals(activeTopic) ? 'active-topic' : ''}">${topic.getTopicName()}</a>

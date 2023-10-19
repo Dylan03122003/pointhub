@@ -87,5 +87,11 @@ public class Authentication {
 		UserDAO userDAO = new UserDAO();
 		return userDAO.getUserRoleByEmail(currentEmail);
 	}
+	
+	public static String getCurrentUserPhoto(HttpServletRequest request) {
+		String currentEmail = Authentication.getCurrentEmail(request);
+		UserDAO userDAO = new UserDAO();
+		return userDAO.getUserPhotoByEmail(currentEmail);
+	}
 
 }

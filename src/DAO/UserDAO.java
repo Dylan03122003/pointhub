@@ -157,6 +157,22 @@ public class UserDAO extends BaseDAO {
 		}
 		return null;
 	}
+	
+	public String getUserPhotoByEmail(String email) {
+		String query = "SELECT photo FROM users WHERE email = ?;";
+
+		try {
+			ResultSet result = executeQuery(query, email);
+			if (result.next()) {
+				String photo = result.getString("photo");
+				return photo;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public ArrayList<User> getUsers(int rowsPerPage, int currentPage) {
 		ArrayList<User> user = new ArrayList<>();
