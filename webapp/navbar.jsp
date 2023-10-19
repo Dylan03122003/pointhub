@@ -11,85 +11,116 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="css/navbar.css" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200&family=Roboto:wght@100;300;400;500;700&family=Rubik:wght@300;400;500;600&display=swap"
+	rel="stylesheet" />
+<script src="https://kit.fontawesome.com/e28a5c6413.js"
+	crossorigin="anonymous"></script>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+	rel="stylesheet" />
+
 <title>Insert title here</title>
 
-<style>
-/* Reset default list styles and remove list bullets */
-.navbar-menu {
-	background-color: #fff; 
-	list-style : none;
-	padding: 20px;
-	margin: 0;
-	list-style: none;
-	list-style: none;
-}
-
-/* Style navbar items */
-.navbar-menu li {
-	display: inline-block;
-	margin-right: 15px;
-}
-
-/* Style navbar links */
-.navbar-menu li a {
-	text-decoration: none;
-	color: #333;
-	font-weight: bold;
-	padding: 10px;
-	border-radius: 5px;
-	transition: background-color 0.3s, color 0.3s;
-}
-
-/* Hover effect for navbar links */
-.navbar-menu li a:hover {
-	background-color: #007bff;
-	color: #fff;
-}
-
-/* Style the username element */
-.username {
-	color: #007bff;
-	font-weight: bold;
-}
-</style>
 </head>
 
 <%
 boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 String username = (String) Authentication.getCurrentUsername(request);
 String role = (String) Authentication.getCurrentUserRole(request);
-
+String userPhoto = (String) Authentication.getCurrentUserPhoto(request);
 boolean isAdmin = isLoggedIn && role.equals("admin");
 %>
 
 <body>
 	<nav class="navbar">
-		<ul class="navbar-menu">
-			<li><a href="/PointHubWebsite">Home</a></li>
+		<label class="toggle-button" for="nav-mobile"> <i
+			class="fa-solid fa-bars menu-bar"></i>
+		</label> <a href="/PointHubWebsite" class="logo">
+			<div class="logo-img">
+				<img src="./img/logo_1.png" alt="" />
+			</div>
+			<h3>PointHub</h3>
+		</a> <input type="checkbox" class="nav-input" id="nav-mobile" /> <label
+			class="navbar-links" for="nav-mobile">
+			<ul>
 
-			<c:if test="<%=!isLoggedIn%>">
-				<li><a href="log-in.jsp">Log in</a></li>
-				<li><a href="sign-up.jsp">Sign up</a></li>
-			</c:if>
+				<c:if test="<%=!isLoggedIn%>">
+					<li><a href="log-in.jsp">Log in</a></li>
+					<li><a href="sign-up.jsp">Sign up</a></li>
+				</c:if>
 
-			<c:if test="<%=isAdmin%>">
-				<li><a href="question-reports">Question Reports</a></li>
-				<li><a href="user-list">UserList</a></li>
+				<c:if test="<%=isAdmin%>">
+					<li><a href="question-reports">Question Reports</a></li>
+					<li><a href="user-list">UserList</a></li>
 
-			</c:if>
+				</c:if>
 
-			<c:if test="<%=isLoggedIn%>">
-				<li><a href="create-question.jsp">Ask a question</a></li>
-				<li><a href="view-my-profile">View profile</a></li>
-				<li><a href="log-out">Logout</a></li>
-			</c:if>
+				<c:if test="<%=isLoggedIn%>">
+					<li><a href="#"> <i
+							class="fa-regular fa-bookmark navbar-icons"></i> Collections
+					</a></li>
 
-			<c:if test="<%=username != null%>">
-				<li class="username"><%=username%></li>
-			</c:if>
-		</ul>
+					<li><a href="create-question.jsp"> <i
+							class="bx bx-plus-circle"></i> Ask a question
+					</a></li>
+
+				</c:if>
+			</ul>
+		</label>
+
+		<c:if test="<%=isLoggedIn%>">
+			<div class="user-icons">
+			<span class="notice-icon"><i class="fa-regular fa-bell"></i></span>
+				<img src="img/<%=userPhoto%>" class="personal-icon" id="iconPhoto" />
+				
+				<div class="dropdown-menu" id="dropdown-menu">
+					<ul class="dropdown-menu-content">
+						<li class="dropdown-header">
+							<div class="dropdown-header-img">
+								<img src="img/<%=userPhoto%>" class="personal-icon" />
+
+							</div>
+							<div class="dropdown-header-content">
+								<h5>Duong</h5>
+								<p class="gmail">duong@gmail.com</p>
+							</div>
+						</li>
+
+						<li><a href="view-my-profile">View Profile</a></li>
+						<li><a href="log-out">Logout</a></li>
+					</ul>
+				</div>
+			</div>
+		</c:if>
+
 	</nav>
+	<div style="margin-bottom: 100px"></div>
+	<script>
+		const iconPhoto = document.getElementById("iconPhoto");
+		const dropdownMenu = document.getElementById("dropdown-menu");
+		const dropdownMenuContent = document
+				.querySelector(".dropdown-menu-content");
+		const toggleButton = document.querySelector(".toggle-button");
+		const navbarLinks = document.querySelector(".navbar-links");
 
+		console.log(iconPhoto)
+		iconPhoto
+				.addEventListener(
+						"click",
+						function() {
+
+							console.log('dm')
+							dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none"
+									: "block";
+						});
+
+		document.addEventListener("click", function(e) {
+			if (!document.querySelector(".user-icons").contains(e.target)) {
+				dropdownMenu.style.display = "none";
+			}
+		})
+	</script>
 
 </body>
 </html>
