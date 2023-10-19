@@ -112,6 +112,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 	</div>
 
 	<jsp:include page="navbar.jsp" />
+	
 
 	<div class="w-[320px] sm:w-[600px] md:w-[800px] lg:w-[1000px] mx-auto">
 		<div class="p-10 bg-white">
