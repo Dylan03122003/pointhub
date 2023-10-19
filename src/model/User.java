@@ -15,6 +15,9 @@ public class User {
 	private String instagramLink;
 	private String githubLink;
 	private int totalQuestions;
+	private String ward;
+	private String district; 
+	private String province;
 
 	public User() {
 
@@ -74,6 +77,28 @@ public class User {
 		this.instagramLink = instagramLink;
 		this.githubLink = githubLink;
 		this.totalQuestions = totalQuestions;
+	}
+	
+	// Used for retrieve user profile for updating
+	public User(int userID, String firstName, String lastName, String email,
+			String photo, String about, String facebookLink, String twitterLink,
+			String instagramLink, String githubLink, int totalQuestions,
+			String ward, String district, String province) {
+		super();
+		this.userID = userID;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.photo = photo;
+		this.about = about;
+		this.facebookLink = facebookLink;
+		this.twitterLink = twitterLink;
+		this.instagramLink = instagramLink;
+		this.githubLink = githubLink;
+		this.totalQuestions = totalQuestions;
+		this.ward = ward;
+		this.district = district;
+		this.province = province;
 	}
 
 	public int getUserID() {
@@ -149,6 +174,9 @@ public class User {
 	}
 
 	public String getAbout() {
+		if (about == null) {
+			return "";
+		}
 		return about;
 	}
 
@@ -157,6 +185,9 @@ public class User {
 	}
 
 	public String getFacebookLink() {
+		if (facebookLink == null) {
+			return "";
+		}
 		return facebookLink;
 	}
 
@@ -165,6 +196,9 @@ public class User {
 	}
 
 	public String getTwitterLink() {
+		if (twitterLink == null) {
+			return "";
+		}
 		return twitterLink;
 	}
 
@@ -173,6 +207,9 @@ public class User {
 	}
 
 	public String getInstagramLink() {
+		if (instagramLink == null) {
+			return "";
+		}
 		return instagramLink;
 	}
 
@@ -181,6 +218,9 @@ public class User {
 	}
 
 	public String getGithubLink() {
+		if (githubLink == null) {
+			return "";
+		}
 		return githubLink;
 	}
 
@@ -195,6 +235,41 @@ public class User {
 	public void setTotalQuestions(int totalQuestions) {
 		this.totalQuestions = totalQuestions;
 	}
+	
+	
+
+	public String getWard() {
+		if (ward == null) {
+			return "";
+		}
+		return ward;
+	}
+
+	public void setWard(String ward) {
+		this.ward = ward;
+	}
+
+	public String getDistrict() {
+		if (district == null) {
+			return "";
+		}
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
+	public String getProvince() {
+		if (province == null) {
+			return "";
+		}
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
 
 	@Override
 	public String toString() {
@@ -205,8 +280,11 @@ public class User {
 				+ ", facebookLink=" + facebookLink + ", twitterLink="
 				+ twitterLink + ", instagramLink=" + instagramLink
 				+ ", githubLink=" + githubLink + ", totalQuestions="
-				+ totalQuestions + "]";
+				+ totalQuestions + ", ward=" + ward + ", district=" + district
+				+ ", province=" + province + "]";
 	}
+
+	
 
 	
 
