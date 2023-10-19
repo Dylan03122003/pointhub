@@ -45,6 +45,9 @@ public class UserController extends HttpServlet {
 			case "/view-my-profile" :
 				viewMyProfile(request, response);
 				break;
+			case "/update-profile" :
+				updateProfile(request, response);
+				break;
 			default :
 
 		}
@@ -53,6 +56,12 @@ public class UserController extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+	}
+
+	private void updateProfile(HttpServletRequest request,
+			HttpServletResponse response) {
+		int userID = Integer.parseInt(request.getParameter("userID"));
+		
 	}
 
 	private void listUser(HttpServletRequest request,
@@ -68,8 +77,7 @@ public class UserController extends HttpServlet {
 				double totalUserPages = (double) Math
 						.ceil((double) userDAO.getTotalUsers()
 								/ (double) rowsPerPage);
-				
-				
+
 				ArrayList<User> users = userDAO.getUsers(rowsPerPage,
 						currentPage);
 				request.setAttribute("users", users);
@@ -83,17 +91,16 @@ public class UserController extends HttpServlet {
 		}
 
 	}
-	
+
 	private void viewMyProfile(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int currentUserID = Authentication.getCurrentUserID(request);
 		User user = userDAO.getUserProfile(currentUserID);
-		
 		request.setAttribute("userProfile", user);
-		
+
 		MyDispatcher.dispatch(request, response, "user-profile.jsp");
 	}
-	
+
 	private void deleteUserByID(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int UserID = Integer.parseInt(request.getParameter("UserID"));
