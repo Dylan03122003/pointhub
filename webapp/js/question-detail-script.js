@@ -113,6 +113,7 @@ const replyComment = (questionID, commentID, userReplyID, replyContent, currentU
 		url: "reply-comment",
 		data: data,
 		success: function(data) {
+			console.log(data)
 			const replyTemplate = renderReply(data, currentUserID)
 			const repliesContainers = $(".replies-container")
 			repliesContainers.each(function(index, repliesContainer) {
