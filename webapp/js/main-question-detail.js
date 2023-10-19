@@ -17,10 +17,17 @@ const showToast = (message, isSuccess) => {
 	const toastElm = $("#toast");
 	toastElm.text(message)
 	toastElm.removeClass("hidden")
-	toastElm.addClass(`block ${isSuccess ? "bg-green-500" : "bg-red-500"}`)
+	toastElm.addClass(`block`)
+	if (isSuccess) {
+		toastElm.addClass(`bg-green-500`)
+	} else {
+		toastElm.addClass(`bg-red-500`)
+	}
 
 	setTimeout(function() {
-		toastElm.removeClass(`block ${isSuccess ? "bg-green-500" : "bg-red-500"}`)
+		toastElm.removeClass(`block`)
+		toastElm.removeClass(`bg-red-500`)
+		toastElm.removeClass(`bg-green-500`)
 		toastElm.addClass("hidden")
 	}, 3000);
 
@@ -42,6 +49,10 @@ const openReportModal = () => {
 
 const handleSubmitReport = () => {
 	const reportContent = reportTextarea.val();
+	if (!reportContent.trim()) {
+		return;
+	}
+
 	$.ajax({
 		type: "POST",
 		url: "report-question",
@@ -50,7 +61,7 @@ const handleSubmitReport = () => {
 			if (isReported) {
 				reportTextarea.val("")
 				closeReportModal()
-				showToast("Your report has been saved!")
+				showToast("Your report has been saved!", true)
 			}
 		},
 		error: function() {

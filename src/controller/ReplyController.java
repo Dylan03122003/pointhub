@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ReplyComment;
+import model.User;
 import util.Authentication;
 
 import java.io.IOException;
@@ -46,17 +47,18 @@ public class ReplyController extends HttpServlet {
 		int replyID = commentDAO.replyComment(replyComment);
 
 		String currentUsername = Authentication.getCurrentUsername(request);
-		String usernameReply = userDAO.getUsernameByID(userReplyID);
-
+		User user =userDAO.getUserProfile(currentUserID);
+		
 		ReplyComment reply = new ReplyComment();
 		reply.setReplyID(replyID);
 		reply.setCommentID(commentID);
 		reply.setUserID(currentUserID);
 		reply.setUsername(currentUsername);
 		reply.setUserReplyID(userReplyID);
-		reply.setUsernameReply(usernameReply);
+		reply.setUsernameReply(user.getUsername());
 		reply.setReplyContent(replyContent);
 		reply.setCreatedAt(currentDate);
+		reply.setUserPhoto(user.getPhoto());
 
 		String json = new Gson().toJson(reply);
 

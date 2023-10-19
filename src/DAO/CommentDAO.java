@@ -97,10 +97,10 @@ public class CommentDAO extends BaseDAO {
 				Date createdAt = commentResult.getDate("created_at");
 				String username = commentResult.getString("username");
 				String userPhoto = commentResult.getString("photo");
-				
+
 				Comment comment = new Comment(commentID, userIDFromDB, username,
 						questionID, commentContent, createdAt);
-				
+
 				comment.setUserPhoto(userPhoto);
 
 				comments.add(comment);
@@ -143,7 +143,7 @@ public class CommentDAO extends BaseDAO {
 
 	public Comment getCommentByID(int questionID, int commentID) {
 		Comment comment = null;
-		String commentQuery = "SELECT c.comment_id, c.user_id, c.comment_content, c.created_at, u.username "
+		String commentQuery = "SELECT c.comment_id, c.user_id, c.comment_content, c.created_at, u.username, u.photo "
 				+ "FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.question_id = ? AND c.comment_id = ?";
 
 		ResultSet commentResult;
@@ -156,8 +156,10 @@ public class CommentDAO extends BaseDAO {
 						.getString("comment_content");
 				Date createdAt = commentResult.getDate("created_at");
 				String username = commentResult.getString("username");
+				String userPhoto = commentResult.getString("photo");
 				comment = new Comment(commentID, userIDFromDB, username,
 						questionID, commentContent, createdAt);
+				comment.setUserPhoto(userPhoto);
 
 			}
 		} catch (SQLException e) {
@@ -167,8 +169,8 @@ public class CommentDAO extends BaseDAO {
 		return comment;
 	}
 
-//	 public static void main(String[] args) {
-//	 CommentDAO commentDAO = new CommentDAO();
-//	 }
+	// public static void main(String[] args) {
+	// CommentDAO commentDAO = new CommentDAO();
+	// }
 
 }
