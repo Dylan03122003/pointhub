@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -51,7 +52,30 @@ public class CommentController extends HttpServlet {
 			viewReplies(request, response);
 		} else if (path == "/view-comments") {
 			viewComments(request, response);
+		} else if (path == "/like-comment") {
+			likeCommentHandler(request, response);
 		}
+
+	}
+
+	private void likeCommentHandler(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		int commentID = Integer.parseInt(request.getParameter("commentID"));
+		int currentUserID = Integer
+				.parseInt(request.getParameter("currentUserID"));
+
+		boolean isLiked = false;
+		try {
+			isLiked = commentDAO.likeComment(currentUserID, commentID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		String json = new Gson().toJson(isLiked);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 
 	}
 

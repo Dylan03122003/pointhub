@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="question-detail-style.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
-<script defer src="js/question-detail-script.js"></script>
+<script defer type="module" src="js/question-detail-script.js"></script>
 <script defer type="module" src="js/main-question-detail.js"></script>
 
 

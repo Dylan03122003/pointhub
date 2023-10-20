@@ -60,6 +60,8 @@ public class ReplyController extends HttpServlet {
 		reply.setReplyContent(replyContent);
 		reply.setCreatedAt(currentDate);
 		reply.setUserPhoto(currentUserProfile.getPhoto());
+		reply.setLikes(0);
+		reply.setDislikes(0);
 
 		String json = new Gson().toJson(reply);
 
