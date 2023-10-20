@@ -12,6 +12,8 @@ public class ReplyComment {
 	private int userReplyID;
 	private String usernameReply;
 	private Date createdAt;
+	private int likes;
+	private int dislikes;
 
 	public ReplyComment(int replyID, int commentID, int userID, String username, String replyContent, int userReplyID,
 			String usernameReply, Date createdAt) {
@@ -113,6 +115,22 @@ public class ReplyComment {
 
 	public void setUserPhoto(String userPhoto) {
 		this.userPhoto = userPhoto;
+	}
+
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
 	}
 
 }

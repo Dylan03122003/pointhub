@@ -51,6 +51,7 @@
     <url-pattern>/view-comments</url-pattern>
     <url-pattern>/view-replies</url-pattern>
     <url-pattern>/view-default-comments</url-pattern>
+    <url-pattern>/like-comment</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>

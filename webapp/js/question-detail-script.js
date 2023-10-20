@@ -25,11 +25,11 @@ const renderReply = (reply, currentUserID) => {
   <div class="flex items-center justify-start gap-4">
     <div>
       <button class="text-yellow-600">Like</button>
-      <span>3</span>
+      <span>${reply.likes}</span>
     </div>
     <div>
       <button class="text-yellow-600">Dislikes</button>
-      <span>4</span>
+      <span>${reply.dislikes}</span>
     </div>
     <button
       class="nested-reply-btn text-gray-600 ${reply.userID === currentUserID ? 'hidden' : 'block'}"
@@ -68,12 +68,12 @@ const renderComment = (comment, currentUserID) => {
 
   <div class="flex items-center justify-start gap-4">
     <div>
-      <button class="text-yellow-600">Like</button>
-      <span>12</span>
+      <button data-commentID="${comment.commentID}" class="like-comment-btn text-yellow-600">Like</button>
+      <span data-commentID="${comment.commentID}" class="like-sum">${comment.likes}</span>
     </div>
     <div>
-      <button class="text-yellow-600">Dislikes</button>
-      <span>12</span>
+      <button data-commentID="${comment.commentID}" class="dislike-comment-btn text-yellow-600">Dislikes</button>
+      <span data-commentID="${comment.commentID}" class="dislike-sum">${comment.dislikes}</span>
     </div>
      <button
         class="reply-button ${comment.userID === currentUserID ? 'hidden' : 'block'}"
@@ -140,7 +140,6 @@ const viewMoreReplies = (commentID, repliesSize, currentUserID) => {
 		url: "view-replies",
 		data: data,
 		success: function(data) {
-
 			const repliesContainer = $(`.replies-container[data-commentID="${commentID}"]`);
 
 			const replyItems = repliesContainer.find(".reply-item");
@@ -201,6 +200,7 @@ const viewMoreComments = (questionID, currentUserID, currentCommentSize) => {
 		data: data,
 		dataType: "json",
 		success: function(data) {
+			console.log(data)
 			if (data) {
 				const currentCommentItems = $(".comment-item");
 				const currentCommentIDs = []
@@ -351,4 +351,39 @@ $(document).ready(function() {
 		const currentCommentSize = parseInt($(this).data("commentsize"));
 		viewMoreComments(questionID, currentUserID, currentCommentSize)
 	})
+
+	// Handle like comment
+	$(document).on("click", ".like-comment-btn", function() {
+		const commentID = $(this).data("commentid");
+
+		$.ajax({
+			type: "POST",
+			url: "like-comment",
+			data: {
+				commentID,
+				currentUserID
+			},
+			dataType: "json",
+			success: function(isLiked) {
+				const likeSumElm = $(`.like-sum[data-commentID="${commentID}"]`);
+				const likeSum = parseInt(likeSumElm.text());
+				if (isLiked) {
+					likeSumElm.text(likeSum + 1)
+				} else {
+					likeSumElm.text(likeSum - 1)
+				}
+
+			},
+			error: function() {
+				alert("Failed to load data from the server.");
+			},
+		});
+	});
+
+	// Handle dislike comment
+	$(document).on("click", ".dislike-comment-btn", function() {
+		const commentID = $(this).data("commentid");
+
+		
+	});
 });

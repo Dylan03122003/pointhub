@@ -11,6 +11,8 @@ public class Comment {
 	private int questionID;
 	private String commentContent;
 	private Date createdAt;
+	private int likes;
+	private int dislikes;
 	private ArrayList<ReplyComment> replyComments = new ArrayList<ReplyComment>();
 
 	public Comment(int commentID, int userID, int questionID, String commentContent, Date createdAt) {
@@ -111,6 +113,22 @@ public class Comment {
 				+ ", questionID=" + questionID + ", commentContent="
 				+ commentContent + ", createdAt=" + createdAt
 				+ ", replyComments=" + replyComments + "]";
+	}
+
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
 	}
 	
 
