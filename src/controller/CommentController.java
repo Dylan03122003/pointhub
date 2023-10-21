@@ -54,7 +54,30 @@ public class CommentController extends HttpServlet {
 			viewComments(request, response);
 		} else if (path == "/like-comment") {
 			likeCommentHandler(request, response);
+		} else if (path == "/dislike-comment") {
+			dislikeCommentHandler(request, response);
 		}
+
+	}
+	
+	private void dislikeCommentHandler(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		int commentID = Integer.parseInt(request.getParameter("commentID"));
+		int currentUserID = Integer
+				.parseInt(request.getParameter("currentUserID"));
+
+		boolean isDisliked = false;
+		try {
+			isDisliked = commentDAO.dislikeComment(currentUserID, commentID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		String json = new Gson().toJson(isDisliked);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 
 	}
 
