@@ -10,6 +10,7 @@ import model.User;
 import util.Authentication;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 
 import com.google.gson.Gson;
@@ -31,9 +32,71 @@ public class ReplyController extends HttpServlet {
 		userDAO = new UserDAO();
 
 	}
-
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
+		String path = request.getServletPath();
+		switch (path) {
+			case "/reply-comment" :
+				replyCommentHandler(request, response);
+				break;
+			case "/like-reply" :
+				likeReplyHandler(request, response);
+				break;
+			case "/dislike-reply" :
+				dislikeReply(request, response);
+				break;
+			default :
+
+		}
+
+	}
+	
+	private void dislikeReply(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		int replyID = Integer.parseInt(request.getParameter("replyID"));
+		int currentUserID = Integer
+				.parseInt(request.getParameter("currentUserID"));
+		int commentID = Integer.parseInt(request.getParameter("commentID"));
+
+		boolean isDisliked = false;
+		try {
+			isDisliked = commentDAO.dislikeReply(currentUserID, commentID, replyID);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String json = new Gson().toJson(isDisliked);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+	}
+	
+	private void likeReplyHandler(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		int replyID = Integer.parseInt(request.getParameter("replyID"));
+		int currentUserID = Integer
+				.parseInt(request.getParameter("currentUserID"));
+		int commentID = Integer.parseInt(request.getParameter("commentID"));
+
+		boolean isLiked = false;
+		try {
+			isLiked = commentDAO.likeReply(currentUserID, commentID, replyID);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String json = new Gson().toJson(isLiked);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+	}
+	private void replyCommentHandler(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		String replyContent = request.getParameter("replyContent");
 		int commentID = Integer.parseInt(request.getParameter("commentID"));
 		int questionID = Integer.parseInt(request.getParameter("questionID"));
@@ -68,7 +131,6 @@ public class ReplyController extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);
-
 	}
 
 }

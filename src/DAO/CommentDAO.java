@@ -89,18 +89,21 @@ public class CommentDAO extends BaseDAO {
 
 	public ArrayList<Comment> getComments(int questionID, int commentLimit) {
 		ArrayList<Comment> comments = new ArrayList<Comment>();
-		String commentQuery = "SELECT c.comment_id, c.user_id, c.comment_content, c.created_at, u.username, u.photo, "
+		String commentQuery = "SELECT "
+				+ "c.comment_id, c.user_id, c.comment_content, c.created_at, u.username, u.photo, "
 				+ "COALESCE(likes.likes_count, 0) AS likes, COALESCE(dislikes.dislikes_count, 0) AS dislikes "
 				+ "FROM comments c JOIN users u ON c.user_id = u.user_id "
-				+ "LEFT JOIN ("
+				+ "LEFT JOIN ( "
 				+ "    SELECT comment_id, COUNT(*) AS likes_count "
 				+ "    FROM interactions   WHERE comment_id IS NOT NULL "
-				+ "    AND is_like = 1   GROUP BY comment_id "
+				+ "    AND is_like = 1   AND reply_id IS NULL "
+				+ "    GROUP BY comment_id "
 				+ ") AS likes ON c.comment_id = likes.comment_id "
-				+ "LEFT JOIN ("
+				+ "LEFT JOIN ( "
 				+ "    SELECT comment_id, COUNT(*) AS dislikes_count "
-				+ "    FROM interactions   WHERE comment_id IS NOT NULL "
-				+ "    AND is_like = 0   GROUP BY comment_id "
+				+ "    FROM interactions    WHERE comment_id IS NOT NULL "
+				+ "    AND is_like = 0    AND reply_id IS NULL "
+				+ "    GROUP BY comment_id "
 				+ ") AS dislikes ON c.comment_id = dislikes.comment_id "
 				+ "WHERE c.question_id = ? LIMIT ?";
 
@@ -138,8 +141,8 @@ public class CommentDAO extends BaseDAO {
 	public Comment getAComment(int questionID, int ordinal) {
 		Comment comment = null;
 		String commentQuery = "SELECT c.comment_id, c.user_id, c.comment_content, c.created_at, u.username, u.photo, "
-				+ "(SELECT COUNT(*) FROM interactions WHERE comment_id = c.comment_id AND is_like = 1) AS likes, "
-				+ "(SELECT COUNT(*) FROM interactions WHERE comment_id = c.comment_id AND is_like = 0) AS dislikes "
+				+ "(SELECT COUNT(*) FROM interactions WHERE comment_id = c.comment_id AND reply_id IS NULL AND is_like = 1) AS likes, "
+				+ "(SELECT COUNT(*) FROM interactions WHERE comment_id = c.comment_id AND reply_id IS NULL AND is_like = 0) AS dislikes "
 				+ "FROM comments c " + "JOIN users u ON c.user_id = u.user_id "
 				+ "WHERE c.question_id = ? LIMIT 1 OFFSET ?";
 
@@ -179,12 +182,12 @@ public class CommentDAO extends BaseDAO {
 				+ "FROM comments c JOIN users u ON c.user_id = u.user_id "
 				+ "LEFT JOIN ("
 				+ "    SELECT comment_id, COUNT(*) AS likes_count "
-				+ "    FROM interactions    WHERE comment_id = ? "
+				+ "    FROM interactions    WHERE comment_id = ? AND reply_id IS NULL "
 				+ "    AND is_like = 1 "
 				+ ") AS likes ON c.comment_id = likes.comment_id "
 				+ "LEFT JOIN ("
 				+ "    SELECT comment_id, COUNT(*) AS dislikes_count "
-				+ "    FROM interactions    WHERE comment_id = ? "
+				+ "    FROM interactions    WHERE comment_id = ? AND reply_id IS NULL "
 				+ "    AND is_like = 0 "
 				+ ") AS dislikes ON c.comment_id = dislikes.comment_id "
 				+ "WHERE c.question_id = ? AND c.comment_id = ?";
@@ -219,21 +222,81 @@ public class CommentDAO extends BaseDAO {
 	}
 
 	public boolean likeComment(int userID, int commentID) throws SQLException {
-		String query = "INSERT INTO interactions (user_id, comment_id, is_like) VALUES (?, ?, 1)";
-
+		String insertCommand = "INSERT INTO interactions (user_id, comment_id, is_like) VALUES (?, ?, 1)";
+		String deleteCommand = "DELETE FROM interactions WHERE user_id = ? AND comment_id = ? AND reply_id IS NULL AND is_like = 1";
+		String selectCommand = "SELECT * FROM interactions WHERE user_id = ? AND comment_id = ? AND reply_id IS NULL AND is_like = 1";
 		try {
-			executeInsert(query, userID, commentID);
+
+			boolean alreadyLiked = executeQuery(selectCommand, userID,
+					commentID).next();
+			if (!alreadyLiked) {
+				executeInsert(insertCommand, userID, commentID);
+			} else {
+				executeUpdate(deleteCommand, userID, commentID);
+				return false;
+
+			}
 
 			return true;
-		} catch (SQLIntegrityConstraintViolationException e) {
-			String deleteCommand = "DELETE FROM interactions WHERE user_id = ? AND comment_id = ?;";
-			executeUpdate(deleteCommand, userID, commentID);
-
-			return false;
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	public boolean dislikeComment(int userID, int commentID)
+			throws SQLException {
+		String insertCommand = "INSERT INTO interactions (user_id, comment_id, is_like) VALUES (?, ?, 0)";
+		String deleteCommand = "DELETE FROM interactions WHERE user_id = ? AND comment_id = ? AND reply_id IS NULL AND is_like = 0";
+		String selectCommand = "SELECT * FROM interactions WHERE user_id = ? AND comment_id = ? AND reply_id IS NULL AND is_like = 0";
+
+		try {
+			boolean alreadyDisliked = executeQuery(selectCommand, userID,
+					commentID).next();
+			if (!alreadyDisliked) {
+				executeInsert(insertCommand, userID, commentID);
+			} else {
+				executeUpdate(deleteCommand, userID, commentID);
+				return false;
+			}
+
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	public boolean likeReply(int userID, int commentID, int replyID)
+			throws SQLException {
+		String insertCommand = "INSERT INTO interactions (user_id, comment_id, reply_id, is_like) VALUES (?, ?, ?, 1)";
+		String deleteCommand = "DELETE FROM interactions WHERE user_id = ? AND comment_id = ? AND reply_id = ?  AND is_like = 1";
+
+		try {
+			executeInsert(insertCommand, userID, commentID, replyID);
+
+			return true;
+		} catch (SQLException e) {
+			executeUpdate(deleteCommand, userID, commentID, replyID);
+		}
+
+		return false;
+	}
+
+	public boolean dislikeReply(int userID, int commentID, int replyID)
+			throws SQLException {
+		String insertCommand = "INSERT INTO interactions (user_id, comment_id, reply_id, is_like) VALUES (?, ?, ?, 0)";
+		String deleteCommand = "DELETE FROM interactions WHERE user_id = ? AND comment_id = ? AND reply_id = ?  AND is_like = 0";
+
+		try {
+			executeInsert(insertCommand, userID, commentID, replyID);
+
+			return true;
+		} catch (SQLException e) {
+			executeUpdate(deleteCommand, userID, commentID, replyID);
 		}
 
 		return false;
