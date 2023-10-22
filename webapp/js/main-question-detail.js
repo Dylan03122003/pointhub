@@ -11,6 +11,7 @@ const reportSubmitBtn = $(".report-submit-btn");
 const upvoteBtn = $(".upvote-btn")
 const downvoteBtn = $(".downvote-btn")
 const votesSum = $(".votes-sum")
+const requireLoginModal = $(".require-login-modal")
 // DEFINING FUNCTIONS
 
 const showToast = (message, isSuccess) => {
@@ -47,6 +48,16 @@ const openReportModal = () => {
 	reportModal.addClass("flex");
 }
 
+export const openRequireLoginModal = () => {
+	requireLoginModal.removeClass("hidden");
+	requireLoginModal.addClass("flex");
+}
+
+const closeRequireLoginModal = () => {
+	requireLoginModal.removeClass("flex");
+	requireLoginModal.addClass("hidden");
+}
+
 const handleSubmitReport = () => {
 	const reportContent = reportTextarea.val();
 	if (!reportContent.trim()) {
@@ -71,6 +82,12 @@ const handleSubmitReport = () => {
 }
 
 const handleUpvote = () => {
+
+	if (currentUserID === -1) {
+		openRequireLoginModal()
+		return
+	}
+
 	$.ajax({
 		type: "GET",
 		url: `vote-question?questionId=${questionID}&voteType=upvote`,
@@ -90,6 +107,11 @@ const handleUpvote = () => {
 }
 
 const handleDownvote = () => {
+	if (currentUserID === -1) {
+		openRequireLoginModal()
+		return
+	}
+
 	$.ajax({
 		type: "GET",
 		url: `vote-question?questionId=${questionID}&voteType=downvote`,
@@ -108,15 +130,33 @@ const handleDownvote = () => {
 	});
 }
 
+const handleOpenReportModal = () => {
+	if (currentUserID !== -1) {
+		openReportModal()
+		return
+	}
+
+	openRequireLoginModal()
+
+}
+
 // EVENT HANDLING
 
 reportContentContainer.click(function(event) {
 	event.stopPropagation();
 });
 
-reportBtn.click(openReportModal)
+$(".require-login-content").click(function(event) {
+	event.stopPropagation();
+})
+
+reportBtn.click(handleOpenReportModal)
 reportCloseBtn.click(closeReportModal)
 reportModal.click(closeReportModal)
 reportSubmitBtn.click(handleSubmitReport)
+
 upvoteBtn.click(handleUpvote)
 downvoteBtn.click(handleDownvote)
+
+requireLoginModal.click(closeRequireLoginModal)
+$(".require-login-close-btn").click(closeRequireLoginModal)
