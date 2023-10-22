@@ -10,12 +10,12 @@ export const renderReply = (reply, currentUserID) => {
       class="w-[50px] h-[50px] object-cover rounded-full"
     />
     <div class="profile_info">
-      <a href="#">@${reply.username}</a>
+      <a href="user-profile?userID=${reply.userID}">@${reply.username}</a>
       <p>${reply.createdAt}</p>
     </div>
   </div>
   <p>
-    <a href="" class="font-medium"
+    <a href="user-profile?userID=${reply.userReplyID}" class="font-medium"
       >@${reply.usernameReply}</a
     >
     ${reply.replyContent}
@@ -57,7 +57,7 @@ export const renderComment = (comment, currentUserID) => {
       class="w-[50px] h-[50px] object-cover rounded-full"
     />
     <div class="profile_info">
-      <a href="#">@${comment.username}</a>
+      <a href="user-profile?userID=${comment.userID}">@${comment.username}</a>
       <p>${comment.createdAt}</p>
     </div>
   </div>

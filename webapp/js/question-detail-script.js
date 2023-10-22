@@ -167,7 +167,6 @@ const openModal = () => {
 $(document).ready(function() {
 	const questionID = $("body").data("questionid");
 	const currentUserID = $("body").data("userid");
-
 	getDefaultComments(questionID, currentUserID);
 
 

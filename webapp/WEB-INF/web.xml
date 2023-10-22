@@ -108,6 +108,7 @@
 		<url-pattern>/view-my-profile</url-pattern>
 		<url-pattern>/retrieve-profile</url-pattern>
 		<url-pattern>/update-profile</url-pattern>
+		<url-pattern>/user-profile</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<description></description>

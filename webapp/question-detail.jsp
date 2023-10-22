@@ -122,8 +122,8 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 					<img src="img/<%=question.getUserPhoto()%>" alt=""
 						class="w-[50px] h-[50px] object-cover rounded-full" />
 					<div class="profile_info">
-						<p>
-							@<%=question.getUsername()%></p>
+						<a href="user-profile?userID=<%=question.getUserID()%>">
+							@<%=question.getUsername()%></a>
 						<p><%=question.getCreatedAt()%></p>
 					</div>
 				</div>
