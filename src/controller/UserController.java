@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import DAO.BaseDAO;
 import DAO.UserDAO;
 
-
 public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -50,6 +49,9 @@ public class UserController extends HttpServlet {
 			case "/update-profile" :
 				updateProfile(request, response);
 				break;
+			case "/user-profile" :
+				viewUserProfileHandler(request, response);
+				break;
 			default :
 
 		}
@@ -62,26 +64,45 @@ public class UserController extends HttpServlet {
 			case "/update-profile" :
 				updateProfile(request, response);
 				break;
-			
+
 			default :
 
 		}
 	}
-	
 
+	private void viewUserProfileHandler(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		int userID = Integer.parseInt(request.getParameter("userID"));
+		int currentUserID = Authentication.getCurrentUserID(request);
+
+		boolean isCurrentLoggedInUser = userID == currentUserID;
+		
+		if (isCurrentLoggedInUser) {
+			request.setAttribute("isCurrentUser", true);
+			viewMyProfile(request, response);
+			return;
+			
+		}
+		
+		User user = userDAO.getUserProfile(userID);
+		request.setAttribute("userProfile", user);
+		request.setAttribute("isCurrentUser", false);
+
+		MyDispatcher.dispatch(request, response, "user-profile.jsp");
+	}
 
 	private void retrieveProfile(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int userID = Integer.parseInt(request.getParameter("userID"));
-		
+
 		User user = userDAO.getUserProfileForUpdate(userID);
-		
+
 		request.setAttribute("userProfile", user);
-		
+
 		MyDispatcher.dispatch(request, response, "update-userProfile.jsp");
-		
+
 	}
-	
+
 	private void updateProfile(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// ông code ở đây
@@ -120,6 +141,7 @@ public class UserController extends HttpServlet {
 		int currentUserID = Authentication.getCurrentUserID(request);
 		User user = userDAO.getUserProfile(currentUserID);
 		request.setAttribute("userProfile", user);
+		request.setAttribute("isCurrentUser", true);
 
 		MyDispatcher.dispatch(request, response, "user-profile.jsp");
 	}
