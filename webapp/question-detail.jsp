@@ -60,10 +60,26 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 
 <body class="" data-questionID="<%=question.getQuestionID()%>"
 	data-userID="<%=Authentication.getCurrentUserID(request)%>">
+	<!-- Require user log in modal --------------------------------------------------------------------->
+	<div
+		class="require-login-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center">
+		<div class="require-login-content flex flex-col justify-center items-center gap-5  bg-white w-1/2 p-4 relative">
+			<h2 class="text-2xl font-bold mb-4">Join the Pointhub community</h2>
+			<p>Join Pointhubto start earning reputation and unlocking new
+				privileges like voting and commenting.</p>
+
+			<a class="bg-orange-400 text-white px-4 py-1 rounded-md" href="log-in.jsp">Log in</a>
+			<a class="bg-orange-400 text-white px-4 py-1 rounded-md" href="sign-up.jsp">Sign up</a>
+
+			<button
+				class="require-login-close-btn bg-gray-300 text-gray-700 px-2 py-1 rounded absolute top-4 right-4"
+				data-dismiss="modal">&times;</button>
+		</div>
+	</div>
 
 	<!-- Toast --------------------------------------------------------------------->
 	<div id="toast"
-		class="fixed top-0 right-0 p-4 m-4 text-white rounded-md shadow-lg hidden"></div>
+		class="z-10 fixed top-20 right-0 p-4 m-4 text-white rounded-md shadow-lg hidden"></div>
 
 	<!-- Reply Comment Form --------------------------------------------------------------------->
 	<div
@@ -113,7 +129,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 	</div>
 
 	<jsp:include page="navbar.jsp" />
-	
+
 
 	<div class="w-[320px] sm:w-[600px] md:w-[800px] lg:w-[1000px] mx-auto">
 		<div class="p-10 bg-white">
@@ -122,8 +138,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 					<img src="img/<%=question.getUserPhoto()%>" alt=""
 						class="w-[50px] h-[50px] object-cover rounded-full" />
 					<div class="profile_info">
-						<a href="user-profile?userID=<%=question.getUserID()%>">
-							@<%=question.getUsername()%></a>
+						<a href="user-profile?userID=<%=question.getUserID()%>"> @<%=question.getUsername()%></a>
 						<p><%=question.getCreatedAt()%></p>
 					</div>
 				</div>

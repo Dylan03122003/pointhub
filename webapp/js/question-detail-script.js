@@ -1,5 +1,6 @@
 
 import { renderReply, renderComment } from "./template.js"
+import { openRequireLoginModal } from "./main-question-detail.js"
 
 
 
@@ -172,6 +173,12 @@ $(document).ready(function() {
 
 	// Handle replying comments ---------------------------------
 	$(document).on("click", ".reply-button", function() {
+
+		if (currentUserID === -1) {
+			openRequireLoginModal()
+			return;
+		}
+
 		const commentID = $(this).data("commentid");
 		const userReplyID = $(this).data("userreplyid");
 		$(".reply-modal").removeClass("hidden");
@@ -182,6 +189,12 @@ $(document).ready(function() {
 
 	// Handle replying replies ---------------------------------
 	$(document).on("click", ".nested-reply-btn", function() {
+
+		if (currentUserID === -1) {
+			openRequireLoginModal()
+			return;
+		}
+
 		const commentID = $(this).data("commentid");
 		const userReplyID = $(this).data("userid");
 		const replyThemselves = userReplyID === currentUserID
@@ -245,6 +258,10 @@ $(document).ready(function() {
 
 	// Handle commenting 
 	$(".comment-btn").click(function() {
+		if (currentUserID === -1) {
+			openRequireLoginModal()
+			return;
+		}
 		const commentContent = $(".comment-content").val()
 		if (commentContent.trim())
 			createComment(questionID, currentUserID, commentContent)
@@ -258,6 +275,11 @@ $(document).ready(function() {
 
 	// Handle like comment
 	$(document).on("click", ".like-comment-btn", function() {
+		if (currentUserID === -1) {
+			openRequireLoginModal()
+			return;
+		}
+
 		const commentID = $(this).data("commentid");
 
 		$.ajax({
@@ -288,6 +310,11 @@ $(document).ready(function() {
 
 	// Handle dislike comment
 	$(document).on("click", ".dislike-comment-btn", function() {
+		if (currentUserID === -1) {
+			openRequireLoginModal()
+			return;
+		}
+
 		const commentID = $(this).data("commentid");
 
 		$.ajax({
@@ -317,6 +344,12 @@ $(document).ready(function() {
 
 	// Handle like reply
 	$(document).on("click", ".like-reply-btn", function() {
+
+		if (currentUserID === -1) {
+			openRequireLoginModal()
+			return;
+		}
+
 		const replyID = $(this).data("replyid");
 		const commentID = $(this).data("commentid");
 
@@ -349,6 +382,12 @@ $(document).ready(function() {
 
 	// Handle dislike reply
 	$(document).on("click", ".dislike-reply-btn", function() {
+
+		if (currentUserID === -1) {
+			openRequireLoginModal()
+			return;
+		}
+
 		const replyID = $(this).data("replyid");
 		const commentID = $(this).data("commentid");
 
