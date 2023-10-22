@@ -140,6 +140,30 @@ const handleOpenReportModal = () => {
 
 }
 
+const handleBookmarkQuestion = () => {
+	if (currentUserID === -1) {
+		openRequireLoginModal()
+		return
+	}
+	$.ajax({
+		type: "POST",
+		url: "bookmark-question",
+		data: { questionID, currentUserID },
+		success: function(isBookmarked) {
+			if (isBookmarked) {
+				$("#bookmark-btn").removeClass("bg-orange-50 text-gray-600");
+				$("#bookmark-btn").addClass("bg-orange-400 text-white");
+			} else {
+				$("#bookmark-btn").removeClass("bg-orange-400 text-white");
+				$("#bookmark-btn").addClass("bg-orange-50 text-gray-600");
+			}
+		},
+		error: function() {
+			alert("Failed to submit.");
+		},
+	});
+}
+
 // EVENT HANDLING
 
 reportContentContainer.click(function(event) {
@@ -160,3 +184,4 @@ downvoteBtn.click(handleDownvote)
 
 requireLoginModal.click(closeRequireLoginModal)
 $(".require-login-close-btn").click(closeRequireLoginModal)
+$("#bookmark-btn").click(handleBookmarkQuestion)

@@ -13,6 +13,7 @@ import util.MyDispatcher;
 import util.StateName;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
@@ -62,20 +63,39 @@ public class QuestionController extends HttpServlet {
 			case "/create-question" :
 				createQuestionHandler(request, response);
 				break;
+			case "/bookmark-question" :
+				bookmarkQuestion(request, response);
+				break;
 			default :
 
 		}
 
 	}
+	private void bookmarkQuestion(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		int questionID = Integer.parseInt(request.getParameter("questionID"));
+		int currentUserID = Integer.parseInt(request.getParameter("currentUserID"));	
+		try {
+			boolean isBookmarked = questionDAO.bookmarkQuestion(currentUserID, questionID);
+			
+			String json = new Gson().toJson(isBookmarked);
+			response.setContentType("application/json");
+			
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void getQuestionDetailHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int questionID = Integer.parseInt(request.getParameter("question_id"));
-		int userID = Integer.parseInt(request.getParameter("user_id"));
+		int userID = Authentication.getCurrentUserID(request); // it must be current logged in user
 
 		Question questionDetail = questionDAO.getQuestionByID(questionID,
 				userID);
-
+		
 		request.setAttribute("questionDetail", questionDetail);
 
 		MyDispatcher.dispatch(request, response, "question-detail.jsp");

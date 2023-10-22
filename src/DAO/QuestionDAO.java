@@ -83,12 +83,12 @@ public class QuestionDAO extends BaseDAO {
 
 		Question question = null;
 
-		String query = "SELECT " + "u.username AS username, u.photo, "
+		String query = "SELECT u.username AS username, u.photo, "
 				+ "q.created_at AS createdAt, " + "q.title AS title, "
 				+ "q.question_content AS questionContent, "
 				+ "q.tags AS tagContents, " + "IFNULL(upvotes, 0) AS upvotes, "
-				+ "IFNULL(downvotes, 0) AS downvotes, " + "EXISTS ("
-				+ "    SELECT 1 " + "    FROM bookmarks b "
+				+ "IFNULL(downvotes, 0) AS downvotes, EXISTS ("
+				+ "    SELECT 1  FROM bookmarks b "
 				+ "    WHERE b.user_id = ? "
 				+ "    AND b.question_id = q.question_id" + ") AS isBookmarked "
 				+ "FROM questions q " + "JOIN users u ON q.user_id = u.user_id "
@@ -235,6 +235,22 @@ public class QuestionDAO extends BaseDAO {
 		return false;
 
 	}
+	
+	public boolean bookmarkQuestion(int userID, int questionID) throws SQLException {
+		String insertCommand = "INSERT INTO bookmarks (user_id, question_id) VALUES (?, ?)"; 
+		String deleteCommand = "DELETE FROM bookmarks WHERE user_id = ? AND question_id = ?";
+		
+		try {
+			executeInsert(insertCommand, userID, questionID);
+			
+			return true;
+		} catch (SQLException e) {
+			executeUpdate(deleteCommand, userID, questionID);
+			System.out.println("Delete bookmark");
+			return false;
+		}
+	}
+
 
 	public static void main(String[] args) {
 		QuestionDAO questionDAO = new QuestionDAO();
@@ -245,5 +261,6 @@ public class QuestionDAO extends BaseDAO {
 		questionDAO.createQuestion(9, "Please explain to me", "What is react?",
 				tags, 1);
 	}
+
 
 }

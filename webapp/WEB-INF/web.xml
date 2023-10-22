@@ -83,6 +83,7 @@
 		<url-pattern>/create-question</url-pattern>
 		<url-pattern>/question-detail</url-pattern>
 		<url-pattern>/vote-question</url-pattern>
+		<url-pattern>/bookmark-question</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<description></description>

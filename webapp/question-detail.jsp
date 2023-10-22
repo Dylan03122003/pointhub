@@ -63,13 +63,16 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 	<!-- Require user log in modal --------------------------------------------------------------------->
 	<div
 		class="require-login-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center">
-		<div class="require-login-content flex flex-col justify-center items-center gap-5  bg-white w-1/2 p-4 relative">
+		<div
+			class="require-login-content flex flex-col justify-center items-center gap-5  bg-white w-1/2 p-4 relative">
 			<h2 class="text-2xl font-bold mb-4">Join the Pointhub community</h2>
 			<p>Join Pointhubto start earning reputation and unlocking new
 				privileges like voting and commenting.</p>
 
-			<a class="bg-orange-400 text-white px-4 py-1 rounded-md" href="log-in.jsp">Log in</a>
-			<a class="bg-orange-400 text-white px-4 py-1 rounded-md" href="sign-up.jsp">Sign up</a>
+			<a class="bg-orange-400 text-white px-4 py-1 rounded-md"
+				href="log-in.jsp">Log in</a> <a
+				class="bg-orange-400 text-white px-4 py-1 rounded-md"
+				href="sign-up.jsp">Sign up</a>
 
 			<button
 				class="require-login-close-btn bg-gray-300 text-gray-700 px-2 py-1 rounded absolute top-4 right-4"
@@ -146,9 +149,8 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 					<button
 						class="report-btn bg-red-400 text-white px-4 py-1 rounded-md">
 						Report</button>
-					<button
-						class="${questionDetail.isBookmarked() ? 'red-button' : 'white-button'}  bg-orange-400 text-white px-4 py-1 rounded-md">
-						Bookmark</button>
+					<button id="bookmark-btn"
+						class="<%=question.isBookmarked() ? "bg-orange-400 text-white" : "bg-orange-50 text-gray-600" %>   px-4 py-1 rounded-md">Bookmark</button>
 				</div>
 			</div>
 
@@ -175,8 +177,8 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 				<button
 					class="report-btn mt-10 sm:hidden block bg-red-400 text-white px-4 py-1 rounded-md">
 					Report</button>
-				<button
-					class="${questionDetail.isBookmarked() ? 'red-button' : 'white-button'} mt-10 sm:hidden block bg-orange-400 text-white px-4 py-1 rounded-md">
+				<button id="bookmark-btn"
+					class="mt-10 sm:hidden block bg-orange-400 text-white px-4 py-1 rounded-md">
 					Bookmark</button>
 			</div>
 		</div>
