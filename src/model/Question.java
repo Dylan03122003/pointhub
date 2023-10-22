@@ -3,6 +3,8 @@ package model;
 import java.util.Arrays;
 import java.util.Date;
 
+import DAO.TopicDAO;
+
 public class Question {
 	private int questionID;
 	private int userID;
@@ -16,6 +18,7 @@ public class Question {
 	private int downvotes;
 	private boolean isBookmarked;
 	private int topicID;
+	private String codeblock;
 
 	public Question(int questionID, int userID, String questionContent,
 			String title, Date createdAt) {
@@ -148,7 +151,6 @@ public class Question {
 		return this.upvotes - this.downvotes;
 	}
 
-	
 	public int getTopicID() {
 		return topicID;
 	}
@@ -157,13 +159,34 @@ public class Question {
 		this.topicID = topicID;
 	}
 
-
 	public String getUserPhoto() {
 		return userPhoto;
 	}
 
 	public void setUserPhoto(String userPhoto) {
 		this.userPhoto = userPhoto;
+	}
+
+	public String getCodeblock() {
+		return codeblock;
+	}
+
+	public void setCodeblock(String codeblock) {
+		this.codeblock = codeblock;
+	}
+	
+	public String getLanguage() {
+		TopicDAO topicDAO = new TopicDAO();
+		switch (topicDAO.getTopicNameByID(this.topicID).toLowerCase()) {
+			case "java" : {
+				return "language-java";
+			}
+			case "react" : {
+				return "language-javascript";
+			}
+			default :
+				return "";
+		}
 	}
 
 	@Override
@@ -174,9 +197,7 @@ public class Question {
 				+ ", createdAt=" + createdAt + ", tagContents="
 				+ Arrays.toString(tagContents) + ", upvotes=" + upvotes
 				+ ", downvotes=" + downvotes + ", isBookmarked=" + isBookmarked
-				+ ", topicID=" + topicID + "]";
+				+ ", topicID=" + topicID + ", codeblock=" + codeblock + "]";
 	}
-	
-	
 
 }

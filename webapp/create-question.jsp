@@ -46,15 +46,19 @@ ArrayList<Topic> topics = new TopicDAO().getTopics();
 					<c:forEach var="topic" items="<%=topics%>">
 						<option value="${topic.getTopicID()}">${topic.getTopicName()}</option>
 					</c:forEach>
-				</select> 
-				<input required="required" name="title" type="text"	placeholder="Type catching attention title" />
-				
-				<input required="required" name="tags" type="text"	placeholder="Type tags (comma-separated)" />
+				</select> <input required="required" name="title" type="text"
+					placeholder="Type catching attention title" /> <input
+					required="required" name="tags" type="text"
+					placeholder="Type tags (comma-separated)" />
 
 
 				<textarea required="required" name="question_content"
 					id="second-input" cols="86" rows="10"
 					placeholder="Type your question"></textarea>
+
+				<textarea name="code_block"
+					id="second-input" cols="86" rows="10"
+					placeholder="Paste your code"></textarea>
 
 				<div class="btn-toggle">
 					<button class="btn" type="submit">

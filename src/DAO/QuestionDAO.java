@@ -13,12 +13,12 @@ import model.ReplyComment;
 
 public class QuestionDAO extends BaseDAO {
 	public void createQuestion(int userID, String questionContent, String title,
-			String[] tags, int topicID) {
-		String createQuestionQuery = "INSERT INTO questions (user_id, question_content, title, tags, topic_id, created_at) VALUES (? ,?, ?, ?, ?, NOW());";
+			String[] tags, int topicID, String codeBlock) {
+		String insertCommand = "INSERT INTO questions (user_id, question_content, title, tags, topic_id, code_block, created_at) VALUES (? ,?, ?, ?, ?, ?, NOW());";
 
 		try {
-			executeNonQuery(createQuestionQuery, userID, questionContent, title,
-					String.join(",", tags), topicID);
+			executeNonQuery(insertCommand, userID, questionContent, title,
+					String.join(",", tags), topicID, codeBlock);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,7 +85,7 @@ public class QuestionDAO extends BaseDAO {
 
 		String query = "SELECT u.username AS username, u.photo, "
 				+ "q.created_at AS createdAt, " + "q.title AS title, "
-				+ "q.question_content AS questionContent, "
+				+ "q.question_content AS questionContent, q.code_block, q.topic_id, "
 				+ "q.tags AS tagContents, " + "IFNULL(upvotes, 0) AS upvotes, "
 				+ "IFNULL(downvotes, 0) AS downvotes, EXISTS ("
 				+ "    SELECT 1  FROM bookmarks b "
@@ -111,11 +111,15 @@ public class QuestionDAO extends BaseDAO {
 				int downvotes = result.getInt("downvotes");
 				boolean isBookmarked = result.getBoolean("isBookmarked");
 				String userPhoto = result.getString("photo");
+				String codeBlock = result.getString("code_block");
+				int topicID = result.getInt("topic_id");
 
 				question = new Question(questionID, userID, username,
 						questionContent, title, createdAt, tagContents, upvotes,
 						downvotes, isBookmarked);
 				question.setUserPhoto(userPhoto);
+				question.setCodeblock(codeBlock);
+				question.setTopicID(topicID);
 
 			}
 
@@ -252,15 +256,15 @@ public class QuestionDAO extends BaseDAO {
 	}
 
 
-	public static void main(String[] args) {
-		QuestionDAO questionDAO = new QuestionDAO();
-		// ArrayList<Question> newestQuetions =
-		// questionDAO.getNewestQuestions();
-		// Question questionDetail = questionDAO.getQuestionByID(7, 9);
-		String[] tags = {"javascript, css, html"};
-		questionDAO.createQuestion(9, "Please explain to me", "What is react?",
-				tags, 1);
-	}
+//	public static void main(String[] args) {
+//		QuestionDAO questionDAO = new QuestionDAO();
+//		// ArrayList<Question> newestQuetions =
+//		// questionDAO.getNewestQuestions();
+//		// Question questionDetail = questionDAO.getQuestionByID(7, 9);
+//		String[] tags = {"javascript, css, html"};
+//		questionDAO.createQuestion(9, "Please explain to me", "What is react?",
+//				tags, 1);
+//	}
 
 
 }
