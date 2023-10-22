@@ -23,8 +23,22 @@ public class TopicDAO extends BaseDAO {
 		}
 		return topics;
 	}
-	
-	
+
+	public String getTopicNameByID(int topicID) {
+		String topicName = "";
+		String query = "SELECT topic_name FROM topics WHERE topic_id = ?";
+		try {
+			ResultSet result = executeQuery(query, topicID);
+			if (result.next()) {
+				topicName = result.getString("topic_name");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return topicName;
+	}
+
 	// public static void main(String[] args) {
 	//
 	// CustomLog.logList(new TopicDAO().getAllTopics());

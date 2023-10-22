@@ -18,6 +18,8 @@
 	rel="stylesheet" />
 <link rel="stylesheet" href="question-detail-style.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tomorrow-night-blue.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer type="module" src="js/question-detail-script.js"></script>
 <script defer type="module" src="js/main-question-detail.js"></script>
@@ -150,7 +152,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 						class="report-btn bg-red-400 text-white px-4 py-1 rounded-md">
 						Report</button>
 					<button id="bookmark-btn"
-						class="<%=question.isBookmarked() ? "bg-orange-400 text-white" : "bg-orange-50 text-gray-600" %>   px-4 py-1 rounded-md">Bookmark</button>
+						class="<%=question.isBookmarked() ? "bg-orange-400 text-white" : "bg-orange-50 text-gray-600"%>   px-4 py-1 rounded-md">Bookmark</button>
 				</div>
 			</div>
 
@@ -181,6 +183,12 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 					class="mt-10 sm:hidden block bg-orange-400 text-white px-4 py-1 rounded-md">
 					Bookmark</button>
 			</div>
+
+			<c:if test="<%=question.getCodeblock() != null && !question.getCodeblock().isBlank()%>">
+				<pre style="tab-size: 2">
+		         <code class="<%=question.getLanguage()%>"><%=question.getCodeblock()%></code>
+	           </pre>
+			</c:if>
 		</div>
 
 		<div
@@ -202,5 +210,12 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 		</div>
 	</div>
 
+
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+	<script>
+		hljs.highlightAll();
+	</script>
 </body>
 </html>

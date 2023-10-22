@@ -95,7 +95,6 @@ public class QuestionController extends HttpServlet {
 
 		Question questionDetail = questionDAO.getQuestionByID(questionID,
 				userID);
-		
 		request.setAttribute("questionDetail", questionDetail);
 
 		MyDispatcher.dispatch(request, response, "question-detail.jsp");
@@ -146,9 +145,10 @@ public class QuestionController extends HttpServlet {
 		String title = request.getParameter("title");
 		String[] tagContents = request.getParameter("tags").split(",");
 		String questionContent = request.getParameter("question_content");
+		String codeBlock = request.getParameter("code_block");
 
 		questionDAO.createQuestion(Authentication.getCurrentUserID(request),
-				questionContent, title, tagContents, topicID);
+				questionContent, title, tagContents, topicID, codeBlock);
 
 		response.sendRedirect("questions");
 	}
