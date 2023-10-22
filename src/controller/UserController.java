@@ -84,7 +84,7 @@ public class UserController extends HttpServlet {
 	
 	private void updateProfile(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("hello");
+		// ông code ở đây
 	}
 
 	private void listUser(HttpServletRequest request,
