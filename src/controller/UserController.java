@@ -13,7 +13,10 @@ import util.Authentication;
 import util.MyDispatcher;
 import util.PasswordEncryption;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
 
 import DAO.BaseDAO;
 import DAO.UserDAO;
@@ -52,6 +55,9 @@ public class UserController extends HttpServlet {
 			case "/user-profile" :
 				viewUserProfileHandler(request, response);
 				break;
+			case "/follow-user" :
+				followUser(request, response);
+				break;
 			default :
 
 		}
@@ -70,21 +76,37 @@ public class UserController extends HttpServlet {
 		}
 	}
 
+	private void followUser(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		int followedUserID = Integer
+				.parseInt(request.getParameter("followedUserID"));
+		int currentUserID = Authentication.getCurrentUserID(request);
+		try {
+			boolean isFollowed = userDAO.followUser(currentUserID, followedUserID);
+			String json = new Gson().toJson(isFollowed);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void viewUserProfileHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		int userID = Integer.parseInt(request.getParameter("userID"));
+		int viewedUserID = Integer.parseInt(request.getParameter("userID"));
 		int currentUserID = Authentication.getCurrentUserID(request);
 
-		boolean isCurrentLoggedInUser = userID == currentUserID;
-		
+		boolean isCurrentLoggedInUser = viewedUserID == currentUserID;
+
 		if (isCurrentLoggedInUser) {
 			request.setAttribute("isCurrentUser", true);
 			viewMyProfile(request, response);
 			return;
-			
+
 		}
-		
-		User user = userDAO.getUserProfile(userID);
+
+		User user = userDAO.getUserProfile(currentUserID, viewedUserID);
 		request.setAttribute("userProfile", user);
 		request.setAttribute("isCurrentUser", false);
 
@@ -139,7 +161,7 @@ public class UserController extends HttpServlet {
 	private void viewMyProfile(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int currentUserID = Authentication.getCurrentUserID(request);
-		User user = userDAO.getUserProfile(currentUserID);
+		User user = userDAO.getUserProfile(currentUserID, currentUserID);
 		request.setAttribute("userProfile", user);
 		request.setAttribute("isCurrentUser", true);
 

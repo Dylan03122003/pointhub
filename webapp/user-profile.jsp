@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
 	integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
@@ -21,7 +22,7 @@
 User user = (User) request.getAttribute("userProfile");
 boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 %>
-<body>
+<body data-userprofileid="<%=user.getUserID()%>">
 	<jsp:include page="navbar.jsp" />
 
 	<div class="viewProfile">
@@ -50,7 +51,8 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 				<div class="stats">
 					<span> <i class="fa-regular fa-circle-question"></i> <%=user.getTotalQuestions()%>
 						questions
-					</span> <span> <i class="fa-solid fa-user-group"></i> 0 Followers
+					</span> <span> <i class="fa-solid fa-user-group"></i> <span id="followers-sum"><%=user.getNumberOfFollowers()%>
+					</span> Followers
 					</span>
 				</div>
 			</div>
@@ -60,6 +62,12 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 					class="fa-regular fa-pen-to-square"></i>
 				</a>
 			</c:if>
+
+			<c:if test="<%=!isCurrentUser%>">
+				<button id="follow-btn"><%=user.isFollowedByCurrentUser() ? "Following" : "Follow"%></button>
+			</c:if>
+
+
 		</div>
 
 		<div class="body-item">
@@ -133,6 +141,32 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 		content.style.display = "block";
 		event.target.style.opacity = "1";
 	}
+
+	$("#follow-btn").click(function() {
+		const followedUserID = $("body").data("userprofileid");
+		const button = $(this);
+		const followersSumElm = $("#followers-sum");
+		$.ajax({
+			type : "GET",
+			url : "follow-user?followedUserID=" + followedUserID,
+			dataType : "json",
+			success : function(isFollowed) {
+				const followersSum = parseInt(followersSumElm.text())
+				if (isFollowed) {
+					button.text("Following");
+					
+					followersSumElm.text(followersSum + 1)
+				} else {
+					button.text("Follow");
+					followersSumElm.text(followersSum - 1)
+				}
+
+			},
+			error : function() {
+				alert("Failed to load data from the server.");
+			},
+		});
+	})
 </script>
 
 </html>

@@ -16,8 +16,10 @@ public class User {
 	private String githubLink;
 	private int totalQuestions;
 	private String ward;
-	private String district; 
+	private String district;
 	private String province;
+	private boolean isFollowedByCurrentUser;
+	private int numberOfFollowers;
 
 	public User() {
 
@@ -49,21 +51,21 @@ public class User {
 		this.password = password;
 		this.username = this.lastName + this.firstName;
 	}
-	
-	
-    /**
-     * Get user profile
-     * @param userID
-     * @param username
-     * @param email
-     * @param photo
-     * @param about
-     * @param facebookLink
-     * @param twitterLink
-     * @param instagramLink
-     * @param githubLink
-     * @param totalQuestions
-     */
+
+	/**
+	 * Get user profile
+	 * 
+	 * @param userID
+	 * @param username
+	 * @param email
+	 * @param photo
+	 * @param about
+	 * @param facebookLink
+	 * @param twitterLink
+	 * @param instagramLink
+	 * @param githubLink
+	 * @param totalQuestions
+	 */
 	public User(int userID, String username, String email, String photo,
 			String about, String facebookLink, String twitterLink,
 			String instagramLink, String githubLink, int totalQuestions) {
@@ -78,7 +80,7 @@ public class User {
 		this.githubLink = githubLink;
 		this.totalQuestions = totalQuestions;
 	}
-	
+
 	// Used for retrieve user profile for updating
 	public User(int userID, String firstName, String lastName, String email,
 			String photo, String about, String facebookLink, String twitterLink,
@@ -235,8 +237,6 @@ public class User {
 	public void setTotalQuestions(int totalQuestions) {
 		this.totalQuestions = totalQuestions;
 	}
-	
-	
 
 	public String getWard() {
 		if (ward == null) {
@@ -271,6 +271,22 @@ public class User {
 		this.province = province;
 	}
 
+	public boolean isFollowedByCurrentUser() {
+		return isFollowedByCurrentUser;
+	}
+
+	public void setFollowedByCurrentUser(boolean isFollowedByCurrentUser) {
+		this.isFollowedByCurrentUser = isFollowedByCurrentUser;
+	}
+
+	public int getNumberOfFollowers() {
+		return numberOfFollowers;
+	}
+
+	public void setNumberOfFollowers(int numberOfFollowers) {
+		this.numberOfFollowers = numberOfFollowers;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userID=" + userID + ", firstName=" + firstName
@@ -283,9 +299,5 @@ public class User {
 				+ totalQuestions + ", ward=" + ward + ", district=" + district
 				+ ", province=" + province + "]";
 	}
-
-	
-
-	
 
 }

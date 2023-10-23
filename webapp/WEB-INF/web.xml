@@ -110,6 +110,7 @@
 		<url-pattern>/retrieve-profile</url-pattern>
 		<url-pattern>/update-profile</url-pattern>
 		<url-pattern>/user-profile</url-pattern>
+		<url-pattern>/follow-user</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<description></description>
