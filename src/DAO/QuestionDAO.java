@@ -79,7 +79,7 @@ public class QuestionDAO extends BaseDAO {
 
 	}
 
-	public Question getQuestionByID(int questionID, int userID) {
+	public Question getQuestionByID(int questionID, int currentUserID, int userIDOfQuestion) {
 
 		Question question = null;
 
@@ -99,7 +99,7 @@ public class QuestionDAO extends BaseDAO {
 				+ "WHERE q.question_id = ?";
 
 		try {
-			ResultSet result = executeQuery(query, userID, questionID);
+			ResultSet result = executeQuery(query, currentUserID, questionID);
 			if (result.next()) {
 				String username = result.getString("username");
 				Date createdAt = result.getDate("createdAt");
@@ -114,7 +114,7 @@ public class QuestionDAO extends BaseDAO {
 				String codeBlock = result.getString("code_block");
 				int topicID = result.getInt("topic_id");
 
-				question = new Question(questionID, userID, username,
+				question = new Question(questionID, userIDOfQuestion, username,
 						questionContent, title, createdAt, tagContents, upvotes,
 						downvotes, isBookmarked);
 				question.setUserPhoto(userPhoto);
