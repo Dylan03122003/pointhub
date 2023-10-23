@@ -184,6 +184,9 @@ public class Question {
 			case "react" : {
 				return "language-javascript";
 			}
+			case "javascript" : {
+				return "language-javascript";
+			}
 			default :
 				return "";
 		}

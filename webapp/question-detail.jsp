@@ -19,6 +19,10 @@
 <link rel="stylesheet" href="question-detail-style.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+	integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tomorrow-night-blue.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer type="module" src="js/question-detail-script.js"></script>
@@ -62,6 +66,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 
 <body class="" data-questionID="<%=question.getQuestionID()%>"
 	data-userID="<%=Authentication.getCurrentUserID(request)%>">
+
 	<!-- Require user log in modal --------------------------------------------------------------------->
 	<div
 		class="require-login-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center">
@@ -149,10 +154,16 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 				</div>
 				<div class="sm:block hidden">
 					<button
-						class="report-btn bg-red-400 text-white px-4 py-1 rounded-md">
-						Report</button>
-					<button id="bookmark-btn"
-						class="<%=question.isBookmarked() ? "bg-orange-400 text-white" : "bg-orange-50 text-gray-600"%>   px-4 py-1 rounded-md">Bookmark</button>
+						class="report-btn bg-red-100 text-white px-4 py-1 rounded-md">
+						<i class="fa-solid fa-flag text-red-500"></i> <span
+							class="ml-2 text-red-500">Report</span>
+					</button>
+					<button 
+						class="bookmark-btn px-4 py-1 rounded-md bg-orange-100 text-orange-500">
+						<i
+							class="<%=question.isBookmarked() ? "fa-solid" : "fa-regular"%> fa-bookmark bookmark-icon"></i>
+						<span class="ml-2">Bookmark</span>
+					</button>
 				</div>
 			</div>
 
@@ -160,31 +171,42 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 				<%=question.getTitle()%>
 			</h2>
 
-			<p class="mt-5"><%=question.getQuestionContent()%></p>
+			<p class="mt-5 text-gray-500"><%=question.getQuestionContent()%></p>
 
 			<div class="mt-10 flex items-center justify-start gap-2">
 				<c:forEach var="tag" items="<%=question.getTagContents()%>">
-					<span class="px-4 py-1 rounded-md bg-red-50">${tag}</span>
+					<span class="px-4 py-1 rounded-md bg-orange-50 text-orange-500">${tag}</span>
 				</c:forEach>
 			</div>
 
-			<div class="mt-10 flex items-center gap-2">
-				<button class="upvote-btn">Upvote</button>
-				<p class="votes-sum"><%=question.getVotesSum()%></p>
-
-				<button class="downvote-btn"
-					href="vote-question?questionId=<%=question.getQuestionID()%>&voteType=downvote">Downvote</button>
-			</div>
-			<div class="flex gap-4">
+			<div class="mt-10 flex items-center gap-4">
 				<button
-					class="report-btn mt-10 sm:hidden block bg-red-400 text-white px-4 py-1 rounded-md">
-					Report</button>
-				<button id="bookmark-btn"
-					class="mt-10 sm:hidden block bg-orange-400 text-white px-4 py-1 rounded-md">
-					Bookmark</button>
+					class="upvote-btn w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
+					<i class="fa-solid fa-angle-up text-2xl text-slate-500"></i>
+				</button>
+				<p class="votes-sum text-gray-600 font-medium"><%=question.getVotesSum()%></p>
+
+				<button
+					class="downvote-btn w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
+					<i class="fa-solid fa-angle-down text-2xl text-slate-500"></i>
+				</button>
+			</div>
+			<div class="mt-8 mb-5 flex sm:hidden gap-4">
+				<button
+					class="report-btn bg-red-100 text-white px-4 py-1 rounded-md">
+					<i class="fa-solid fa-flag text-red-500"></i> <span
+						class="ml-2 text-red-500">Report</span>
+				</button>
+				<button 
+					class="bookmark-btn px-4 py-1 rounded-md bg-orange-100 text-orange-500">
+					<i
+						class="<%=question.isBookmarked() ? "fa-solid" : "fa-regular"%> fa-bookmark bookmark-icon"></i>
+					<span class="ml-2">Bookmark</span>
+				</button>
 			</div>
 
-			<c:if test="<%=question.getCodeblock() != null && !question.getCodeblock().isBlank()%>">
+			<c:if
+				test="<%=question.getCodeblock() != null && !question.getCodeblock().isBlank()%>">
 				<pre style="tab-size: 2">
 		         <code class="<%=question.getLanguage()%>"><%=question.getCodeblock()%></code>
 	           </pre>
@@ -202,6 +224,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 					type="button">Comment</button>
 			</form>
 		</div>
+
 
 		<div class="p-10 mt-10 bg-white">
 			<div id="comments-container"></div>
