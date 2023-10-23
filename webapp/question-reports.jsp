@@ -52,13 +52,11 @@
                       <c:param name='question_id' value='${report.getQuestionID()}' />
                       <c:param name='user_id' value='${report.getReportedUserID()}' />
                     </c:url>"
-						class="text-blue-500 hover:underline">${report.getTitle()}
-					</a></td>
+						class="text-blue-500 hover:underline">${report.getTitle()} </a></td>
 					<td class="px-6 py-4">
 						<div class="flex items-center">
-							<img
-								src="img/${report.getUserPhoto()}"
-								alt="User 1" class="w-12 h-12 object-cover rounded-full">
+							<img src="img/${report.getUserPhoto()}" alt="User 1"
+								class="w-12 h-12 object-cover rounded-full">
 							<h3 class="ml-4">${report.getReportingUsername()}</h3>
 						</div>
 					</td>

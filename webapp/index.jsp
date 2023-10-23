@@ -26,7 +26,9 @@
 <title>Pointhub</title>
 
 <style>
-
+.active-page {
+	color: red
+}
 </style>
 </head>
 
@@ -57,8 +59,7 @@ String activeTopic = (String) request.getAttribute("activeTopic");
                   </c:url>"
 					class="question-item">
 					<div class="question-author">
-						<img
-							src="img/${question.getUserPhoto()}" />
+						<img src="img/${question.getUserPhoto()}" />
 						<div class="question-author-name">
 							<h4>${question.getUsername()}</h4>
 							<p>${question.getCreatedAt()}</p>
@@ -71,15 +72,48 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 					</div>
 
 					<div class="question-category">
-						
+
 						<c:forEach var="tag" items="${question.getTagContents()}">
-								<span>${tag}</span>
-							</c:forEach>
+							<span>${tag}</span>
+						</c:forEach>
 					</div>
 				</a>
 			</c:forEach>
+
+
+
+			<div style="margin-bottom: 100px; text-align: center;">
+				<c:choose>
+					<c:when test="${currentQuestionPage > 1}">
+						<a
+							href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage - 1}"
+							class="">prev</a>
+					</c:when>
+					<c:otherwise>
+						<a href="#" class="">prev</a>
+					</c:otherwise>
+				</c:choose>
+
+				<c:forEach var="i" begin="1" end="${totalQuestionPages}">
+					<a href="questions?activeTopic=${activeTopic}&page=${i}"
+						class="${i == currentQuestionPage ? 'active-page' : ''}">${i}
+					</a>
+				</c:forEach>
+
+				<c:choose>
+					<c:when test="${currentQuestionPage < totalQuestionPages}">
+						<a
+							href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage + 1}"
+							class="">next</a>
+					</c:when>
+					<c:otherwise>
+						<a href="#" class="ml-2 text-gray-500 cursor-not-allowed">next</a>
+					</c:otherwise>
+				</c:choose>
+			</div>
+
 		</div>
-		
+
 
 	</div>
 
