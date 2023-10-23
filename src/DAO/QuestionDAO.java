@@ -195,14 +195,14 @@ public class QuestionDAO extends BaseDAO {
 	public int getTotalQuestionReportsRecords() {
 		return getTotalRecords("report_questions");
 	}
-	
+
 	public int getTotalQuestionRecords() {
 		return getTotalRecords("questions");
 	}
-	
+
 	public int getTotalQuestionsByTopic(int topicID) {
 		String query = "SELECT COUNT(*) as total_questions FROM questions WHERE topic_id = ?";
-		
+
 		try {
 			ResultSet result = executeQuery(query, topicID);
 			if (result.next()) {
@@ -212,9 +212,9 @@ public class QuestionDAO extends BaseDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return -1;
-		
+
 	}
 
 	public void voteQuestion(int userID, int questionID, String voteType)
@@ -280,14 +280,36 @@ public class QuestionDAO extends BaseDAO {
 		}
 	}
 
+	public ArrayList<Question> getQuestionsOfUser(int userID) {
+		String query = "SELECT * FROM questions WHERE user_id = ?";
+		ArrayList<Question> questions = new ArrayList<Question>();
+
+		try {
+			ResultSet result = executeQuery(query, userID);
+			while (result.next()) {
+				int questionID = result.getInt("question_id");
+
+				Question question = new Question();
+				question.setQuestionID(questionID);
+
+				questions.add(question);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return questions;
+
+	}
+
 	// public static void main(String[] args) {
 	// QuestionDAO questionDAO = new QuestionDAO();
 	// // ArrayList<Question> newestQuetions =
 	// // questionDAO.getNewestQuestions();
 	// // Question questionDetail = questionDAO.getQuestionByID(7, 9);
-	// String[] tags = {"javascript, css, html"};
-	// questionDAO.createQuestion(9, "Please explain to me", "What is react?",
-	// tags, 1);
+	// //System.out.println(questionDAO.getQuestionsOfUser(19));
 	// }
 
 }
