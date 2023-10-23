@@ -145,17 +145,18 @@ const handleBookmarkQuestion = () => {
 		openRequireLoginModal()
 		return
 	}
+
 	$.ajax({
 		type: "POST",
 		url: "bookmark-question",
 		data: { questionID, currentUserID },
 		success: function(isBookmarked) {
 			if (isBookmarked) {
-				$("#bookmark-btn").removeClass("bg-orange-50 text-gray-600");
-				$("#bookmark-btn").addClass("bg-orange-400 text-white");
+				$(".bookmark-icon").removeClass("fa-regular");
+				$(".bookmark-icon").addClass("fa-solid text-orange-500");
 			} else {
-				$("#bookmark-btn").removeClass("bg-orange-400 text-white");
-				$("#bookmark-btn").addClass("bg-orange-50 text-gray-600");
+				$(".bookmark-icon").removeClass("fa-solid text-orange-500");
+				$(".bookmark-icon").addClass("fa-regular");
 			}
 		},
 		error: function() {
@@ -184,4 +185,4 @@ downvoteBtn.click(handleDownvote)
 
 requireLoginModal.click(closeRequireLoginModal)
 $(".require-login-close-btn").click(closeRequireLoginModal)
-$("#bookmark-btn").click(handleBookmarkQuestion)
+$(".bookmark-btn").click(handleBookmarkQuestion)
