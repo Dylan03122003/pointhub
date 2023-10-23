@@ -10,17 +10,25 @@ import model.User;
 
 public class UserDAO extends BaseDAO {
 
-	public User getUserProfile(int userID) {
-		String query = "SELECT u.email, u.username, u.photo, "
-				+ "u.about, sa.facebook_link, sa.twitter_link, "
-				+ "sa.instagram_link, sa.github_link, "
-				+ "COUNT(q.question_id) AS total_questions FROM users u "
-				+ "LEFT JOIN social_accounts sa ON u.user_id = sa.user_id "
-				+ "LEFT JOIN questions q ON u.user_id = q.user_id "
-				+ "WHERE u.user_id = ?";
+	public User getUserProfile(int currentUserID, int viewedUserID) {
+		String query = "SELECT " + "    u.email, " + "    u.username, "
+				+ "    u.photo, " + "    u.about, " + "    sa.facebook_link, "
+				+ "    sa.twitter_link, " + "    sa.instagram_link, "
+				+ "    sa.github_link, "
+				+ "    COUNT(q.question_id) AS total_questions, " + "    CASE "
+				+ "        WHEN fr.followed_user_id IS NOT NULL THEN 1 "
+				+ "        ELSE 0 " + "    END AS is_following, "
+				+ "    (SELECT COUNT(*) FROM following_relationships WHERE followed_user_id = ?) AS followers "
+				+ "FROM " + "    users u " + "LEFT JOIN "
+				+ "    social_accounts sa ON u.user_id = sa.user_id "
+				+ "LEFT JOIN " + "    questions q ON u.user_id = q.user_id "
+				+ "LEFT JOIN "
+				+ "    following_relationships fr ON u.user_id = fr.followed_user_id AND fr.user_id = ? "
+				+ "WHERE " + "    u.user_id = ?";
 
 		try {
-			ResultSet result = executeQuery(query, userID);
+			ResultSet result = executeQuery(query, viewedUserID, currentUserID,
+					viewedUserID);
 			if (result.next()) {
 				String email = result.getString("email");
 				String username = result.getString("username");
@@ -31,9 +39,15 @@ public class UserDAO extends BaseDAO {
 				String instagramLink = result.getString("instagram_link");
 				String githubLink = result.getString("github_link");
 				int totalQuestions = result.getInt("total_questions");
-				User user = new User(userID, username, email, photo, about,
-						facebookLink, twitterLink, instagramLink, githubLink,
-						totalQuestions);
+				boolean isFollowedByCurrentUser = result
+						.getBoolean("is_following");
+				int numberOfFollowers = result.getInt("followers");
+
+				User user = new User(viewedUserID, username, email, photo,
+						about, facebookLink, twitterLink, instagramLink,
+						githubLink, totalQuestions);
+				user.setFollowedByCurrentUser(isFollowedByCurrentUser);
+				user.setNumberOfFollowers(numberOfFollowers);
 
 				return user;
 			}
@@ -79,11 +93,11 @@ public class UserDAO extends BaseDAO {
 
 		return null;
 	}
-	
+
 	public boolean updateUserPhoto(String fileName, int userID) {
-        String updatePhotoQuery = "UPDATE users SET photo = ? WHERE user_id = ?";
-        
-        try {
+		String updatePhotoQuery = "UPDATE users SET photo = ? WHERE user_id = ?";
+
+		try {
 			executeUpdate(updatePhotoQuery, fileName, userID);
 			return true;
 		} catch (SQLException e) {
@@ -157,7 +171,7 @@ public class UserDAO extends BaseDAO {
 		}
 		return null;
 	}
-	
+
 	public String getUserPhotoByEmail(String email) {
 		String query = "SELECT photo FROM users WHERE email = ?;";
 
@@ -243,5 +257,22 @@ public class UserDAO extends BaseDAO {
 	}
 	public int getTotalUsers() {
 		return getTotalRecordsUser();
+	}
+
+	public boolean followUser(int currentUserID, int followedUserID)
+			throws SQLException {
+		String insertCommand = "INSERT INTO following_relationships (user_id, followed_user_id) VALUES (?, ?);";
+		String deleteCommand = "DELETE FROM following_relationships WHERE user_id = ? AND followed_user_id = ?";
+
+		try {
+			executeUpdate(insertCommand, currentUserID, followedUserID);
+			return true;
+		} catch (SQLException e) {
+			System.out.println("deleted duplicated follow");
+			executeUpdate(deleteCommand, currentUserID, followedUserID);
+			return false;
+
+		}
+
 	}
 }

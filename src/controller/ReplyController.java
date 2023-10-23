@@ -110,8 +110,8 @@ public class ReplyController extends HttpServlet {
 		int replyID = commentDAO.replyComment(replyComment);
 
 		String currentUsername = Authentication.getCurrentUsername(request);
-		User user = userDAO.getUserProfile(userReplyID); // HERE
-		User currentUserProfile = userDAO.getUserProfile(currentUserID); // HERE
+		User user = userDAO.getUserProfile(currentUserID, userReplyID); // HERE
+		User currentUserProfile = userDAO.getUserProfile(currentUserID, currentUserID); // HERE
 
 		ReplyComment reply = new ReplyComment();
 		reply.setReplyID(replyID);
