@@ -25,7 +25,8 @@ public class QuestionDAO extends BaseDAO {
 		}
 	}
 
-	public ArrayList<Question> getNewestQuestions(String topicName) {
+	public ArrayList<Question> getNewestQuestions(String topicName,
+			int rowsPerPage, int currentPage) {
 
 		ArrayList<Question> questions = new ArrayList<Question>();
 		String query = null;
@@ -38,8 +39,9 @@ public class QuestionDAO extends BaseDAO {
 						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
 						+ "FROM questions q JOIN users u ON q.user_id = u.user_id "
 						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
-						+ "ORDER BY createdAt DESC";
-				result = executeQuery(query);
+						+ "ORDER BY createdAt DESC " + "LIMIT ? OFFSET ?";
+				result = executeQuery(query, rowsPerPage,
+						(currentPage - 1) * rowsPerPage);
 
 			} else {
 				query = "SELECT q.question_id, u.user_id, u.username, u.photo, q.created_at AS createdAt, "
@@ -49,8 +51,9 @@ public class QuestionDAO extends BaseDAO {
 						+ "JOIN topics t ON q.topic_id = t.topic_id "
 						+ "WHERE t.topic_name = ? "
 						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
-						+ "ORDER BY createdAt DESC";
-				result = executeQuery(query, topicName);
+						+ "ORDER BY createdAt DESC LIMIT ? OFFSET ?";
+				result = executeQuery(query, topicName, rowsPerPage,
+						(currentPage - 1) * rowsPerPage);
 
 			}
 
@@ -79,7 +82,8 @@ public class QuestionDAO extends BaseDAO {
 
 	}
 
-	public Question getQuestionByID(int questionID, int currentUserID, int userIDOfQuestion) {
+	public Question getQuestionByID(int questionID, int currentUserID,
+			int userIDOfQuestion) {
 
 		Question question = null;
 
@@ -88,8 +92,7 @@ public class QuestionDAO extends BaseDAO {
 				+ "q.question_content AS questionContent, q.code_block, q.topic_id, "
 				+ "q.tags AS tagContents, " + "IFNULL(upvotes, 0) AS upvotes, "
 				+ "IFNULL(downvotes, 0) AS downvotes, EXISTS ("
-				+ "    SELECT 1  FROM bookmarks b "
-				+ "    WHERE b.user_id = ? "
+				+ "    SELECT 1  FROM bookmarks b " + "    WHERE b.user_id = ? "
 				+ "    AND b.question_id = q.question_id" + ") AS isBookmarked "
 				+ "FROM questions q " + "JOIN users u ON q.user_id = u.user_id "
 				+ "LEFT JOIN (SELECT question_id, SUM(CASE WHEN vote_type = 'upvote' THEN 1 ELSE 0 END) AS upvotes "
@@ -155,8 +158,8 @@ public class QuestionDAO extends BaseDAO {
 		String query = "SELECT " + "rq.report_id, " + "rq.question_id, "
 				+ "q.title, " + "q.user_id AS reported_user_id, "
 				+ "rq.user_id AS reporting_user_id, "
-				+ "u.username AS reporting_username, u.photo, " + "rq.report_content "
-				+ "FROM report_questions rq "
+				+ "u.username AS reporting_username, u.photo, "
+				+ "rq.report_content " + "FROM report_questions rq "
 				+ "INNER JOIN questions q ON rq.question_id = q.question_id "
 				+ "INNER JOIN users u ON rq.user_id = u.user_id "
 				+ "LIMIT ? OFFSET ?;";
@@ -191,6 +194,27 @@ public class QuestionDAO extends BaseDAO {
 
 	public int getTotalQuestionReportsRecords() {
 		return getTotalRecords("report_questions");
+	}
+	
+	public int getTotalQuestionRecords() {
+		return getTotalRecords("questions");
+	}
+	
+	public int getTotalQuestionsByTopic(int topicID) {
+		String query = "SELECT COUNT(*) as total_questions FROM questions WHERE topic_id = ?";
+		
+		try {
+			ResultSet result = executeQuery(query, topicID);
+			if (result.next()) {
+				return result.getInt("total_questions");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return -1;
+		
 	}
 
 	public void voteQuestion(int userID, int questionID, String voteType)
@@ -239,14 +263,15 @@ public class QuestionDAO extends BaseDAO {
 		return false;
 
 	}
-	
-	public boolean bookmarkQuestion(int userID, int questionID) throws SQLException {
-		String insertCommand = "INSERT INTO bookmarks (user_id, question_id) VALUES (?, ?)"; 
+
+	public boolean bookmarkQuestion(int userID, int questionID)
+			throws SQLException {
+		String insertCommand = "INSERT INTO bookmarks (user_id, question_id) VALUES (?, ?)";
 		String deleteCommand = "DELETE FROM bookmarks WHERE user_id = ? AND question_id = ?";
-		
+
 		try {
 			executeInsert(insertCommand, userID, questionID);
-			
+
 			return true;
 		} catch (SQLException e) {
 			executeUpdate(deleteCommand, userID, questionID);
@@ -255,16 +280,14 @@ public class QuestionDAO extends BaseDAO {
 		}
 	}
 
-
-//	public static void main(String[] args) {
-//		QuestionDAO questionDAO = new QuestionDAO();
-//		// ArrayList<Question> newestQuetions =
-//		// questionDAO.getNewestQuestions();
-//		// Question questionDetail = questionDAO.getQuestionByID(7, 9);
-//		String[] tags = {"javascript, css, html"};
-//		questionDAO.createQuestion(9, "Please explain to me", "What is react?",
-//				tags, 1);
-//	}
-
+	// public static void main(String[] args) {
+	// QuestionDAO questionDAO = new QuestionDAO();
+	// // ArrayList<Question> newestQuetions =
+	// // questionDAO.getNewestQuestions();
+	// // Question questionDetail = questionDAO.getQuestionByID(7, 9);
+	// String[] tags = {"javascript, css, html"};
+	// questionDAO.createQuestion(9, "Please explain to me", "What is react?",
+	// tags, 1);
+	// }
 
 }

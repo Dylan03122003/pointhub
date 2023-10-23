@@ -74,13 +74,15 @@ public class QuestionController extends HttpServlet {
 	private void bookmarkQuestion(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int questionID = Integer.parseInt(request.getParameter("questionID"));
-		int currentUserID = Integer.parseInt(request.getParameter("currentUserID"));	
+		int currentUserID = Integer
+				.parseInt(request.getParameter("currentUserID"));
 		try {
-			boolean isBookmarked = questionDAO.bookmarkQuestion(currentUserID, questionID);
-			
+			boolean isBookmarked = questionDAO.bookmarkQuestion(currentUserID,
+					questionID);
+
 			String json = new Gson().toJson(isBookmarked);
 			response.setContentType("application/json");
-			
+
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(json);
 		} catch (SQLException e) {
@@ -91,8 +93,9 @@ public class QuestionController extends HttpServlet {
 	private void getQuestionDetailHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int questionID = Integer.parseInt(request.getParameter("question_id"));
-		int currentUserID = Authentication.getCurrentUserID(request); // it must be current logged in user
-		int userIDOfQuestion = Integer.parseInt(request.getParameter("user_id"));
+		int currentUserID = Authentication.getCurrentUserID(request);
+		int userIDOfQuestion = Integer
+				.parseInt(request.getParameter("user_id"));
 
 		Question questionDetail = questionDAO.getQuestionByID(questionID,
 				currentUserID, userIDOfQuestion);
@@ -117,6 +120,7 @@ public class QuestionController extends HttpServlet {
 	private void getQuestions(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String activeTopic = request.getParameter("activeTopic");
+		
 
 		if (activeTopic == null)
 			activeTopic = "All topics";
@@ -130,12 +134,39 @@ public class QuestionController extends HttpServlet {
 		getNewestQuestionsHandler(request, response);
 
 	}
+	@SuppressWarnings("unchecked")
 	private void getNewestQuestionsHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String activeTopic = (String) request.getAttribute("activeTopic");
+		ArrayList<Topic> topics = (ArrayList<Topic>) request
+				.getAttribute("topics");
+		int activeTopicID = 1;
+
+		for (Topic topic : topics) {
+			if (topic.getTopicName().equals(activeTopic)) {
+				activeTopicID = topic.getTopicID();
+			}
+		}
+
+		int rowsPerPage = 2;
+
+		int currentPage = request.getParameter("page") == null
+				? 1
+				: Integer.parseInt(request.getParameter("page"));
 
 		ArrayList<Question> questions = questionDAO
-				.getNewestQuestions(activeTopic);
+				.getNewestQuestions(activeTopic, rowsPerPage, currentPage);
+
+		int totalQuestions = activeTopic.equals("All topics")
+				? questionDAO.getTotalQuestionRecords()
+				: questionDAO.getTotalQuestionsByTopic(activeTopicID);
+
+		double totalQuestionsPages = (double) Math
+				.ceil((double) totalQuestions / (double) rowsPerPage);
+		
+
+		request.setAttribute("currentQuestionPage", currentPage);
+		request.setAttribute("totalQuestionPages", totalQuestionsPages);
 		request.setAttribute("question_list", questions);
 		MyDispatcher.dispatch(request, response, "/index.jsp");
 	}
