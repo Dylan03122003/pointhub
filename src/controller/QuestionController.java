@@ -91,10 +91,11 @@ public class QuestionController extends HttpServlet {
 	private void getQuestionDetailHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int questionID = Integer.parseInt(request.getParameter("question_id"));
-		int userID = Authentication.getCurrentUserID(request); // it must be current logged in user
+		int currentUserID = Authentication.getCurrentUserID(request); // it must be current logged in user
+		int userIDOfQuestion = Integer.parseInt(request.getParameter("user_id"));
 
 		Question questionDetail = questionDAO.getQuestionByID(questionID,
-				userID);
+				currentUserID, userIDOfQuestion);
 		request.setAttribute("questionDetail", questionDetail);
 
 		MyDispatcher.dispatch(request, response, "question-detail.jsp");
