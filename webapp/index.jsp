@@ -23,6 +23,7 @@
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
 	rel="stylesheet" />
 
+<script src="https://cdn.tailwindcss.com"></script>
 <title>Pointhub</title>
 
 <style>
@@ -67,7 +68,7 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 					</div>
 
 					<div class="question-content">
-						<h3>${question.getTitle()}</h3>
+						<h3 class="text-gray-700 font-medium ">${question.getTitle()}</h3>
 						<p>${question.getQuestionContent()}</p>
 					</div>
 
@@ -82,32 +83,42 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 
 
 
-			<div style="margin-bottom: 100px; text-align: center;">
+			<div class="flex items-center justify-center gap-6"
+				style="margin-bottom: 100px; text-align: center;">
 				<c:choose>
 					<c:when test="${currentQuestionPage > 1}">
 						<a
 							href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage - 1}"
-							class="">prev</a>
+							class="bg-orange-400 text-white px-3 py-1 rounded-md"> <i
+							class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span></a>
 					</c:when>
 					<c:otherwise>
-						<a href="#" class="">prev</a>
+						<a href="#"
+							class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
+							<i class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span>
+						</a>
 					</c:otherwise>
 				</c:choose>
-
-				<c:forEach var="i" begin="1" end="${totalQuestionPages}">
-					<a href="questions?activeTopic=${activeTopic}&page=${i}"
-						class="${i == currentQuestionPage ? 'active-page' : ''}">${i}
-					</a>
-				</c:forEach>
+				<div class="flex items-center justify-center gap-5 flex-wrap">
+					<c:forEach var="i" begin="1" end="${totalQuestionPages}">
+						<a href="questions?activeTopic=${activeTopic}&page=${i}"
+							class="flex items-center justify-center border border-solid  rounded-md w-8 h-8 ${i == currentQuestionPage ? 'bg-orange-100 text-orange-500 border-orange-400' : 'text-gray-500 border-gray-400'}">${i}
+						</a>
+					</c:forEach>
+				</div>
 
 				<c:choose>
 					<c:when test="${currentQuestionPage < totalQuestionPages}">
 						<a
 							href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage + 1}"
-							class="">next</a>
+							class="bg-orange-400 text-white px-3 py-1 rounded-md">  <span class="mr-1">Next</span> <i
+							class="fa-solid fa-arrow-right"></i></a>
 					</c:when>
 					<c:otherwise>
-						<a href="#" class="ml-2 text-gray-500 cursor-not-allowed">next</a>
+						<a href="#"
+							class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
+							 <span class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i>
+						</a>
 					</c:otherwise>
 				</c:choose>
 			</div>

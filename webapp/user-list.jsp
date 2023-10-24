@@ -17,6 +17,7 @@
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="css/user_list_style.css">
 <!-- Keep both style sections -->
+<script src="https://cdn.tailwindcss.com"></script>
 
 <title>Document</title>
 
