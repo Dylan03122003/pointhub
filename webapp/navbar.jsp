@@ -30,6 +30,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 String username = (String) Authentication.getCurrentUsername(request);
 String role = (String) Authentication.getCurrentUserRole(request);
 String userPhoto = (String) Authentication.getCurrentUserPhoto(request);
+String email = (String) Authentication.getCurrentEmail(request);
 boolean isAdmin = isLoggedIn && role.equals("admin");
 %>
 
@@ -83,8 +84,8 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 
 							</div>
 							<div class="dropdown-header-content">
-								<h5>Duong</h5>
-								<p class="gmail">duong@gmail.com</p>
+								<h5><%=username%></h5>
+								<p class="gmail"><%=email%></p>
 							</div>
 						</li>
 
