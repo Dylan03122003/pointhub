@@ -93,47 +93,55 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 
 	<!-- Reply Comment Form --------------------------------------------------------------------->
 	<div
-		class="reply-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center">
-		<div class="reply-container bg-white w-1/2 p-4 relative">
-			<h2 class="text-2xl font-bold mb-4">Reply to Comment</h2>
+		class="reply-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center ">
+		<div
+			class="reply-container bg-white w-[90%] sm:w-[70%] md:w-[60%] p-4 relative rounded-sm">
+			<h2 class="text-2xl font-bold mb-4 text-gray-500">Reply to
+				Comment</h2>
 			<form class="reply-form">
 				<div class="mb-4">
 					<label for="replyText"
-						class="block font-medium text-sm text-gray-700">Your
-						Reply:</label>
+						class="block font-medium text-sm text-gray-500 mb-4">Your
+						Reply</label>
 					<textarea class="reply-content w-full border rounded p-2" rows="4"></textarea>
 				</div>
-				<input type="hidden" name="parentCommentId" value="123" />
-				<!-- Include the parent comment ID here -->
-				<button type="button"
-					class="reply-submit-btn bg-blue-500 text-white px-4 py-2 rounded">
-					Submit</button>
+				<div class="flex justify-end">
+					<button type="button"
+						class="reply-submit-btn bg-blue-500 text-white px-4 py-2 rounded">
+						Submit</button>
+				</div>
+
 			</form>
 			<button
-				class="modal-close-btn bg-gray-300 text-gray-700 px-2 py-1 rounded absolute top-4 right-4"
+				class="modal-close-btn  text-gray-700 text-4xl rounded absolute top-4 right-4"
 				data-dismiss="modal">&times;</button>
 		</div>
 	</div>
 
 
 	<div id="report-overlay"
-		class="fixed inset-0 bg-black opacity-50 hidden"></div>
+		class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden z-10"></div>
 
 	<!-- Report Modal ----------------------------------------------------------------------------------------------->
 	<div id="report-modal"
-		class="fixed inset-0 hidden items-center justify-center">
+		class="z-20 fixed inset-0 hidden items-center justify-center">
 		<div
-			class="report-content-container modal-content bg-white p-4 rounded-lg shadow-lg w-1/2">
+			class="report-content-container modal-content bg-white p-4 rounded-lg shadow-lg w-[90%] sm:w-[70%] md:w-[60%]">
 			<span id="report-close-btn"
 				class="text-3xl absolute top-0 right-0 m-2 cursor-pointer text-gray-600 hover:text-gray-800">&times;</span>
-			<h2 class="text-2xl font-semibold mb-4">Report</h2>
+			<h2 class="text-2xl font-semibold mb-4 text-gray-500">Report</h2>
 
-			<form id="reportForm">
+			<form id="reportForm" class="">
+				<label class="block font-medium text-sm text-gray-500 mb-4">Your
+					Report</label>
 				<textarea
-					class="report-textarea w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
-				<input
-					class="report-submit-btn px-4 py-1 bg-blue-400 rounded-md text-white"
-					type="button" value="Submit" />
+					class="report-textarea w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+					rows="4"></textarea>
+				<div class="flex justify-end">
+					<input
+						class="report-submit-btn mt-4 px-4 py-1 bg-blue-400 rounded-md text-white cursor-pointer"
+						type="button" value="Submit" />
+				</div>
 			</form>
 		</div>
 	</div>
@@ -141,25 +149,25 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 	<jsp:include page="navbar.jsp" />
 
 
-	<div class="w-[320px] sm:w-[600px] md:w-[800px] lg:w-[1000px] mx-auto">
-		<div class="p-10 bg-white">
+	<div class="w-full sm:w-[600px] md:w-[800px] lg:w-[1000px] mx-auto">
+		<div class="p-3 sm:p-10 bg-white">
 			<div class="flex item-center justify-between">
 				<div class="flex items-center justify-start gap-3">
 					<img src="img/<%=question.getUserPhoto()%>" alt=""
 						class="w-[50px] h-[50px] object-cover rounded-full" />
 					<div class="profile_info">
-						<a href="user-profile?userID=<%=question.getUserID()%>"> @<%=question.getUsername()%></a>
-						<p><%=question.getCreatedAt()%></p>
+						<a class="text-gray-600 font-medium" href="user-profile?userID=<%=question.getUserID()%>"> @<%=question.getUsername()%></a>
+						<p class="text-gray-500"><%=question.getCreatedAt()%></p>
 					</div>
 				</div>
 				<div class="sm:block hidden">
 					<button
-						class="report-btn bg-red-100 text-white px-4 py-1 rounded-md">
+						class="report-btn bg-red-100 hover:bg-red-200 text-white px-4 py-1 rounded-md">
 						<i class="fa-solid fa-flag text-red-500"></i> <span
 							class="ml-2 text-red-500">Report</span>
 					</button>
-					<button 
-						class="bookmark-btn px-4 py-1 rounded-md bg-orange-100 text-orange-500">
+					<button
+						class="bookmark-btn px-4 py-1 rounded-md bg-orange-100 hover:bg-orange-200 text-orange-500">
 						<i
 							class="<%=question.isBookmarked() ? "fa-solid" : "fa-regular"%> fa-bookmark bookmark-icon"></i>
 						<span class="ml-2">Bookmark</span>
@@ -173,7 +181,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 
 			<p class="mt-5 text-gray-500"><%=question.getQuestionContent()%></p>
 
-			<div class="mt-10 flex items-center justify-start gap-2">
+			<div class="mt-10 flex items-center justify-start flex-wrap gap-2">
 				<c:forEach var="tag" items="<%=question.getTagContents()%>">
 					<span class="px-4 py-1 rounded-md bg-orange-50 text-orange-500">${tag}</span>
 				</c:forEach>
@@ -181,24 +189,24 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 
 			<div class="mt-10 flex items-center gap-4">
 				<button
-					class="upvote-btn w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
+					class="upvote-btn w-10 h-10 bg-slate-200 hover:bg-slate-300 rounded-full flex items-center justify-center">
 					<i class="fa-solid fa-angle-up text-2xl text-slate-500"></i>
 				</button>
 				<p class="votes-sum text-gray-600 font-medium"><%=question.getVotesSum()%></p>
 
 				<button
-					class="downvote-btn w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
+					class="downvote-btn w-10 h-10 bg-slate-200 hover:bg-slate-300 rounded-full flex items-center justify-center">
 					<i class="fa-solid fa-angle-down text-2xl text-slate-500"></i>
 				</button>
 			</div>
 			<div class="mt-8 mb-5 flex sm:hidden gap-4">
 				<button
-					class="report-btn bg-red-100 text-white px-4 py-1 rounded-md">
+					class="report-btn bg-red-100 hover:bg-red-200 text-white px-4 py-1 rounded-md">
 					<i class="fa-solid fa-flag text-red-500"></i> <span
 						class="ml-2 text-red-500">Report</span>
 				</button>
-				<button 
-					class="bookmark-btn px-4 py-1 rounded-md bg-orange-100 text-orange-500">
+				<button
+					class="bookmark-btn px-4 py-1 rounded-md bg-orange-100 hover:bg-orange-200 text-orange-500">
 					<i
 						class="<%=question.isBookmarked() ? "fa-solid" : "fa-regular"%> fa-bookmark bookmark-icon"></i>
 					<span class="ml-2">Bookmark</span>
@@ -226,7 +234,7 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 		</div>
 
 
-		<div class="p-10 mt-10 bg-white">
+		<div class="p-3 sm:p-10 mt-10 bg-white">
 			<div id="comments-container"></div>
 			<button class="view-comments text-gray-600">View more
 				comments</button>
