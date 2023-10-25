@@ -128,10 +128,15 @@ public class User {
 	}
 
 	public String getEmail() {
-		return email;
+		if (email.length() >= 20) {
+			return email.substring(0, 20) + "..."; 
+		} else {
+			return email;
+		}
 	}
 
 	public void setEmail(String email) {
+
 		this.email = email;
 	}
 
