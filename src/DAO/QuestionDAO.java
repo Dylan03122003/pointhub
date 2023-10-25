@@ -348,6 +348,20 @@ public class QuestionDAO extends BaseDAO {
 
 	}
 
+	public boolean deleteQuestion(int questionID) {
+		String deleteCommand = "DELETE FROM questions WHERE question_id = ?";
+
+		try {
+			executeNonQuery(deleteCommand, questionID);
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+
+	}
+
 	// public static void main(String[] args) {
 	// QuestionDAO questionDAO = new QuestionDAO();
 	// // ArrayList<Question> newestQuetions =

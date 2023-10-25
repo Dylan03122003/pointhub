@@ -62,10 +62,27 @@
 <%
 Question question = (Question) request.getAttribute("questionDetail");
 boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
+boolean currentUserIsAdmin = isLoggedIn && Authentication.getCurrentUserRole(request).equals("admin");
+int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 %>
 
 <body class="" data-questionID="<%=question.getQuestionID()%>"
 	data-userID="<%=Authentication.getCurrentUserID(request)%>">
+
+	<!-- Confirm delete question modal --------------------------------------------------------------------->
+	<div
+		class="confirm-delete-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center ">
+		<div
+			class="confirm-delete-container bg-white w-fit p-4 relative rounded-sm">
+			<h2 class="text-2xl font-bold my-5 text-gray-500">Are you sure
+				to delete this question?</h2>
+			<div class="flex item-centers justify-end gap-4">
+				<button class="cancel-delete-btn px-4 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-500">Cancel</button>
+				<button class="confirm-delete-btn px-4 py-1 rounded-md bg-orange-100 hover:bg-orange-200 text-orange-500">Confirm</button>
+			</div>
+			
+		</div>
+	</div>
 
 	<!-- Require user log in modal --------------------------------------------------------------------->
 	<div
@@ -149,18 +166,27 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 	<jsp:include page="navbar.jsp" />
 
 
-	<div class="w-full sm:w-[600px] md:w-[800px] lg:w-[1000px] mx-auto">
+	<div class="w-full sm:w-[650px] md:w-[800px] lg:w-[1000px] mx-auto">
 		<div class="p-3 sm:p-10 bg-white">
 			<div class="flex item-center justify-between">
 				<div class="flex items-center justify-start gap-3">
 					<img src="img/<%=question.getUserPhoto()%>" alt=""
 						class="w-[50px] h-[50px] object-cover rounded-full" />
 					<div class="profile_info">
-						<a class="text-gray-600 font-medium" href="user-profile?userID=<%=question.getUserID()%>"> @<%=question.getUsername()%></a>
+						<a class="text-gray-600 font-medium"
+							href="user-profile?userID=<%=question.getUserID()%>"> @<%=question.getUsername()%></a>
 						<p class="text-gray-500"><%=question.getCreatedAt()%></p>
 					</div>
 				</div>
 				<div class="sm:block hidden">
+					<c:if
+						test="<%=currentUserID == question.getUserID() || currentUserIsAdmin%>">
+						<button
+							class="delete-question-btn bg-slate-100 hover:bg-slate-200 text-slate-500 px-4 py-1 rounded-md">
+							<i class="fa-solid fa-trash"></i> <span class="ml-2">Delete</span>
+						</button>
+					</c:if>
+
 					<button
 						class="report-btn bg-red-100 hover:bg-red-200 text-white px-4 py-1 rounded-md">
 						<i class="fa-solid fa-flag text-red-500"></i> <span
@@ -199,7 +225,14 @@ boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 					<i class="fa-solid fa-angle-down text-2xl text-slate-500"></i>
 				</button>
 			</div>
-			<div class="mt-8 mb-5 flex sm:hidden gap-4">
+			<div class="mt-8 mb-5 flex flex-wrap sm:hidden gap-4">
+				<c:if
+					test="<%=currentUserID == question.getUserID() || currentUserIsAdmin%>">
+					<button
+						class="delete-question-btn bg-slate-100 hover:bg-slate-200 text-slate-500 px-4 py-1 rounded-md">
+						<i class="fa-solid fa-trash"></i> <span class="ml-2">Delete</span>
+					</button>
+				</c:if>
 				<button
 					class="report-btn bg-red-100 hover:bg-red-200 text-white px-4 py-1 rounded-md">
 					<i class="fa-solid fa-flag text-red-500"></i> <span
