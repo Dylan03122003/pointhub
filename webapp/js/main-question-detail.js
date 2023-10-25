@@ -1,4 +1,6 @@
 
+import { showToastInHomePage } from "./home.js"
+
 const questionID = $("body").data("questionid");
 const currentUserID = $("body").data("userid");
 const reportModal = $("#report-modal");
@@ -140,6 +142,17 @@ const handleOpenReportModal = () => {
 
 }
 
+const openConfirmDeleteModal = () => {
+	$(".confirm-delete-modal").removeClass("hidden")
+	$(".confirm-delete-modal").addClass("flex")
+
+}
+
+const closeConfirmDeleteModal = () => {
+	$(".confirm-delete-modal").removeClass("flex")
+	$(".confirm-delete-modal").addClass("hidden")
+}
+
 const handleBookmarkQuestion = () => {
 	if (currentUserID === -1) {
 		openRequireLoginModal()
@@ -165,6 +178,25 @@ const handleBookmarkQuestion = () => {
 	});
 }
 
+const handleDeleteQuestion = () => {
+	$.ajax({
+		type: "GET",
+		url: `delete-question?questionID=${questionID}`,
+		dataType: "json",
+		success: function(isDeleted) {
+			if (isDeleted) {
+
+				window.location.href = "questions";
+
+				//showToastInHomePage("Your question has been successfully deleted.", true);
+			}
+		},
+		error: function() {
+			alert("Failed to load data from the server.");
+		},
+	});
+}
+
 // EVENT HANDLING
 
 reportContentContainer.click(function(event) {
@@ -175,14 +207,21 @@ $(".require-login-content").click(function(event) {
 	event.stopPropagation();
 })
 
+$(".confirm-delete-container").click(function(event) {
+	event.stopPropagation();
+})
+
 reportBtn.click(handleOpenReportModal)
 reportCloseBtn.click(closeReportModal)
 reportModal.click(closeReportModal)
 reportSubmitBtn.click(handleSubmitReport)
-
 upvoteBtn.click(handleUpvote)
 downvoteBtn.click(handleDownvote)
 
 requireLoginModal.click(closeRequireLoginModal)
 $(".require-login-close-btn").click(closeRequireLoginModal)
 $(".bookmark-btn").click(handleBookmarkQuestion)
+$(".delete-question-btn").click(openConfirmDeleteModal)
+$(".confirm-delete-modal").click(closeConfirmDeleteModal)
+$(".cancel-delete-btn").click(closeConfirmDeleteModal)
+$(".confirm-delete-btn").click(handleDeleteQuestion)

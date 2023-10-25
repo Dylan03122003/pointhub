@@ -46,6 +46,11 @@ public class QuestionController extends HttpServlet {
 				break;
 			case "/vote-question" :
 				voteQuestionHandler(request, response);
+				break;
+
+			case "/delete-question" :
+				deleteQuestion(request, response);
+				break;
 			default :
 
 		}
@@ -71,6 +76,23 @@ public class QuestionController extends HttpServlet {
 		}
 
 	}
+
+	private void deleteQuestion(HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
+		int questionID = Integer.parseInt(request.getParameter("questionID"));
+
+		boolean isDeleted = questionDAO.deleteQuestion(questionID);
+
+		if (isDeleted) {
+			System.out.println("question is deleted");
+			String json = new Gson().toJson(isDeleted);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json);
+		}
+
+	}
+
 	private void bookmarkQuestion(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int questionID = Integer.parseInt(request.getParameter("questionID"));
@@ -120,7 +142,6 @@ public class QuestionController extends HttpServlet {
 	private void getQuestions(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String activeTopic = request.getParameter("activeTopic");
-		
 
 		if (activeTopic == null)
 			activeTopic = "All topics";
@@ -163,7 +184,6 @@ public class QuestionController extends HttpServlet {
 
 		double totalQuestionsPages = (double) Math
 				.ceil((double) totalQuestions / (double) rowsPerPage);
-		
 
 		request.setAttribute("currentQuestionPage", currentPage);
 		request.setAttribute("totalQuestionPages", totalQuestionsPages);

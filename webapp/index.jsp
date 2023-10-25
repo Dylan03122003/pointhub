@@ -24,6 +24,7 @@
 	rel="stylesheet" />
 
 <script src="https://cdn.tailwindcss.com"></script>
+<script defer="defer" type="module" src="js/home.js"></script>
 <title>Pointhub</title>
 
 <style>
@@ -41,7 +42,9 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 
 <body>
 	<jsp:include page="navbar.jsp" />
-
+	<div id="toast"
+		class="z-10 fixed top-20 right-0 p-4 m-4 text-white rounded-md shadow-lg hidden"></div>
+		
 	<div class="right-small-container">
 		<div class="category category-container" style="padding-top: 40px">
 			<c:forEach var="topic" items="<%=topics%>">
@@ -111,13 +114,13 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 					<c:when test="${currentQuestionPage < totalQuestionPages}">
 						<a
 							href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage + 1}"
-							class="bg-orange-400 text-white px-3 py-1 rounded-md">  <span class="mr-1">Next</span> <i
-							class="fa-solid fa-arrow-right"></i></a>
+							class="bg-orange-400 text-white px-3 py-1 rounded-md"> <span
+							class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i></a>
 					</c:when>
 					<c:otherwise>
 						<a href="#"
 							class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
-							 <span class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i>
+							<span class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i>
 						</a>
 					</c:otherwise>
 				</c:choose>
