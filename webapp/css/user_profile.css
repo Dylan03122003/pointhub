@@ -30,9 +30,13 @@ html {
 .viewProfile .profile img {
 	width: 300px;
 	height: 271px;
+	width: 260px;
+	height: 260px;
 	flex-shrink: 0;
 	object-fit: cover;
 	border-radius: 35px;
+	border-radius: 9999px;
+
 }
 
 .viewProfile .profile #username {
@@ -83,6 +87,7 @@ html {
 	display: flex;
 	gap: 1rem;
 	font-size: 15px;
+	align-items: center
 }
 
 .viewProfile .profile .stats i {
@@ -99,6 +104,22 @@ html {
 	font-size: 14px;
 	font-weight: 600;
 	padding: 12px 13px;
+	letter-spacing: 0.5px;
+	background-color: #F48023;
+	border-radius: 5px;
+}
+
+#follow-btn {
+	position: absolute;
+	top: 0;
+	right: 0;
+	color: #fff;
+	text-decoration: none;
+	display: block;
+	border: none;
+	font-size: 14px;	
+	font-weight: 500;
+	padding: 9px 15px;
 	letter-spacing: 0.5px;
 	background-color: #F48023;
 	border-radius: 5px;
@@ -155,9 +176,58 @@ html {
 	margin-left: 5px;
 }
 
+.viewProfile .profile .stats2 {
+	display: none;
+}
+
 @media (max-width: 1010px) {
 	.viewProfile .profile .stats {
 		width: 100%;
+		min-width: 360px;
+	}
+}
+
+@media (max-width: 729px) {
+	.viewProfile {
+		margin: 10px;
+	}
+
+	.viewProfile .profile .stats1 {
+		display: none;
+	}
+
+	.viewProfile .profile .stats2 {
+		display: flex;
+	}
+
+	.viewProfile .content {
+		margin-top: auto;
+		margin-bottom: auto;
+	}
+}
+
+@media (max-width: 600px) {
+	.viewProfile .profile {
+		display: block;
+		text-align: center;
+	}
+
+	.viewProfile {
+		margin: auto;
+		padding: 10px;
+	}
+
+	.viewProfile .profile .logo-social {
+		justify-content: center;
+	}
+
+	#btn-update,
+	#follow-btn {
+		right: 10px;
+	}
+
+	.viewProfile .profile img {
+		margin-top: 33px;
 	}
 }
 
