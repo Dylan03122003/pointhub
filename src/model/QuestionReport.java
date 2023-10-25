@@ -1,29 +1,21 @@
 package model;
 
+import java.util.ArrayList;
+
 public class QuestionReport {
 	private int reportID;
 	private int questionID;
 	private String title;
-	private int reportingUserID;
+	private int usersReported;
 	private int reportedUserID;
-	private String reportingUsername;
-	private String reportContent;
-	
-	private String userPhoto;
-	
-	
-	
 
 	public QuestionReport(int reportID, int questionID, String title,
-			int reportingUserID, int reportedUserID, String reportingUsername,
-			String reportContent) {
+			int usersReported, int reportedUserID) {
 		this.reportID = reportID;
 		this.questionID = questionID;
 		this.title = title;
-		this.reportingUserID = reportingUserID;
+		this.usersReported = usersReported;
 		this.reportedUserID = reportedUserID;
-		this.reportingUsername = reportingUsername;
-		this.reportContent = reportContent;
 	}
 
 	public int getReportID() {
@@ -50,20 +42,12 @@ public class QuestionReport {
 		this.title = title;
 	}
 
-	public String getReportContent() {
-		return reportContent;
+	public int getUsersReported() {
+		return usersReported;
 	}
 
-	public void setReportContent(String reportContent) {
-		this.reportContent = reportContent;
-	}
-
-	public int getReportingUserID() {
-		return reportingUserID;
-	}
-
-	public void setReportingUserID(int reportingUserID) {
-		this.reportingUserID = reportingUserID;
+	public void setUsersReported(int usersReported) {
+		this.usersReported = usersReported;
 	}
 
 	public int getReportedUserID() {
@@ -72,31 +56,6 @@ public class QuestionReport {
 
 	public void setReportedUserID(int reportedUserID) {
 		this.reportedUserID = reportedUserID;
-	}
-
-	public String getReportingUsername() {
-		return reportingUsername;
-	}
-
-	public void setReportingUsername(String reportingUsername) {
-		this.reportingUsername = reportingUsername;
-	}
-
-	@Override
-	public String toString() {
-		return "QuestionReport [reportID=" + reportID + ", questionID="
-				+ questionID + ", title=" + title + ", reportingUserID="
-				+ reportingUserID + ", reportedUserID=" + reportedUserID
-				+ ", reportingUsername=" + reportingUsername
-				+ ", reportContent=" + reportContent + "]";
-	}
-
-	public String getUserPhoto() {
-		return userPhoto;
-	}
-
-	public void setUserPhoto(String userPhoto) {
-		this.userPhoto = userPhoto;
 	}
 
 }

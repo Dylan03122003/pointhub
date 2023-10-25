@@ -1,13 +1,13 @@
 package model;
 
 public class User {
-	private int userID;
+	protected int userID;
 	private String firstName;
 	private String lastName;
-	private String username;
-	private String email;
+	protected String username;
+	protected String email;
 	private String password;
-	private String photo;
+	protected String photo;
 	private String role;
 	private String about;
 	private String facebookLink;
