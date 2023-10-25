@@ -10,7 +10,8 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://cdn.tailwindcss.com"></script>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script defer="defer" src="js/reports-list.js"></script>
 <title>Insert title here</title>
 
 <style>
@@ -30,6 +31,28 @@
 <body>
 	<jsp:include page="navbar.jsp" />
 
+	<!-- Report detail modal --------------------------------------------------------------------->
+	<div
+		class="report-detail-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center ">
+		<div
+			class="report-detail-container bg-white w-[90%] sm:w-[70%] md:w-[60%] p-4 relative rounded-sm">
+			<h2 class="text-2xl font-bold mb-4 text-gray-500">Reports</h2>
+
+		     <div class="reports-detail max-h-[300px] overflow-y-scroll p-2">
+		         
+		     </div>
+		     
+		     <div class="flex items-center justify-center">
+		     
+		     <button class="view-more-reports-btn text-gray-600">View more reports</button>
+		     </div>
+
+			<button
+				class="report-detail-close-btn  text-gray-700 text-4xl rounded absolute top-4 right-4"
+				data-dismiss="modal">&times;</button>
+		</div>
+	</div>
+
 	<table class="min-w-full divide-y divide-gray-200">
 		<thead>
 			<tr>
@@ -38,10 +61,11 @@
 					Question Title</th>
 				<th
 					class="px-6 py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
-					User Information</th>
+					Number of reporting users</th>
 				<th
 					class="px-6 py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
-					Report Content</th>
+					Action</th>
+
 			</tr>
 		</thead>
 		<tbody class="bg-white divide-y divide-gray-200">
@@ -53,15 +77,10 @@
                       <c:param name='user_id' value='${report.getReportedUserID()}' />
                     </c:url>"
 						class="text-blue-500 hover:underline">${report.getTitle()} </a></td>
+					<td class="px-6 py-4">${report.getUsersReported()}</td>
 					<td class="px-6 py-4">
-						<div class="flex items-center">
-							<img src="img/${report.getUserPhoto()}" alt="User 1"
-								class="w-12 h-12 object-cover rounded-full">
-							<h3 class="ml-4">${report.getReportingUsername()}</h3>
-						</div>
-					</td>
-					<td class="px-6 py-4">
-						<p>${report.getReportContent()}</p>
+						<button data-questionid="${report.getQuestionID()}"
+							class="see-report-detail-btn">See more detail</button>
 					</td>
 				</tr>
 			</c:forEach>

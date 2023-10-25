@@ -10,6 +10,7 @@ import model.Comment;
 import model.Question;
 import model.QuestionReport;
 import model.ReplyComment;
+import model.UserReported;
 
 public class QuestionDAO extends BaseDAO {
 	public void createQuestion(int userID, String questionContent, String title,
@@ -155,14 +156,12 @@ public class QuestionDAO extends BaseDAO {
 
 		ArrayList<QuestionReport> questionReports = new ArrayList<QuestionReport>();
 
-		String query = "SELECT " + "rq.report_id, " + "rq.question_id, "
-				+ "q.title, " + "q.user_id AS reported_user_id, "
-				+ "rq.user_id AS reporting_user_id, "
-				+ "u.username AS reporting_username, u.photo, "
-				+ "rq.report_content " + "FROM report_questions rq "
-				+ "INNER JOIN questions q ON rq.question_id = q.question_id "
-				+ "INNER JOIN users u ON rq.user_id = u.user_id "
-				+ "LIMIT ? OFFSET ?;";
+		String query = "SELECT rq.report_id, q.question_id, q.user_id AS reported_user_id, q.title, "
+				+ "COUNT(rq.question_id) AS users_reported "
+				+ "FROM report_questions rq "
+				+ "JOIN questions q ON rq.question_id = q.question_id "
+				+ "GROUP BY q.question_id, q.user_id, q.title "
+				+ "LIMIT ? OFFSET ?";
 
 		try {
 			ResultSet result = executeQuery(query, rowsPerPage,
@@ -172,17 +171,17 @@ public class QuestionDAO extends BaseDAO {
 				int reportID = result.getInt("report_id");
 				int questionID = result.getInt("question_id");
 				String title = result.getString("title");
+				int usersReported = result.getInt("users_reported");
 				int reportedUserID = result.getInt("reported_user_id");
-				int reportingUserID = result.getInt("reporting_user_id");
-				String reportingUsername = result
-						.getString("reporting_username");
-				String reportContent = result.getString("report_content");
-				String userPhoto = result.getString("photo");
+				// int reportedUserID = result.getInt("reported_user_id");
+				// int reportingUserID = result.getInt("reporting_user_id");
+				// String reportingUsername = result
+				// .getString("reporting_username");
+				// String reportContent = result.getString("report_content");
+				// String userPhoto = result.getString("photo");
 
 				QuestionReport questionReport = new QuestionReport(reportID,
-						questionID, title, reportingUserID, reportedUserID,
-						reportingUsername, reportContent);
-				questionReport.setUserPhoto(userPhoto);
+						questionID, title, usersReported, reportedUserID);
 				questionReports.add(questionReport);
 			}
 		} catch (SQLException e) {
@@ -192,8 +191,53 @@ public class QuestionDAO extends BaseDAO {
 		return questionReports;
 	}
 
+	public ArrayList<UserReported> getReportDetail(int questionID, int limit,
+			int currentReportDetailSize) {
+
+		ArrayList<UserReported> usersReported = new ArrayList<UserReported>();
+
+		String query = "SELECT u.user_id, u.username, u.email, u.photo, rq.report_content "
+				+ "FROM report_questions rq "
+				+ "JOIN users u ON rq.user_id = u.user_id "
+				+ "WHERE rq.question_id = ? LIMIT ? OFFSET ?";
+
+		try {
+			ResultSet result = executeQuery(query, questionID, limit, currentReportDetailSize);
+
+			while (result.next()) {
+				int userID = result.getInt("user_id");
+				String username = result.getString("username");
+				String photo = result.getString("photo");
+				String reportContent = result.getString("report_content");
+				String email = result.getString("email");
+
+				usersReported.add(new UserReported(userID, username, photo,
+						reportContent, email));
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return usersReported;
+	}
+
 	public int getTotalQuestionReportsRecords() {
-		return getTotalRecords("report_questions");
+		String query = "SELECT COUNT(DISTINCT question_id) AS total_records FROM report_questions;";
+
+		try {
+			ResultSet result = executeQuery(query);
+
+			if (result.next()) {
+				return result.getInt("total_records");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
+
 	}
 
 	public int getTotalQuestionRecords() {
