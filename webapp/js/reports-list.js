@@ -3,8 +3,8 @@ const renderReportDetail = (userReported) => {
 	return `
 
 			<div
-				class="flex items-center justify-around gap-10 mb-5 border-[1px] border-solid border-gray-200 rounded-md p-2">
-				<a href="user-profile?userID=${userReported.userID}" class="w-[30%] flex items-center gap-2">
+				class="flex flex-col xl:flex-row items-start xl:items-center justify-between xl:justify-around gap-5 mb-5 border-[1px] border-solid border-gray-200 rounded-md p-2">
+				<a href="user-profile?userID=${userReported.userID}" class="w-full xl:w-[30%] flex items-center gap-2">
 					<img class="w-14 h-14 object-cover rounded-full" alt=""
 						src="img/${userReported.photo}">
 					<div>
@@ -14,7 +14,7 @@ const renderReportDetail = (userReported) => {
 					
 				</a>
 
-				<p class="w-[70%] text-gray-600">${userReported.reportContent}</p>
+				<p class="w-full xl:w-[70%] text-gray-600">${userReported.reportContent}</p>
 			</div>	
 	
 `

@@ -9,6 +9,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script defer="defer" src="js/reports-list.js"></script>
@@ -38,32 +40,34 @@
 			class="report-detail-container bg-white w-[90%] sm:w-[70%] md:w-[60%] p-4 relative rounded-sm">
 			<h2 class="text-2xl font-bold mb-4 text-gray-500">Reports</h2>
 
-		     <div class="reports-detail max-h-[300px] overflow-y-scroll p-2">
-		         
-		     </div>
-		     
-		     <div class="flex items-center justify-center">
-		     
-		     <button class="view-more-reports-btn text-gray-600">View more reports</button>
-		     </div>
+			<div class="reports-detail max-h-[300px] overflow-y-scroll p-2">
+
+			</div>
+
+			<div class="flex items-center justify-center">
+
+				<button class="view-more-reports-btn text-gray-600">View
+					more reports</button>
+			</div>
 
 			<button
 				class="report-detail-close-btn  text-gray-700 text-4xl rounded absolute top-4 right-4"
 				data-dismiss="modal">&times;</button>
 		</div>
 	</div>
-
-	<table class="min-w-full divide-y divide-gray-200">
+	
+  <div class="bg-[#FAFAFA] h-[860px]">
+	<table class="w-[600px] sm:w-[90%] mx-auto divide-y divide-gray-200">
 		<thead>
 			<tr>
 				<th
-					class="px-6 py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+					class="px-6 py-3 bg-white text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
 					Question Title</th>
 				<th
-					class="px-6 py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+					class="px-6 py-3 bg-white text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
 					Number of reporting users</th>
 				<th
-					class="px-6 py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+					class="px-6 py-3 bg-white text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
 					Action</th>
 
 			</tr>
@@ -87,32 +91,43 @@
 		</tbody>
 	</table>
 
-	<div class="mt-4">
-		<c:choose>
-			<c:when test="${currentReportPage > 1}">
-				<a href="question-reports?page=${currentReportPage - 1}"
-					class="text-blue-500 hover:underline">prev</a>
-			</c:when>
-			<c:otherwise>
-				<a href="#" class="text-gray-500 cursor-not-allowed">prev</a>
-			</c:otherwise>
-		</c:choose>
+		<div class="mt-4 flex items-center justify-center gap-6">
+			<c:choose>
+				<c:when test="${currentReportPage > 1}">
+					<a href="question-reports?page=${currentReportPage - 1}"
+						class="bg-orange-400 text-white px-3 py-1 rounded-md"> <i
+						class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span>
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a href="#"
+						class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
+						<i class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span>
+					</a>
+				</c:otherwise>
+			</c:choose>
 
-		<c:forEach var="i" begin="1" end="${totalReportPages}">
-			<a href="question-reports?page=${i}"
-				class="ml-2 text-blue-500 hover:underline ${i == currentReportPage ? 'font-bold' : ''}">${i}
-			</a>
-		</c:forEach>
+			<c:forEach var="i" begin="1" end="${totalReportPages}">
+				<a href="question-reports?page=${i}"
+					class="flex items-center justify-center border border-solid  rounded-md w-8 h-8 ${i == currentReportPage ? 'bg-orange-100 text-orange-500 border-orange-400' : 'text-gray-500 border-gray-400'}">${i}
+				</a>
+			</c:forEach>
 
-		<c:choose>
-			<c:when test="${currentReportPage < totalReportPages}">
-				<a href="question-reports?page=${currentReportPage + 1}"
-					class="ml-2 text-blue-500 hover:underline">next</a>
-			</c:when>
-			<c:otherwise>
-				<a href="#" class="ml-2 text-gray-500 cursor-not-allowed">next</a>
-			</c:otherwise>
-		</c:choose>
+			<c:choose>
+				<c:when test="${currentReportPage < totalReportPages}">
+					<a href="question-reports?page=${currentReportPage + 1}"
+						class="bg-orange-400 text-white px-3 py-1 rounded-md"> <span
+						class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i>
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a href="#"
+						class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
+						<span class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i>
+					</a>
+				</c:otherwise>
+			</c:choose>
+		</div>
 	</div>
 
 </body>
