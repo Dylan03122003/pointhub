@@ -48,11 +48,12 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 						href="<%=user.getGithubLink()%>"><i
 						class="fa-brands fa-github"></i></a>
 				</div>
-				<div class="stats">
-					<span> <i class="fa-regular fa-circle-question"></i> <%=user.getTotalQuestions()%>
-						questions
-					</span> <span> <i class="fa-solid fa-user-group"></i> <span id="followers-sum"><%=user.getNumberOfFollowers()%>
-					</span> Followers
+				<div class="stats stats1">
+					<span> <i class="fa-regular fa-circle-question"></i> <span><%=user.getTotalQuestions()%></span>
+						Questions
+					</span> <span> <i class="fa-solid fa-user-group"></i> <span
+						id="followers-sum"><%=user.getNumberOfFollowers()%> </span>
+						Followers
 					</span>
 				</div>
 			</div>
@@ -66,7 +67,14 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 			<c:if test="<%=!isCurrentUser%>">
 				<button id="follow-btn"><%=user.isFollowedByCurrentUser() ? "Following" : "Follow"%></button>
 			</c:if>
-
+			<div class="stats stats2">
+				<span> <i class="fa-regular fa-circle-question"></i> <span><%=user.getTotalQuestions()%></span>
+					Questions
+				</span> <span> <i class="fa-solid fa-user-group"></i> <span
+					id="followers-sum"><%=user.getNumberOfFollowers()%> </span>
+					Followers
+				</span>
+			</div>
 
 		</div>
 
@@ -128,7 +136,8 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 	let question = document.getElementById("question");
 	let aboutNav = document.getElementById("about-nav");
 	let questionNav = document.getElementById("posts-nav");
-
+	let btnfollow = document.getElementById("follow-btn");
+	
 	function clicknav(event) {
 		console.log(event.target.getAttribute("data-target"));
 		let element = event.target.getAttribute("data-target");
@@ -140,6 +149,10 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 
 		content.style.display = "block";
 		event.target.style.opacity = "1";
+	}
+	console.log(btnfollow);
+	if (btnfollow.innerText == "Following") {
+		btnfollow.style.background = "#9E9E9E";
 	}
 
 	$("#follow-btn").click(function() {
@@ -154,11 +167,12 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 				const followersSum = parseInt(followersSumElm.text())
 				if (isFollowed) {
 					button.text("Following");
-					
 					followersSumElm.text(followersSum + 1)
+					btnfollow.style.background = "#9E9E9E";
 				} else {
 					button.text("Follow");
 					followersSumElm.text(followersSum - 1)
+					btnfollow.style.background = "#F48023";
 				}
 
 			},
