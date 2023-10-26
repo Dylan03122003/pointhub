@@ -52,7 +52,17 @@ const handleShowNav = (event) => {
 	event.target.style.opacity = "1";
 }
 
+function checkUserLogin() {
+
+}
+
 function handleFollowUser() {
+	const currentUserID = $("body").data("currentuserid");
+	if (currentUserID === -1) {
+		// TODO: show require login modal
+		return
+	}
+
 	const followedUserID = $("body").data("userprofileid");
 	const button = $(this);
 	const followersSumElm = $("#followers-sum");
