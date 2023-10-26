@@ -202,7 +202,8 @@ public class QuestionDAO extends BaseDAO {
 				+ "WHERE rq.question_id = ? LIMIT ? OFFSET ?";
 
 		try {
-			ResultSet result = executeQuery(query, questionID, limit, currentReportDetailSize);
+			ResultSet result = executeQuery(query, questionID, limit,
+					currentReportDetailSize);
 
 			while (result.next()) {
 				int userID = result.getInt("user_id");
@@ -362,12 +363,53 @@ public class QuestionDAO extends BaseDAO {
 
 	}
 
-	// public static void main(String[] args) {
-	// QuestionDAO questionDAO = new QuestionDAO();
-	// // ArrayList<Question> newestQuetions =
-	// // questionDAO.getNewestQuestions();
-	// // Question questionDetail = questionDAO.getQuestionByID(7, 9);
-	// //System.out.println(questionDAO.getQuestionsOfUser(19));
-	// }
+	public ArrayList<Question> getUserPosts(int userID, int limit,
+			int currentPostSize) {
+		ArrayList<Question> userQuestions = new ArrayList<Question>();
+
+		String query = "SELECT " + "q.question_id AS questionID, " + "q.title, "
+				+ "q.created_at, " + "q.tags, "
+				+ "(IFNULL(upvotes, 0) - IFNULL(downvotes, 0)) AS voteSum, "
+				+ "t.topic_name AS topicName " + "FROM questions q "
+				+ "LEFT JOIN "
+				+ "(SELECT question_id, SUM(CASE WHEN vote_type = 'upvote' THEN 1 ELSE 0 END) AS upvotes "
+				+ " FROM votes_question GROUP BY question_id) AS upvote_counts ON q.question_id = upvote_counts.question_id "
+				+ "LEFT JOIN "
+				+ "(SELECT question_id, SUM(CASE WHEN vote_type = 'downvote' THEN 1 ELSE 0 END) AS downvotes "
+				+ " FROM votes_question GROUP BY question_id) AS downvote_counts ON q.question_id = downvote_counts.question_id "
+				+ "LEFT JOIN topics t ON q.topic_id = t.topic_id "
+				+ "WHERE q.user_id = ? LIMIT ? OFFSET ?";
+
+		try {
+			ResultSet resultSet = executeQuery(query, userID, limit,
+					currentPostSize);
+			while (resultSet.next()) {
+				int questionID = resultSet.getInt("questionID");
+				String title = resultSet.getString("title");
+				Date createdAt = resultSet.getDate("created_at");
+				String[] tags = resultSet.getString("tags").split(",");
+				int voteSum = resultSet.getInt("voteSum");
+				String topicName = resultSet.getString("topicName");
+
+				Question question = new Question(questionID, title, createdAt,
+						tags, voteSum, topicName);
+				userQuestions.add(question);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return userQuestions;
+
+	}
+
+	public static void main(String[] args) {
+		QuestionDAO questionDAO = new QuestionDAO();
+		// ArrayList<Question> newestQuetions =
+		// questionDAO.getNewestQuestions();
+		// Question questionDetail = questionDAO.getQuestionByID(7, 9);
+		// System.out.println(questionDAO.getQuestionsOfUser(19));
+		// questionDAO.getUserPosts(19);
+	}
 
 }

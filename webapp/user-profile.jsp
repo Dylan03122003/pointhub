@@ -15,6 +15,7 @@
 	integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="css/user_profile.css">
+<script defer="defer" type="module" src="js/user-profile.js"></script>
 <title>Document</title>
 </head>
 
@@ -81,10 +82,10 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 		<div class="body-item">
 			<div class="profile-nav">
 				<ul>
-					<li id="about-nav" data-target="about" onclick="clicknav(event)"><a
-						href="" class="nav-link"></a>About</li>
-					<li id="posts-nav" data-target="question" onclick="clicknav(event)"><a
-						href="" class="nav-link"></a>Posts</li>
+					<li id="about-nav" data-target="about"><a href=""
+						class="nav-link"></a>About</li>
+					<li id="posts-nav" data-target="question"><a href=""
+						class="nav-link"></a>Posts</li>
 				</ul>
 			</div>
 			<div class="content" id="about">
@@ -131,56 +132,6 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 		</div>
 	</div>
 </body>
-<script>
-	let about = document.getElementById("about");
-	let question = document.getElementById("question");
-	let aboutNav = document.getElementById("about-nav");
-	let questionNav = document.getElementById("posts-nav");
-	let btnfollow = document.getElementById("follow-btn");
-	
-	function clicknav(event) {
-		console.log(event.target.getAttribute("data-target"));
-		let element = event.target.getAttribute("data-target");
-		let content = document.getElementById(element);
-		about.style.display = "none";
-		question.style.display = "none";
-		questionNav.style.opacity = "0.5";
-		aboutNav.style.opacity = "0.5";
 
-		content.style.display = "block";
-		event.target.style.opacity = "1";
-	}
-	console.log(btnfollow);
-	if (btnfollow.innerText == "Following") {
-		btnfollow.style.background = "#9E9E9E";
-	}
-
-	$("#follow-btn").click(function() {
-		const followedUserID = $("body").data("userprofileid");
-		const button = $(this);
-		const followersSumElm = $("#followers-sum");
-		$.ajax({
-			type : "GET",
-			url : "follow-user?followedUserID=" + followedUserID,
-			dataType : "json",
-			success : function(isFollowed) {
-				const followersSum = parseInt(followersSumElm.text())
-				if (isFollowed) {
-					button.text("Following");
-					followersSumElm.text(followersSum + 1)
-					btnfollow.style.background = "#9E9E9E";
-				} else {
-					button.text("Follow");
-					followersSumElm.text(followersSum - 1)
-					btnfollow.style.background = "#F48023";
-				}
-
-			},
-			error : function() {
-				alert("Failed to load data from the server.");
-			},
-		});
-	})
-</script>
 
 </html>
