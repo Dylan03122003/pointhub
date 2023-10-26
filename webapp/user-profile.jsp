@@ -1,3 +1,4 @@
+<%@page import="util.Authentication"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -16,14 +17,17 @@
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="css/user_profile.css">
 <script defer="defer" type="module" src="js/user-profile.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
 <title>Document</title>
 </head>
 
 <%
 User user = (User) request.getAttribute("userProfile");
 boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
+int currentUserID = (int) Authentication.getCurrentUserID(request);
 %>
-<body data-userprofileid="<%=user.getUserID()%>">
+<body data-userprofileid="<%=user.getUserID()%>" data-currentuserid="<%=currentUserID%>">
 	<jsp:include page="navbar.jsp" />
 
 	<div class="viewProfile">

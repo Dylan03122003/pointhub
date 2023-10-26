@@ -77,29 +77,35 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 			<h2 class="text-2xl font-bold my-5 text-gray-500">Are you sure
 				to delete this question?</h2>
 			<div class="flex item-centers justify-end gap-4">
-				<button class="cancel-delete-btn px-4 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-500">Cancel</button>
-				<button class="confirm-delete-btn px-4 py-1 rounded-md bg-orange-100 hover:bg-orange-200 text-orange-500">Confirm</button>
+				<button
+					class="cancel-delete-btn px-4 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-500">Cancel</button>
+				<button
+					class="confirm-delete-btn px-4 py-1 rounded-md bg-orange-100 hover:bg-orange-200 text-orange-500">Confirm</button>
 			</div>
-			
+
 		</div>
 	</div>
 
 	<!-- Require user log in modal --------------------------------------------------------------------->
 	<div
-		class="require-login-modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center">
+		class="require-login-modal  fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center">
 		<div
-			class="require-login-content flex flex-col justify-center items-center gap-5  bg-white w-1/2 p-4 relative">
-			<h2 class="text-2xl font-bold mb-4">Join the Pointhub community</h2>
-			<p>Join Pointhubto start earning reputation and unlocking new
-				privileges like voting and commenting.</p>
+			class="require-login-content flex flex-col justify-center items-center gap-5  bg-white w-[340px] sm:w-[600px] p-4 relative rounded-md">
+			<h2 class="text-2xl text-center font-bold mb-4 mt-8">Join the Pointhub
+				community</h2>
+			<p class="text-gray-600 text-center">Join Pointhubto start
+				earning reputation and unlocking new privileges like voting and
+				commenting.</p>
 
-			<a class="bg-orange-400 text-white px-4 py-1 rounded-md"
-				href="log-in.jsp">Log in</a> <a
-				class="bg-orange-400 text-white px-4 py-1 rounded-md"
-				href="sign-up.jsp">Sign up</a>
+			<div class="flex gap-5 mt-5">
+				<a class="bg-orange-400 text-white px-4 py-1 rounded-md"
+					href="log-in.jsp">Log in</a> <a
+					class="bg-orange-400 text-white px-4 py-1 rounded-md"
+					href="sign-up.jsp">Sign up</a>
+			</div>
 
 			<button
-				class="require-login-close-btn bg-gray-300 text-gray-700 px-2 py-1 rounded absolute top-4 right-4"
+				class="require-login-close-btn text-3xl text-gray-700 absolute top-4 right-4"
 				data-dismiss="modal">&times;</button>
 		</div>
 	</div>
@@ -166,7 +172,7 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 	<jsp:include page="navbar.jsp" />
 
 
-	<div class="w-full sm:w-[650px] md:w-[800px] lg:w-[1000px] mx-auto">
+	<div class="w-full sm:w-[600px] md:w-[750px] lg:w-[1000px] mx-auto">
 		<div class="p-3 sm:p-10 bg-white">
 			<div class="flex item-center justify-between">
 				<div class="flex items-center justify-start gap-3">
@@ -178,7 +184,7 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 						<p class="text-gray-500"><%=question.getCreatedAt()%></p>
 					</div>
 				</div>
-				<div class="sm:block hidden">
+				<div class="md:block hidden">
 					<c:if
 						test="<%=currentUserID == question.getUserID() || currentUserIsAdmin%>">
 						<button
@@ -225,7 +231,7 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 					<i class="fa-solid fa-angle-down text-2xl text-slate-500"></i>
 				</button>
 			</div>
-			<div class="mt-8 mb-5 flex flex-wrap sm:hidden gap-4">
+			<div class="mt-8 mb-5 flex flex-wrap md:hidden gap-4">
 				<c:if
 					test="<%=currentUserID == question.getUserID() || currentUserIsAdmin%>">
 					<button
