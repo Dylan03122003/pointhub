@@ -19,6 +19,30 @@ public class Authentication {
 		response.addCookie(cookie);
 	}
 
+	public static void updateUserEmailCookie(HttpServletResponse response,
+			HttpServletRequest request, String newEmail) {
+		Cookie[] cookies = request.getCookies();
+
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("user_cookie")) {
+					// Create a new Cookie with the updated email
+					Cookie updatedCookie = new Cookie("user_cookie", newEmail);
+
+					// Set the same maximum age (one year)
+					int oneYear = 60 * 60 * 24 * 365;
+					updatedCookie.setMaxAge(oneYear);
+
+					// Add the updated cookie to the response to replace the old
+					// one
+					response.addCookie(updatedCookie);
+					return; // Exit the loop since we've found and updated the
+							// cookie
+				}
+			}
+		}
+	}
+
 	public static void deleteUserCookie(HttpServletRequest request,
 			HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
@@ -87,7 +111,7 @@ public class Authentication {
 		UserDAO userDAO = new UserDAO();
 		return userDAO.getUserRoleByEmail(currentEmail);
 	}
-	
+
 	public static String getCurrentUserPhoto(HttpServletRequest request) {
 		String currentEmail = Authentication.getCurrentEmail(request);
 		UserDAO userDAO = new UserDAO();

@@ -69,7 +69,7 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 
 				<div>
 					<label for="InputInstagramlink">Instagram</label><br> <input
-						type="text" id="InputInstagramlink" name="about"
+						type="text" id="InputInstagramlink" name="insta_link"
 						value="<%=userProfile.getInstagramLink()%>">
 				</div>
 

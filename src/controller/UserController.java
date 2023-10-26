@@ -82,7 +82,8 @@ public class UserController extends HttpServlet {
 				.parseInt(request.getParameter("followedUserID"));
 		int currentUserID = Authentication.getCurrentUserID(request);
 		try {
-			boolean isFollowed = userDAO.followUser(currentUserID, followedUserID);
+			boolean isFollowed = userDAO.followUser(currentUserID,
+					followedUserID);
 			String json = new Gson().toJson(isFollowed);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
@@ -127,7 +128,29 @@ public class UserController extends HttpServlet {
 
 	private void updateProfile(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// ông code ở đây
+		int currentUserID = Authentication.getCurrentUserID(request);
+
+		String email = request.getParameter("email");
+		String first_name = request.getParameter("firstname");
+		String last_name = request.getParameter("lastname");
+		String about = request.getParameter("about");
+
+		String face_link = request.getParameter("facebook-link");
+		String twitter_link = request.getParameter("twitter-link");
+		String insta_link = request.getParameter("insta_link");
+		String git_link = request.getParameter("github-link");
+
+		String ward = request.getParameter("ward");
+		String district = request.getParameter("district");
+		String province = request.getParameter("province");
+
+		User user = new User(currentUserID, first_name, last_name, email, about,
+				face_link, twitter_link, insta_link, git_link, ward, district,
+				province);
+		userDAO.updateUserProfile(response, request, user);
+
+		response.sendRedirect("user-profile?userID=" + currentUserID);
+
 	}
 
 	private void listUser(HttpServletRequest request,
