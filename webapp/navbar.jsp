@@ -106,7 +106,6 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 		const toggleButton = document.querySelector(".toggle-button");
 		const navbarLinks = document.querySelector(".navbar-links");
 
-		console.log(iconPhoto)
 		iconPhoto
 				.addEventListener(
 						"click",

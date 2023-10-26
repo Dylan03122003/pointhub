@@ -51,6 +51,9 @@ public class QuestionController extends HttpServlet {
 			case "/delete-question" :
 				deleteQuestion(request, response);
 				break;
+			case "/view-user-questions" :
+				viewUserQuestionsHandler(request, response);
+				break;
 			default :
 
 		}
@@ -75,6 +78,22 @@ public class QuestionController extends HttpServlet {
 
 		}
 
+	}
+
+	private void viewUserQuestionsHandler(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		int userID = Integer.parseInt(request.getParameter("userID"));
+		int currentPostSize = request.getParameter("currentPostSize") != null
+				? Integer.parseInt(request.getParameter("currentPostSize"))
+				: 0;
+		int postsLimit = 2;
+		ArrayList<Question> userPosts = questionDAO.getUserPosts(userID,
+				postsLimit, currentPostSize);
+
+		String json = new Gson().toJson(userPosts);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 	}
 
 	private void deleteQuestion(HttpServletRequest request,

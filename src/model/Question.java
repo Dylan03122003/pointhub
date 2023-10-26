@@ -16,8 +16,10 @@ public class Question {
 	private String[] tagContents;
 	private int upvotes;
 	private int downvotes;
+	private int voteSum;
 	private boolean isBookmarked;
 	private int topicID;
+	private String topicName;
 	private String codeblock;
 
 	public Question(int questionID, int userID, String questionContent,
@@ -62,6 +64,17 @@ public class Question {
 		this.upvotes = upvotes;
 		this.downvotes = downvotes;
 		this.isBookmarked = isBookmarked;
+	}
+
+	// Constructor for get user questions
+	public Question(int questionID, String title, Date createdAt,
+			String[] tagContents, int voteSum, String topicName) {
+		this.questionID = questionID;
+		this.title = title;
+		this.createdAt = createdAt;
+		this.tagContents = tagContents;
+		this.voteSum = voteSum;
+		this.topicName = topicName;
 	}
 
 	public Question() {
@@ -174,7 +187,7 @@ public class Question {
 	public void setCodeblock(String codeblock) {
 		this.codeblock = codeblock;
 	}
-	
+
 	public String getLanguage() {
 		TopicDAO topicDAO = new TopicDAO();
 		switch (topicDAO.getTopicNameByID(this.topicID).toLowerCase()) {
@@ -201,6 +214,22 @@ public class Question {
 				+ Arrays.toString(tagContents) + ", upvotes=" + upvotes
 				+ ", downvotes=" + downvotes + ", isBookmarked=" + isBookmarked
 				+ ", topicID=" + topicID + ", codeblock=" + codeblock + "]";
+	}
+
+	public int getVoteSum() {
+		return voteSum;
+	}
+
+	public void setVoteSum(int voteSum) {
+		this.voteSum = voteSum;
+	}
+
+	public String getTopicName() {
+		return topicName;
+	}
+
+	public void setTopicName(String topicName) {
+		this.topicName = topicName;
 	}
 
 }
