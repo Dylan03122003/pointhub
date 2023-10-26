@@ -26,6 +26,7 @@
 </head>
 
 <%
+System.out.println("email: " + Authentication.getCurrentEmail(request));
 boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 String username = (String) Authentication.getCurrentUsername(request);
 String role = (String) Authentication.getCurrentUserRole(request);
@@ -73,9 +74,9 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 
 		<c:if test="<%=isLoggedIn%>">
 			<div class="user-icons">
-			<span class="notice-icon"><i class="fa-regular fa-bell"></i></span>
+				<span class="notice-icon"><i class="fa-regular fa-bell"></i></span>
 				<img src="img/<%=userPhoto%>" class="personal-icon" id="iconPhoto" />
-				
+
 				<div class="dropdown-menu" id="dropdown-menu">
 					<ul class="dropdown-menu-content">
 						<li class="dropdown-header">

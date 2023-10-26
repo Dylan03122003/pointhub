@@ -102,6 +102,25 @@ public class User {
 		this.district = district;
 		this.province = province;
 	}
+	
+	// This is the new updated object when user submit update
+	public User(int userID, String firstName, String lastName, String email,
+			String about, String facebookLink, String twitterLink,
+			String instagramLink, String githubLink, String ward,
+			String district, String province) {
+		this.userID = userID;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.about = about;
+		this.facebookLink = facebookLink;
+		this.twitterLink = twitterLink;
+		this.instagramLink = instagramLink;
+		this.githubLink = githubLink;
+		this.ward = ward;
+		this.district = district;
+		this.province = province;
+	}
 
 	public int getUserID() {
 		return userID;
@@ -129,7 +148,7 @@ public class User {
 
 	public String getEmail() {
 		if (email.length() >= 20) {
-			return email.substring(0, 20) + "..."; 
+			return email.substring(0, 20) + "...";
 		} else {
 			return email;
 		}

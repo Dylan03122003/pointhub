@@ -6,7 +6,10 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import model.User;
+import util.Authentication;
 
 public class UserDAO extends BaseDAO {
 
@@ -274,5 +277,62 @@ public class UserDAO extends BaseDAO {
 
 		}
 
+	}
+
+	public void updateUserProfile(HttpServletResponse response,
+			HttpServletRequest request, User user) {
+		String updateUserCommand = "UPDATE users "
+				+ "SET email = ?, first_name = ?, last_name = ?, about = ?, username = ? "
+				+ "WHERE user_id = ?";
+		String insertSocialCommand = "INSERT INTO social_accounts (user_id, facebook_link, twitter_link, instagram_link, github_link) "
+				+ "VALUES (?, ?, ?, ?, ?) " + "ON DUPLICATE KEY UPDATE "
+				+ "facebook_link = VALUES(facebook_link), "
+				+ "twitter_link = VALUES(twitter_link), "
+				+ "instagram_link = VALUES(instagram_link), "
+				+ "github_link = VALUES(github_link)";
+
+		String queryLocationIDCommand = "SELECT location_id FROM users WHERE user_id = ?";
+		String insertLocationCommand = "INSERT INTO locations (ward, district, province) VALUES (?, ?, ?)";
+		String updateLocationIDCommand = "UPDATE users SET location_id = ? WHERE user_id = ?";
+		String updateLocationCommand = "UPDATE locations SET ward = ?, district = ?, province = ?  WHERE location_id = ?";
+
+		try {
+			executeUpdate(updateUserCommand, user.getEmail(),
+					user.getFirstName(), user.getLastName(), user.getAbout(),
+					user.getLastName() + user.getFirstName(), user.getUserID());
+
+			Authentication.updateUserEmailCookie(response, request,
+					user.getEmail());
+
+			executeUpdate(insertSocialCommand, user.getUserID(),
+					user.getFacebookLink(), user.getTwitterLink(),
+					user.getInstagramLink(), user.getGithubLink());
+
+			ResultSet result = executeQuery(queryLocationIDCommand,
+					user.getUserID());
+			int locationID = -1;
+			if (result.next()) {
+				locationID = result.getInt("location_id");
+
+			}
+
+			boolean locationIDExisted = locationID != 0;
+
+			if (locationIDExisted) {
+				executeUpdate(updateLocationCommand, user.getWard(),
+						user.getDistrict(), user.getProvince(), locationID);
+
+			} else {
+				locationID = executeInsert(insertLocationCommand,
+						user.getWard(), user.getDistrict(), user.getProvince());
+
+				executeUpdate(updateLocationIDCommand, locationID,
+						user.getUserID());
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
