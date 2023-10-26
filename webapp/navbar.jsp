@@ -26,7 +26,6 @@
 </head>
 
 <%
-System.out.println("email: " + Authentication.getCurrentEmail(request));
 boolean isLoggedIn = (boolean) Authentication.isLoggedIn(request);
 String username = (String) Authentication.getCurrentUsername(request);
 String role = (String) Authentication.getCurrentUserRole(request);

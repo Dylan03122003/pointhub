@@ -4,6 +4,39 @@ let aboutNav = document.getElementById("about-nav");
 let questionNav = document.getElementById("posts-nav");
 let btnfollow = document.getElementById("follow-btn");
 
+// TEMPLATES
+
+function renderPost(post) {
+
+	const userProfileID = $("body").data("userprofileid");
+
+	let tagElements = "";
+
+	for (const tag of post.tagContents) {
+		tagElements += `<div>${tag}</div>`;
+	}
+
+	return `
+
+<a href="question-detail?question_id=${post.questionID}&user_id=${userProfileID}"
+						class="card">
+		<div class="card-body">
+							<h5 class="card-title">${post.title}</h5>
+							<p>Topic: ${post.topicName}</p>
+							<p>Votes: ${post.voteSum}</p>
+							<div class="card-tags">
+
+								${tagElements}
+
+							</div>
+						</div>
+		<div class="card-footer text-muted">${post.createdAt}</div>
+</a>	
+	
+`
+}
+
+
 // FUNCTION HANDLERS
 
 const handleShowNav = (event) => {
@@ -19,7 +52,7 @@ const handleShowNav = (event) => {
 	event.target.style.opacity = "1";
 }
 
-function handleFollowUser () {
+function handleFollowUser() {
 	const followedUserID = $("body").data("userprofileid");
 	const button = $(this);
 	const followersSumElm = $("#followers-sum");
@@ -46,15 +79,46 @@ function handleFollowUser () {
 	});
 }
 
-function handleShowUserPosts () {
+function handleShowUserPosts() {
 	const userProfileID = $("body").data("userprofileid");
-	
+
 	$.ajax({
 		type: "GET",
 		url: `view-user-questions?userID=${userProfileID}`,
 		dataType: "json",
 		success: function(userPosts) {
-		   console.log(userPosts)
+			// questionID, title, createdAt, tagContents, voteSum, topicName
+			$(".card-container").empty();
+
+			let userPostTemplates = ""
+			for (const post of userPosts) {
+				userPostTemplates += renderPost(post);
+			}
+			$(".card-container").data("userpostssize", userPosts.length)
+			$(".card-container").append(userPostTemplates)
+		},
+		error: function() {
+			alert("Failed to load data from the server.");
+		},
+	});
+}
+
+function handleLoadMoreQuestions() {
+	const userPostsSize = $(".card-container").data("userpostssize");
+	const userProfileID = $("body").data("userprofileid");
+
+	$.ajax({
+		type: "GET",
+		url: `view-user-questions?userID=${userProfileID}&currentPostSize=${userPostsSize}`,
+		dataType: "json",
+		success: function(userPosts) {
+			// questionID, title, createdAt, tagContents, voteSum, topicName
+			let userPostTemplates = ""
+			for (const post of userPosts) {
+				userPostTemplates += renderPost(post);
+			}
+			$(".card-container").data("userpostssize", userPostsSize + userPosts.length)
+			$(".card-container").append(userPostTemplates)
 		},
 		error: function() {
 			alert("Failed to load data from the server.");
@@ -77,3 +141,5 @@ if (btnfollow && btnfollow.innerText == "Following") {
 }
 
 $("#follow-btn").click(handleFollowUser)
+
+$(".load-more-btn").click(handleLoadMoreQuestions)

@@ -86,7 +86,7 @@ public class QuestionController extends HttpServlet {
 		int currentPostSize = request.getParameter("currentPostSize") != null
 				? Integer.parseInt(request.getParameter("currentPostSize"))
 				: 0;
-		int postsLimit = 2;
+		int postsLimit = 1;
 		ArrayList<Question> userPosts = questionDAO.getUserPosts(userID,
 				postsLimit, currentPostSize);
 

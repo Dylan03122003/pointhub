@@ -89,45 +89,16 @@ boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 				</ul>
 			</div>
 			<div class="content" id="about">
-				<p>
+				<p >
 					<%=user.getAbout()%>
 				</p>
 			</div>
 
 			<div class="content" id="question">
 				<div class="card-container">
-					<a href="/PointHubWebsite/question-detail?question_id=10&user_id=9"
-						class="card">
-						<div class="card-body">
-							<h5 class="card-title">what is javascript?</h5>
-							<!-- <p class="card-text">help</p> -->
-							<div class="card-tags">
-
-								<div>React</div>
-
-								<div>Java</div>
-
-							</div>
-						</div>
-						<div class="card-footer text-muted">2023-10-13</div>
-					</a> <a
-						href="/PointHubWebsite/question-detail?question_id=8&user_id=12"
-						class="card">
-						<div class="card-body">
-							<h5 class="card-title">What is Java?</h5>
-							<!-- <p class="card-text">explain for me what java is?</p> -->
-							<div class="card-tags">
-
-								<div>React</div>
-
-								<div>Java</div>
-
-							</div>
-						</div>
-						<div class="card-footer text-muted">2023-10-11</div>
-					</a>
 
 				</div>
+				<button class="load-more-btn" type="button">Load more</button>
 			</div>
 		</div>
 	</div>
