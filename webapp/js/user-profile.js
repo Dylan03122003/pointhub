@@ -1,7 +1,11 @@
 let about = document.getElementById("about");
 let question = document.getElementById("question");
+let bookmark = document.getElementById("bookmark");
+
 let aboutNav = document.getElementById("about-nav");
 let questionNav = document.getElementById("posts-nav");
+let bookmarkNav = document.getElementById("bookmarks-nav");
+
 let btnfollow = document.getElementById("follow-btn");
 
 // TEMPLATES
@@ -40,12 +44,13 @@ function renderPost(post) {
 // FUNCTION HANDLERS
 
 const handleShowNav = (event) => {
-
 	let element = event.target.getAttribute("data-target");
 	let content = document.getElementById(element);
 	about.style.display = "none";
 	question.style.display = "none";
+	bookmark.style.display = "none";
 	questionNav.style.opacity = "0.5";
+	bookmarkNav.style.opacity = "0.5";
 	aboutNav.style.opacity = "0.5";
 
 	content.style.display = "block";
@@ -113,6 +118,7 @@ function handleShowUserPosts() {
 	});
 }
 
+
 function handleLoadMoreQuestions() {
 	const userPostsSize = $(".card-container").data("userpostssize");
 	const userProfileID = $("body").data("userprofileid");
@@ -136,6 +142,54 @@ function handleLoadMoreQuestions() {
 	});
 }
 
+function handleShowUserBookmarks() {
+	const userProfileID = $("body").data("userprofileid");
+
+	$.ajax({
+		type: "GET",
+		url: `view-bookmarks?userID=${userProfileID}`,
+		dataType: "json",
+		success: function(userBookmarks) {
+			// questionID, title, createdAt, tagContents, voteSum, topicName
+			$(".card-bookmark-container").empty();
+
+			let userPostTemplates = ""
+			for (const bookmark of userBookmarks) {
+				userPostTemplates += renderPost(bookmark);
+			}
+			$(".card-bookmark-container").data("userbookmarkssize", userBookmarks.length)
+			$(".card-bookmark-container").append(userPostTemplates)
+			
+		},
+		error: function() {
+			alert("Failed to load data from the server.");
+		},
+	});
+}
+
+function handleLoadMoreBookmark() {
+	const userBookmarksSize = $(".card-bookmark-container").data("userbookmarkssize");
+	const userProfileID = $("body").data("userprofileid");
+
+	$.ajax({
+		type: "GET",
+		url: `view-bookmarks?userID=${userProfileID}&currentBookmarkSize=${userBookmarksSize}`,
+		dataType: "json",
+		success: function(userBookmarks) {
+			//userBookmarks contains: questionID, title, createdAt, tagContents, voteSum, topicName
+			let userBookmarkTemplates = ""
+			for (const bookmark of userBookmarks) {
+				userBookmarkTemplates += renderPost(bookmark);
+			}
+			$(".card-bookmark-container").data("userbookmarkssize", userBookmarksSize + userBookmarks.length)
+			$(".card-bookmark-container").append(userBookmarkTemplates)
+		},
+		error: function() {
+			alert("Failed to load data from the server.");
+		},
+	});
+}
+
 // EVENT HANDLERS --------------------------------------------------------------------------------------------
 
 $("#about-nav").click(handleShowNav)
@@ -145,6 +199,10 @@ $("#posts-nav").click(function(event) {
 	handleShowUserPosts()
 })
 
+$("#bookmarks-nav").click(function(event) {
+	handleShowNav(event)
+	handleShowUserBookmarks()
+})
 
 if (btnfollow && btnfollow.innerText == "Following") {
 	btnfollow.style.background = "#9E9E9E";
@@ -152,4 +210,5 @@ if (btnfollow && btnfollow.innerText == "Following") {
 
 $("#follow-btn").click(handleFollowUser)
 
-$(".load-more-btn").click(handleLoadMoreQuestions)
+$(".load-more-post-btn").click(handleLoadMoreQuestions)
+$(".load-more-bookmark-btn").click(handleLoadMoreBookmark)

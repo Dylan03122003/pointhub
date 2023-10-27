@@ -54,6 +54,9 @@ public class QuestionController extends HttpServlet {
 			case "/view-user-questions" :
 				viewUserQuestionsHandler(request, response);
 				break;
+			case "/view-bookmarks" :
+				getBookmarksHandler(request, response);
+				break;
 			default :
 
 		}
@@ -78,6 +81,22 @@ public class QuestionController extends HttpServlet {
 
 		}
 
+	}
+	
+	private void getBookmarksHandler (HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		int userID = Integer.parseInt(request.getParameter("userID"));
+		int currentBookmarkSize = request.getParameter("currentBookmarkSize") != null
+				? Integer.parseInt(request.getParameter("currentBookmarkSize"))
+				: 0;
+		int bookmarkLimit = 1;
+		ArrayList<Question> userBookmarks = questionDAO.getUserBookmarks(userID,
+				bookmarkLimit, currentBookmarkSize);
+
+		String json = new Gson().toJson(userBookmarks);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 	}
 
 	private void viewUserQuestionsHandler(HttpServletRequest request,

@@ -241,6 +241,14 @@ html {
 	/* padding: 20px; */
 }
 
+.card-bookmark-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 20px;
+	/* padding: 20px; */
+}
+
 /* Style for each card */
 .card {
 	width: 100%;

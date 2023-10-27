@@ -86,6 +86,7 @@
 		<url-pattern>/bookmark-question</url-pattern>
 		<url-pattern>/delete-question</url-pattern>
 		<url-pattern>/view-user-questions</url-pattern>
+		<url-pattern>/view-bookmarks</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<description></description>

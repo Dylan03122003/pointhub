@@ -66,7 +66,7 @@ public class Question {
 		this.isBookmarked = isBookmarked;
 	}
 
-	// Constructor for get user questions
+	// Constructor for get user questions (or) user bookmarks
 	public Question(int questionID, String title, Date createdAt,
 			String[] tagContents, int voteSum, String topicName) {
 		this.questionID = questionID;
@@ -76,6 +76,8 @@ public class Question {
 		this.voteSum = voteSum;
 		this.topicName = topicName;
 	}
+	
+	
 
 	public Question() {
 	}
