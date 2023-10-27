@@ -17,7 +17,7 @@
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="css/user_profile.css">
 <script defer="defer" type="module" src="js/user-profile.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 
 <title>Document</title>
 </head>
@@ -27,7 +27,8 @@ User user = (User) request.getAttribute("userProfile");
 boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 int currentUserID = (int) Authentication.getCurrentUserID(request);
 %>
-<body data-userprofileid="<%=user.getUserID()%>" data-currentuserid="<%=currentUserID%>">
+<body data-userprofileid="<%=user.getUserID()%>"
+	data-currentuserid="<%=currentUserID%>">
 	<jsp:include page="navbar.jsp" />
 
 	<div class="viewProfile">
@@ -86,23 +87,28 @@ int currentUserID = (int) Authentication.getCurrentUserID(request);
 		<div class="body-item">
 			<div class="profile-nav">
 				<ul>
-					<li id="about-nav" data-target="about"><a href=""
-						class="nav-link"></a>About</li>
-					<li id="posts-nav" data-target="question"><a href=""
+					<li id="about-nav" data-target="about" class="cursor-pointer"><a href=""
+						class="nav-link "></a>About</li>
+					<li id="posts-nav" data-target="question" class="cursor-pointer"><a href=""
 						class="nav-link"></a>Posts</li>
+					<li id="bookmarks-nav" data-target="bookmark" class="cursor-pointer"><a href=""
+						class="nav-link"></a>Bookmarks</li>
 				</ul>
 			</div>
 			<div class="content" id="about">
-				<p >
+				<p>
 					<%=user.getAbout()%>
 				</p>
 			</div>
 
 			<div class="content" id="question">
-				<div class="card-container">
-
-				</div>
-				<button class="load-more-btn" type="button">Load more</button>
+				<div class="card-container"></div>
+				<button class="load-more-post-btn" type="button">Load more</button>
+			</div>
+			<div class="content" id="bookmark">
+				<div class="card-bookmark-container"></div>
+				<button class="load-more-bookmark-btn" type="button">Load
+					more</button>
 			</div>
 		</div>
 	</div>

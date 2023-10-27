@@ -403,6 +403,41 @@ public class QuestionDAO extends BaseDAO {
 
 	}
 
+	public ArrayList<Question> getUserBookmarks(int userID, int limit, int currentBookmarkSize) {
+		ArrayList<Question> userBookmarks = new ArrayList<Question>();
+
+		String query = "SELECT " + "q.question_id AS questionID, "
+				+ "q.title AS title, " + "q.created_at AS createdAt, "
+				+ "q.tags AS tags, "
+				+ "SUM(CASE WHEN v.vote_type = 'upvote' THEN 1 ELSE 0 END) - SUM(CASE WHEN v.vote_type = 'downvote' THEN 1 ELSE 0 END) AS voteSum, "
+				+ "t.topic_name AS topicName " + "FROM bookmarks b "
+				+ "JOIN questions q ON b.question_id = q.question_id "
+				+ "LEFT JOIN votes_question v ON q.question_id = v.question_id "
+				+ "JOIN topics t ON q.topic_id = t.topic_id "
+				+ "WHERE b.user_id = ? "
+				+ "GROUP BY q.question_id, q.title, q.created_at, q.tags, t.topic_name LIMIT ? OFFSET ?";
+
+		try {
+			ResultSet resultSet = executeQuery(query, userID, limit, currentBookmarkSize);
+
+			while (resultSet.next()) {
+				int questionID = resultSet.getInt("questionID");
+				String title = resultSet.getString("title");
+				Date createdAt = resultSet.getDate("createdAt");
+				String[] tags = resultSet.getString("tags").split(",");
+				int voteSum = resultSet.getInt("voteSum");
+				String topicName = resultSet.getString("topicName");
+				Question question = new Question(questionID, title, createdAt,
+						tags, voteSum, topicName);
+				userBookmarks.add(question);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return userBookmarks;
+	}
+
 	public static void main(String[] args) {
 		QuestionDAO questionDAO = new QuestionDAO();
 		// ArrayList<Question> newestQuetions =
