@@ -11,6 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="css/navbar.css" />
 <link
 	href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200&family=Roboto:wght@100;300;400;500;700&family=Rubik:wght@300;400;500;600&display=swap"
@@ -19,7 +20,6 @@
 	crossorigin="anonymous"></script>
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
 	rel="stylesheet" />
-
 <title>Insert title here</title>
 
 
@@ -53,15 +53,13 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 				</c:if>
 
 				<c:if test="<%=isAdmin%>">
+				<li><a href="topics">Manage Topics</a></li>
 					<li><a href="question-reports">Question Reports</a></li>
 					<li><a href="user-list">UserList</a></li>
 
 				</c:if>
 
 				<c:if test="<%=isLoggedIn%>">
-					<li><a href="#"> <i
-							class="fa-regular fa-bookmark navbar-icons"></i> Collections
-					</a></li>
 
 					<li><a href="create-question.jsp"> <i
 							class="bx bx-plus-circle"></i> Ask a question

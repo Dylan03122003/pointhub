@@ -44,7 +44,7 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 	<jsp:include page="navbar.jsp" />
 	<div id="toast"
 		class="z-10 fixed top-20 right-0 p-4 m-4 text-white rounded-md shadow-lg hidden"></div>
-		
+
 	<div class="right-small-container">
 		<div class="category category-container" style="padding-top: 40px">
 			<c:forEach var="topic" items="<%=topics%>">
@@ -85,46 +85,53 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 			</c:forEach>
 
 
+			<c:if test="${totalQuestionPages == 0}">
+				<p class="text-gray-500 text-medium text-center">There is currently no questions for this tag</p>
+			</c:if>
 
-			<div class="flex items-center justify-center gap-6"
-				style="margin-bottom: 100px; text-align: center;">
-				<c:choose>
-					<c:when test="${currentQuestionPage > 1}">
-						<a
-							href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage - 1}"
-							class="bg-orange-400 text-white px-3 py-1 rounded-md"> <i
-							class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span></a>
-					</c:when>
-					<c:otherwise>
-						<a href="#"
-							class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
-							<i class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span>
-						</a>
-					</c:otherwise>
-				</c:choose>
-				<div class="flex items-center justify-center gap-5 flex-wrap">
-					<c:forEach var="i" begin="1" end="${totalQuestionPages}">
-						<a href="questions?activeTopic=${activeTopic}&page=${i}"
-							class="flex items-center justify-center border border-solid  rounded-md w-8 h-8 ${i == currentQuestionPage ? 'bg-orange-100 text-orange-500 border-orange-400' : 'text-gray-500 border-gray-400'}">${i}
-						</a>
-					</c:forEach>
+			<c:if test="${totalQuestionPages != 0}">
+				<div class="flex items-center justify-center gap-6"
+					style="margin-bottom: 100px; text-align: center;">
+					<c:choose>
+						<c:when test="${currentQuestionPage > 1}">
+							<a
+								href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage - 1}"
+								class="bg-orange-400 text-white px-3 py-1 rounded-md"> <i
+								class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span></a>
+						</c:when>
+						<c:otherwise>
+							<a href="#"
+								class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
+								<i class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span>
+							</a>
+						</c:otherwise>
+					</c:choose>
+					<div class="flex items-center justify-center gap-5 flex-wrap">
+						<c:forEach var="i" begin="1" end="${totalQuestionPages}">
+							<a href="questions?activeTopic=${activeTopic}&page=${i}"
+								class="flex items-center justify-center border border-solid  rounded-md w-8 h-8 ${i == currentQuestionPage ? 'bg-orange-100 text-orange-500 border-orange-400' : 'text-gray-500 border-gray-400'}">${i}
+							</a>
+						</c:forEach>
+					</div>
+
+					<c:choose>
+						<c:when test="${currentQuestionPage < totalQuestionPages}">
+							<a
+								href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage + 1}"
+								class="bg-orange-400 text-white px-3 py-1 rounded-md"> <span
+								class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i></a>
+						</c:when>
+						<c:otherwise>
+							<a href="#"
+								class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
+								<span class="mr-1">Next</span> <i
+								class="fa-solid fa-arrow-right"></i>
+							</a>
+						</c:otherwise>
+					</c:choose>
 				</div>
+			</c:if>
 
-				<c:choose>
-					<c:when test="${currentQuestionPage < totalQuestionPages}">
-						<a
-							href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage + 1}"
-							class="bg-orange-400 text-white px-3 py-1 rounded-md"> <span
-							class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i></a>
-					</c:when>
-					<c:otherwise>
-						<a href="#"
-							class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
-							<span class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i>
-						</a>
-					</c:otherwise>
-				</c:choose>
-			</div>
 
 		</div>
 

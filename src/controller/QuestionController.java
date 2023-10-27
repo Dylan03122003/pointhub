@@ -82,13 +82,15 @@ public class QuestionController extends HttpServlet {
 		}
 
 	}
-	
-	private void getBookmarksHandler (HttpServletRequest request,
+
+	private void getBookmarksHandler(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		int userID = Integer.parseInt(request.getParameter("userID"));
-		int currentBookmarkSize = request.getParameter("currentBookmarkSize") != null
-				? Integer.parseInt(request.getParameter("currentBookmarkSize"))
-				: 0;
+		int currentBookmarkSize = request
+				.getParameter("currentBookmarkSize") != null
+						? Integer.parseInt(
+								request.getParameter("currentBookmarkSize"))
+						: 0;
 		int bookmarkLimit = 1;
 		ArrayList<Question> userBookmarks = questionDAO.getUserBookmarks(userID,
 				bookmarkLimit, currentBookmarkSize);

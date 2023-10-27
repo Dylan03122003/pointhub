@@ -39,8 +39,24 @@ public class TopicDAO extends BaseDAO {
 		return topicName;
 	}
 
-	// public static void main(String[] args) {
-	//
-	// CustomLog.logList(new TopicDAO().getAllTopics());
-	// }
+	public void addTopic(String topicName) throws SQLException {
+		String insertTopicCommand = "INSERT INTO topics (topic_name) VALUES (?)";
+
+		executeInsert(insertTopicCommand, topicName);
+
+	}
+
+	public void updateTopic(String topicName, int topicID)
+			throws SQLException {
+		String updateTopicCommand = "UPDATE topics SET topic_name = ? WHERE topic_id = ?";
+
+		executeUpdate(updateTopicCommand, topicName, topicID);
+
+	}
+
+	public static void main(String[] args) {
+
+		// CustomLog.logList(new TopicDAO().getAllTopics());
+
+	}
 }

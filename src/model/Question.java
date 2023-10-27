@@ -76,8 +76,6 @@ public class Question {
 		this.voteSum = voteSum;
 		this.topicName = topicName;
 	}
-	
-	
 
 	public Question() {
 	}
@@ -201,6 +199,12 @@ public class Question {
 			}
 			case "javascript" : {
 				return "language-javascript";
+			}
+			case "csharp" : {
+				return "language-csharp";
+			}
+			case "python" : {
+				return "language-python";
 			}
 			default :
 				return "";
