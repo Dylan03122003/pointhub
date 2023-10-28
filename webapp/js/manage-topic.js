@@ -35,20 +35,20 @@ function handleUpdateTopic() {
 	// Create an input field to edit the topic name
 	const topicNameInput = $("<input>").attr({
 		type: "text",
-		class: "border-[1px] border-solid border-gray-400",
+		class: "border-[2px] px-2 border-solid border-gray sm:w-[215px] w-[120px]",
 		value: topicNameElm.text()
 	});
 
 	// Create a "Save" button
 	const saveButton = $("<button>").attr({
 		type: "button",
-		class: "bg-blue-400 text-white px-3 py-1 rounded-md"
+		class: "bg-[#2980b9] text-white px-3 py-1 rounded-md lg:ml-[300px] md:ml-[300px] sm:ml-[205px] ml-[50px]"
 	}).text("Save");
 
 	// Create a "Cancel" button
 	const cancelButton = $("<button>").attr({
 		type: "button",
-		class: "bg-slate-400 text-white px-3 py-1 rounded-md"
+		class: "bg-red-400 text-white px-3 py-1 rounded-md ml-[5px]"
 	}).text("Cancel");
 
 
