@@ -163,6 +163,9 @@ public class QuestionController extends HttpServlet {
 
 		Question questionDetail = questionDAO.getQuestionByID(questionID,
 				currentUserID, userIDOfQuestion);
+		
+		questionDAO.increaseQuestionViews(questionID);
+		
 		request.setAttribute("questionDetail", questionDetail);
 
 		MyDispatcher.dispatch(request, response, "question-detail.jsp");

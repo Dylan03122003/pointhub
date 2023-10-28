@@ -37,22 +37,27 @@ public class QuestionDAO extends BaseDAO {
 			if (topicName.equals("All topics")) {
 				query = "SELECT "
 						+ "q.question_id, u.user_id, u.username, u.photo, q.created_at AS createdAt, "
-						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
-						+ "FROM questions q JOIN users u ON q.user_id = u.user_id "
-						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
+						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content, v.view_count "
+						+ "FROM questions q "
+						+ "JOIN users u ON q.user_id = u.user_id "
+						+ "LEFT JOIN question_views v ON q.question_id = v.question_id "
+						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content, v.view_count "
 						+ "ORDER BY createdAt DESC " + "LIMIT ? OFFSET ?";
+
 				result = executeQuery(query, rowsPerPage,
 						(currentPage - 1) * rowsPerPage);
 
 			} else {
 				query = "SELECT q.question_id, u.user_id, u.username, u.photo, q.created_at AS createdAt, "
-						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
+						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content, v.view_count "
 						+ "FROM questions q "
 						+ "JOIN users u ON q.user_id = u.user_id "
 						+ "JOIN topics t ON q.topic_id = t.topic_id "
+						+ "LEFT JOIN question_views v ON q.question_id = v.question_id "
 						+ "WHERE t.topic_name = ? "
-						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
+						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content, v.view_count "
 						+ "ORDER BY createdAt DESC LIMIT ? OFFSET ?";
+
 				result = executeQuery(query, topicName, rowsPerPage,
 						(currentPage - 1) * rowsPerPage);
 
@@ -68,9 +73,11 @@ public class QuestionDAO extends BaseDAO {
 				String[] tagContents = result.getString("tag_content")
 						.split(",");
 				String photo = result.getString("photo");
+				int viewCount = result.getInt("view_count");
 				Question question = new Question(userID, questionID, username,
 						createdAt, title, questionContent, tagContents);
 				question.setUserPhoto(photo);
+				question.setViewCount(viewCount);
 				questions.add(question);
 			}
 
@@ -455,6 +462,45 @@ public class QuestionDAO extends BaseDAO {
 		}
 
 		throw new Error("There is not username with that questionID");
+	}
+
+	public void increaseQuestionViews(int questionID) {
+		String query = "SELECT 1 FROM question_views WHERE question_id = ?";
+		String insertCommand = "INSERT INTO question_views (question_id, view_count) VALUES (?, 1)";
+		String updateCommand = "UPDATE question_views "
+				+ "SET view_count = view_count + 1 WHERE question_id = ?;";
+
+		try {
+
+			boolean hasView = executeQuery(query, questionID).next();
+
+			if (hasView) {
+				executeUpdate(updateCommand, questionID);
+			} else {
+				executeNonQuery(insertCommand, questionID);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public int getQuestionViews(int questionID) {
+		String query = "SELECT view_count FROM question_views WHERE question_id = ?";
+
+		try {
+			ResultSet result = executeQuery(query, questionID);
+			if (result.next()) {
+				int viewCount = result.getInt("view_count");
+				return viewCount;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return -1;
 	}
 
 	public static void main(String[] args) {

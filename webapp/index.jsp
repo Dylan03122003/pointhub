@@ -81,12 +81,17 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 							<span>${tag}</span>
 						</c:forEach>
 					</div>
+
+					<p>
+						<span class="text-gray-600 font-medium text-sm">${question.getViewCount()}</span> <span class="text-gray-600 text-sm"> views</span>
+					</p>
 				</a>
 			</c:forEach>
 
 
 			<c:if test="${totalQuestionPages == 0}">
-				<p class="text-gray-500 text-medium text-center">There is currently no questions for this tag</p>
+				<p class="text-gray-500 text-medium text-center">There is
+					currently no questions for this tag</p>
 			</c:if>
 
 			<c:if test="${totalQuestionPages != 0}">

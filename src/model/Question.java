@@ -21,6 +21,7 @@ public class Question {
 	private int topicID;
 	private String topicName;
 	private String codeblock;
+	private int viewCount;
 
 	public Question(int questionID, int userID, String questionContent,
 			String title, Date createdAt) {
@@ -236,6 +237,14 @@ public class Question {
 
 	public void setTopicName(String topicName) {
 		this.topicName = topicName;
+	}
+
+	public int getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
 	}
 
 }
