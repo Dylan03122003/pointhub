@@ -1,3 +1,6 @@
+<%@page import="DAO.NotificationDAO"%>
+<%@page import="model.Notification"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="util.Authentication"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -26,10 +29,21 @@
 User user = (User) request.getAttribute("userProfile");
 boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 int currentUserID = (int) Authentication.getCurrentUserID(request);
+ArrayList<Notification> notifications = new NotificationDAO().getNotifications(currentUserID);
 %>
 <body data-userprofileid="<%=user.getUserID()%>"
 	data-currentuserid="<%=currentUserID%>">
 	<jsp:include page="navbar.jsp" />
+	
+	<!-- Notifications ------------------------------------------------------------------------->
+	<div class="bg-blue-100 m-2">
+		<c:forEach var="notification" items="<%=notifications%>">
+			<p>${notification.getMessage()}</p>
+			<p>${notification.getCreatedAt()}</p>
+		</c:forEach>
+	</div>
+
+	<!--END Notifications ------------------------------------------------------------------------->
 
 	<div class="viewProfile">
 		<div class="profile">
