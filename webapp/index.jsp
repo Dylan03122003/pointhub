@@ -38,6 +38,7 @@
 ArrayList<Question> questions = (ArrayList<Question>) request.getAttribute("question_list");
 ArrayList<Topic> topics = (ArrayList<Topic>) request.getAttribute("topics");
 String activeTopic = (String) request.getAttribute("activeTopic");
+String searchKey = (String) request.getAttribute("searchKey");
 %>
 
 <body>
@@ -45,10 +46,20 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 	<div id="toast"
 		class="z-10 fixed top-20 right-0 p-4 m-4 text-white rounded-md shadow-lg hidden"></div>
 
+	<form action="questions" method="get">
+		<input type="hidden" name="page" value="1" /> <input
+			type="hidden" name="activeTopic" value="<%=activeTopic%>" /> <input
+			value="<%=searchKey%>"
+			placeholder="How to remove an object in JavaScript.." type="text"
+			name="searchQuestionKey"
+			class="py-1 px-3 border-[1px] border-solid border-gray-400 rounded-md" />
+		<button type="submit">Search</button>
+	</form>
+
 	<div class="right-small-container">
 		<div class="category category-container" style="padding-top: 40px">
 			<c:forEach var="topic" items="<%=topics%>">
-				<a href="questions?activeTopic=${topic.getTopicName()}"
+				<a href="questions?activeTopic=${topic.getTopicName()}&searchQuestionKey=<%=searchKey%>"
 					class="${topic.getTopicName().equals(activeTopic) ? 'active-topic' : ''}">${topic.getTopicName()}</a>
 			</c:forEach>
 		</div>
@@ -83,7 +94,8 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 					</div>
 
 					<p>
-						<span class="text-gray-600 font-medium text-sm">${question.getViewCount()}</span> <span class="text-gray-600 text-sm"> views</span>
+						<span class="text-gray-600 font-medium text-sm">${question.getViewCount()}</span>
+						<span class="text-gray-600 text-sm"> views</span>
 					</p>
 				</a>
 			</c:forEach>
@@ -100,7 +112,7 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 					<c:choose>
 						<c:when test="${currentQuestionPage > 1}">
 							<a
-								href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage - 1}"
+								href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage - 1}&searchQuestionKey=<%=searchKey%>"
 								class="bg-orange-400 text-white px-3 py-1 rounded-md"> <i
 								class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span></a>
 						</c:when>
@@ -113,7 +125,7 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 					</c:choose>
 					<div class="flex items-center justify-center gap-5 flex-wrap">
 						<c:forEach var="i" begin="1" end="${totalQuestionPages}">
-							<a href="questions?activeTopic=${activeTopic}&page=${i}"
+							<a href="questions?activeTopic=${activeTopic}&page=${i}&searchQuestionKey=<%=searchKey%>"
 								class="flex items-center justify-center border border-solid  rounded-md w-8 h-8 ${i == currentQuestionPage ? 'bg-orange-100 text-orange-500 border-orange-400' : 'text-gray-500 border-gray-400'}">${i}
 							</a>
 						</c:forEach>
@@ -122,7 +134,7 @@ String activeTopic = (String) request.getAttribute("activeTopic");
 					<c:choose>
 						<c:when test="${currentQuestionPage < totalQuestionPages}">
 							<a
-								href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage + 1}"
+								href="questions?activeTopic=${activeTopic}&page=${currentQuestionPage + 1}&searchQuestionKey=<%=searchKey%>"
 								class="bg-orange-400 text-white px-3 py-1 rounded-md"> <span
 								class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i></a>
 						</c:when>
