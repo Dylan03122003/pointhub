@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 
 import DAO.BaseDAO;
+import DAO.NotificationDAO;
 import DAO.UserDAO;
 
 public class UserController extends HttpServlet {
@@ -70,7 +71,6 @@ public class UserController extends HttpServlet {
 			case "/update-profile" :
 				updateProfile(request, response);
 				break;
-
 			default :
 
 		}
@@ -84,6 +84,15 @@ public class UserController extends HttpServlet {
 		try {
 			boolean isFollowed = userDAO.followUser(currentUserID,
 					followedUserID);
+
+			if (isFollowed) {
+				NotificationDAO notificationDAO = new NotificationDAO();
+				String notificationMessage = Authentication
+						.getCurrentUsername(request) + " have followed you.";
+				notificationDAO.notifyFollowing(followedUserID, currentUserID,
+						notificationMessage);
+			}
+
 			String json = new Gson().toJson(isFollowed);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");

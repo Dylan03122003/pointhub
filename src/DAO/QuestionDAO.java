@@ -403,7 +403,8 @@ public class QuestionDAO extends BaseDAO {
 
 	}
 
-	public ArrayList<Question> getUserBookmarks(int userID, int limit, int currentBookmarkSize) {
+	public ArrayList<Question> getUserBookmarks(int userID, int limit,
+			int currentBookmarkSize) {
 		ArrayList<Question> userBookmarks = new ArrayList<Question>();
 
 		String query = "SELECT " + "q.question_id AS questionID, "
@@ -418,7 +419,8 @@ public class QuestionDAO extends BaseDAO {
 				+ "GROUP BY q.question_id, q.title, q.created_at, q.tags, t.topic_name LIMIT ? OFFSET ?";
 
 		try {
-			ResultSet resultSet = executeQuery(query, userID, limit, currentBookmarkSize);
+			ResultSet resultSet = executeQuery(query, userID, limit,
+					currentBookmarkSize);
 
 			while (resultSet.next()) {
 				int questionID = resultSet.getInt("questionID");
@@ -436,6 +438,23 @@ public class QuestionDAO extends BaseDAO {
 		}
 
 		return userBookmarks;
+	}
+
+	public int getUserIDOfQuestion(int questionID) {
+		String selectQuery = "SELECT user_id FROM questions WHERE question_id = ?";
+
+		try {
+			ResultSet result = executeQuery(selectQuery, questionID);
+
+			if (result.next()) {
+				return result.getInt("user_id");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		throw new Error("There is not username with that questionID");
 	}
 
 	public static void main(String[] args) {

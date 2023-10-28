@@ -1,6 +1,9 @@
 package controller;
 
 import DAO.CommentDAO;
+import DAO.NotificationDAO;
+import DAO.QuestionDAO;
+import DAO.UserDAO;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -59,7 +62,7 @@ public class CommentController extends HttpServlet {
 		}
 
 	}
-	
+
 	private void dislikeCommentHandler(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		int commentID = Integer.parseInt(request.getParameter("commentID"));
@@ -71,6 +74,21 @@ public class CommentController extends HttpServlet {
 			isDisliked = commentDAO.dislikeComment(currentUserID, commentID);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+
+		// Handle notifying user
+		int userIDOfComment = commentDAO.getUserIDOfComment(commentID);
+		boolean commentOfCurrentUser = Authentication
+				.getCurrentUserID(request) == userIDOfComment;
+
+		if (!commentOfCurrentUser && isDisliked) {
+			NotificationDAO notificationDAO = new NotificationDAO();
+			String notificationMessage = Authentication
+					.getCurrentUsername(request) + " disliked your comment.";
+
+			int questionID = commentDAO.getQuestionIDOfComment(commentID);
+			notificationDAO.notifyInteractingQuestion(userIDOfComment,
+					questionID, notificationMessage);
 		}
 
 		String json = new Gson().toJson(isDisliked);
@@ -92,6 +110,21 @@ public class CommentController extends HttpServlet {
 			isLiked = commentDAO.likeComment(currentUserID, commentID);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+
+		// Handle notifying user
+		int userIDOfComment = commentDAO.getUserIDOfComment(commentID);
+		boolean commentOfCurrentUser = Authentication
+				.getCurrentUserID(request) == userIDOfComment;
+
+		if (!commentOfCurrentUser && isLiked) {
+			NotificationDAO notificationDAO = new NotificationDAO();
+			String notificationMessage = Authentication
+					.getCurrentUsername(request) + " liked your comment.";
+
+			int questionID = commentDAO.getQuestionIDOfComment(commentID);
+			notificationDAO.notifyInteractingQuestion(userIDOfComment,
+					questionID, notificationMessage);
 		}
 
 		String json = new Gson().toJson(isLiked);
@@ -117,8 +150,18 @@ public class CommentController extends HttpServlet {
 		Comment createdComment = commentDAO.getCommentByID(questionID,
 				commentID);
 
-		String json = new Gson().toJson(createdComment);
+		NotificationDAO notificationDAO = new NotificationDAO();
+		int userIDOfQuestion = new QuestionDAO()
+				.getUserIDOfQuestion(questionID);
+		boolean commentedByCurrentUser = currentUserID == userIDOfQuestion;
+		if (!commentedByCurrentUser) {
+			String notificationMessage = Authentication.getCurrentUsername(
+					request) + " have commented your question.";
+			notificationDAO.notifyInteractingQuestion(userIDOfQuestion,
+					questionID, notificationMessage);
+		}
 
+		String json = new Gson().toJson(createdComment);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);

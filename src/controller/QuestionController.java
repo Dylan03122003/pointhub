@@ -19,8 +19,10 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
+import DAO.NotificationDAO;
 import DAO.QuestionDAO;
 import DAO.TopicDAO;
+import DAO.UserDAO;
 
 public class QuestionController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -247,10 +249,15 @@ public class QuestionController extends HttpServlet {
 
 	private void voteQuestionHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		NotificationDAO notificationDAO = new NotificationDAO();
+
 		String voteType = request.getParameter("voteType");
 		int questionID = Integer.parseInt(request.getParameter("questionId"));
+		int userIDOfQuestion = Integer
+				.parseInt(request.getParameter("userIDOfQuestion"));
 		int currentUserID = Authentication.getCurrentUserID(request);
 		boolean isVoted = false;
+
 		String json;
 		try {
 			questionDAO.voteQuestion(currentUserID, questionID, voteType);
@@ -267,6 +274,23 @@ public class QuestionController extends HttpServlet {
 			e.printStackTrace();
 		}
 		isVoted = true;
+
+		boolean votedByCurrentUser = userIDOfQuestion == currentUserID;
+		if (!votedByCurrentUser) {
+			String notificationMessage = "";
+			String currentUsername = Authentication.getCurrentUsername(request);
+			if (voteType.equals("upvote")) {
+				notificationMessage = currentUsername
+						+ " have upvoted your question.";
+			} else if (voteType.equals("downvote")) {
+				notificationMessage = currentUsername
+						+ " have downvoted your question.";
+
+			}
+			notificationDAO.notifyInteractingQuestion(userIDOfQuestion,
+					questionID, notificationMessage);
+		}
+
 		json = new Gson().toJson(isVoted);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

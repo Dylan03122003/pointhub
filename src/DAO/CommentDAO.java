@@ -301,6 +301,57 @@ public class CommentDAO extends BaseDAO {
 
 		return false;
 	}
+	
+	public int getUserIDOfComment(int commentID) {
+		String query = "SELECT user_id FROM comments WHERE comment_id = ?";
+		
+		try {
+			ResultSet result = executeQuery(query, commentID);
+			if (result.next()) {
+				return result.getInt("user_id");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		throw new Error("There is no userID with that commentID");
+		
+	}
+	
+	public int getQuestionIDOfComment(int commentID) {
+		String query = "SELECT question_id FROM comments WHERE comment_id = ?";
+		
+		try {
+			ResultSet result = executeQuery(query, commentID);
+			if (result.next()) {
+				return result.getInt("question_id");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		throw new Error("There is no question_id with that commentID");
+		
+	}
+	
+	public int getUserIDOfReply(int replyID) {
+		String query = "SELECT user_id FROM replies WHERE reply_id = ?";
+		
+		try {
+			ResultSet result = executeQuery(query, replyID);
+			if (result.next()) {
+				return result.getInt("user_id");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		throw new Error("There is no user_id with that replyID");
+		
+	}
 
 	// public static void main(String[] args) {
 	// CommentDAO commentDAO = new CommentDAO();
