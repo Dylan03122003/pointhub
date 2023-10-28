@@ -27,11 +27,16 @@ public class QuestionDAO extends BaseDAO {
 	}
 
 	public ArrayList<Question> getNewestQuestions(String topicName,
-			int rowsPerPage, int currentPage) {
+			int rowsPerPage, int currentPage, String searchKey) {
 
 		ArrayList<Question> questions = new ArrayList<Question>();
 		String query = null;
 		ResultSet result = null;
+		boolean hasSearchKey = searchKey != null && !searchKey.isEmpty();
+
+		if (hasSearchKey)
+			searchKey = "%" + searchKey + "%";
+
 		try {
 
 			if (topicName.equals("All topics")) {
@@ -40,12 +45,20 @@ public class QuestionDAO extends BaseDAO {
 						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content, v.view_count "
 						+ "FROM questions q "
 						+ "JOIN users u ON q.user_id = u.user_id "
-						+ "LEFT JOIN question_views v ON q.question_id = v.question_id "
-						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content, v.view_count "
-						+ "ORDER BY createdAt DESC " + "LIMIT ? OFFSET ?";
+						+ "LEFT JOIN question_views v ON q.question_id = v.question_id ";
 
-				result = executeQuery(query, rowsPerPage,
-						(currentPage - 1) * rowsPerPage);
+				if (hasSearchKey)
+					query += "WHERE q.title LIKE ? OR q.question_content LIKE ? ";
+
+				query += "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content, v.view_count "
+						+ "ORDER BY createdAt DESC LIMIT ? OFFSET ?";
+				if (hasSearchKey) {
+					result = executeQuery(query, searchKey, searchKey,
+							rowsPerPage, (currentPage - 1) * rowsPerPage);
+				} else {
+					result = executeQuery(query, rowsPerPage,
+							(currentPage - 1) * rowsPerPage);
+				}
 
 			} else {
 				query = "SELECT q.question_id, u.user_id, u.username, u.photo, q.created_at AS createdAt, "
@@ -54,12 +67,21 @@ public class QuestionDAO extends BaseDAO {
 						+ "JOIN users u ON q.user_id = u.user_id "
 						+ "JOIN topics t ON q.topic_id = t.topic_id "
 						+ "LEFT JOIN question_views v ON q.question_id = v.question_id "
-						+ "WHERE t.topic_name = ? "
-						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content, v.view_count "
-						+ "ORDER BY createdAt DESC LIMIT ? OFFSET ?";
+						+ "WHERE t.topic_name = ? ";
 
-				result = executeQuery(query, topicName, rowsPerPage,
-						(currentPage - 1) * rowsPerPage);
+				if (hasSearchKey)
+					query += "AND (q.title LIKE ? OR q.question_content LIKE ?) ";
+
+				query += "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content, v.view_count "
+						+ "ORDER BY createdAt DESC LIMIT ? OFFSET ?";
+				if (hasSearchKey) {
+					result = executeQuery(query, topicName, searchKey,
+							searchKey, rowsPerPage,
+							(currentPage - 1) * rowsPerPage);
+				} else {
+					result = executeQuery(query, topicName, rowsPerPage,
+							(currentPage - 1) * rowsPerPage);
+				}
 
 			}
 
@@ -250,6 +272,42 @@ public class QuestionDAO extends BaseDAO {
 
 	public int getTotalQuestionRecords() {
 		return getTotalRecords("questions");
+	}
+
+	public int getTotalQuestionRecordsBySearchkey(String searchKey) {
+		searchKey = "%" + searchKey + "%";
+		String query = "SELECT COUNT(*) as total_questions FROM questions WHERE title LIKE ? OR question_content LIKE ?";
+
+		try {
+			ResultSet result = executeQuery(query, searchKey, searchKey);
+			if (result.next()) {
+				return result.getInt("total_questions");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
+
+	public int getTotalQuestionRecordsBySearchkeyAndTopic(String searchKey,
+			int topicID) {
+		searchKey = "%" + searchKey + "%";
+		String query = "SELECT COUNT(*) as total_questions FROM questions WHERE topic_id = ? AND (title LIKE ? OR question_content LIKE ?)";
+
+		try {
+			ResultSet result = executeQuery(query, topicID, searchKey,
+					searchKey);
+			if (result.next()) {
+				return result.getInt("total_questions");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return -1;
 	}
 
 	public int getTotalQuestionsByTopic(int topicID) {
