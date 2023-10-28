@@ -16,6 +16,7 @@ import java.util.Date;
 import com.google.gson.Gson;
 
 import DAO.CommentDAO;
+import DAO.NotificationDAO;
 import DAO.UserDAO;
 
 /**
@@ -51,7 +52,7 @@ public class ReplyController extends HttpServlet {
 		}
 
 	}
-	
+
 	private void dislikeReply(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		int replyID = Integer.parseInt(request.getParameter("replyID"));
@@ -61,10 +62,26 @@ public class ReplyController extends HttpServlet {
 
 		boolean isDisliked = false;
 		try {
-			isDisliked = commentDAO.dislikeReply(currentUserID, commentID, replyID);
+			isDisliked = commentDAO.dislikeReply(currentUserID, commentID,
+					replyID);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+		// Handle notifying user
+		int userIDOfReply = commentDAO.getUserIDOfReply(replyID);
+		boolean replyOfCurrentUser = Authentication
+				.getCurrentUserID(request) == userIDOfReply;
+
+		if (!replyOfCurrentUser && isDisliked) {
+			NotificationDAO notificationDAO = new NotificationDAO();
+			String notificationMessage = Authentication
+					.getCurrentUsername(request) + " disliked your reply.";
+
+			int questionID = commentDAO.getQuestionIDOfComment(commentID);
+			notificationDAO.notifyInteractingQuestion(userIDOfReply, questionID,
+					notificationMessage);
 		}
 
 		String json = new Gson().toJson(isDisliked);
@@ -73,7 +90,7 @@ public class ReplyController extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);
 	}
-	
+
 	private void likeReplyHandler(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		int replyID = Integer.parseInt(request.getParameter("replyID"));
@@ -87,6 +104,21 @@ public class ReplyController extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+		// Handle notifying user
+		int userIDOfReply = commentDAO.getUserIDOfReply(replyID);
+		boolean replyOfCurrentUser = Authentication
+				.getCurrentUserID(request) == userIDOfReply;
+
+		if (!replyOfCurrentUser && isLiked) {
+			NotificationDAO notificationDAO = new NotificationDAO();
+			String notificationMessage = Authentication
+					.getCurrentUsername(request) + " liked your reply.";
+
+			int questionID = commentDAO.getQuestionIDOfComment(commentID);
+			notificationDAO.notifyInteractingQuestion(userIDOfReply, questionID,
+					notificationMessage);
 		}
 
 		String json = new Gson().toJson(isLiked);
@@ -111,7 +143,8 @@ public class ReplyController extends HttpServlet {
 
 		String currentUsername = Authentication.getCurrentUsername(request);
 		User user = userDAO.getUserProfile(currentUserID, userReplyID); // HERE
-		User currentUserProfile = userDAO.getUserProfile(currentUserID, currentUserID); // HERE
+		User currentUserProfile = userDAO.getUserProfile(currentUserID,
+				currentUserID); // HERE
 
 		ReplyComment reply = new ReplyComment();
 		reply.setReplyID(replyID);
@@ -126,8 +159,13 @@ public class ReplyController extends HttpServlet {
 		reply.setLikes(0);
 		reply.setDislikes(0);
 
-		String json = new Gson().toJson(reply);
+		NotificationDAO notificationDAO = new NotificationDAO();
+		String notificationMessage = currentUsername
+				+ " have replied your comment";
+		notificationDAO.notifyInteractingQuestion(userReplyID, questionID,
+				notificationMessage);
 
+		String json = new Gson().toJson(reply);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);

@@ -67,7 +67,7 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 %>
 
 <body class="" data-questionID="<%=question.getQuestionID()%>"
-	data-userID="<%=Authentication.getCurrentUserID(request)%>">
+	data-userID="<%=Authentication.getCurrentUserID(request)%>" data-userIDOfQuestion="<%=question.getUserID()%>">
 
 	<!-- Confirm delete question modal --------------------------------------------------------------------->
 	<div

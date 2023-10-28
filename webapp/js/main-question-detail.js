@@ -3,6 +3,7 @@ import { showToastInHomePage } from "./home.js"
 
 const questionID = $("body").data("questionid");
 const currentUserID = $("body").data("userid");
+const userIDOfQuestion = $("body").data("useridofquestion");
 const reportModal = $("#report-modal");
 const reportOverlay = $("#report-overlay");
 const reportBtn = $(".report-btn");
@@ -89,10 +90,11 @@ const handleUpvote = () => {
 		openRequireLoginModal()
 		return
 	}
+	
 
 	$.ajax({
 		type: "GET",
-		url: `vote-question?questionId=${questionID}&voteType=upvote`,
+		url: `vote-question?questionId=${questionID}&voteType=upvote&userIDOfQuestion=${userIDOfQuestion}`,
 		dataType: "json",
 		success: function(isVoted) {
 			if (isVoted) {
@@ -116,7 +118,7 @@ const handleDownvote = () => {
 
 	$.ajax({
 		type: "GET",
-		url: `vote-question?questionId=${questionID}&voteType=downvote`,
+		url: `vote-question?questionId=${questionID}&voteType=downvote&userIDOfQuestion=${userIDOfQuestion}`,
 		dataType: "json",
 		success: function(isVoted) {
 			if (isVoted) {
