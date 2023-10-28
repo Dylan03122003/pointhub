@@ -17,7 +17,7 @@ function renderPost(post) {
 	let tagElements = "";
 
 	for (const tag of post.tagContents) {
-		tagElements += `<div>${tag}</div>`;
+		tagElements += `<span class="px-4 py-1 rounded-md bg-orange-100 text-orange-500">${tag}</span>`;
 	}
 
 	return `
@@ -25,14 +25,14 @@ function renderPost(post) {
 <a href="question-detail?question_id=${post.questionID}&user_id=${userProfileID}"
 						class="card">
 		<div class="card-body">
-							<h5 class="card-title">${post.title}</h5>
-							<p>Topic: ${post.topicName}</p>
-							<p>Votes: ${post.voteSum}</p>
-							<div class="card-tags">
-
+							<h5 class="card-title font-bold text-gray-600">${post.title}</h5>
+							<p class="text-[12px] text-gray-600">Topic: <span class="text-orange-500">${post.topicName}<span></p>
+							<p class="text-[12px] text-gray-600 ">Votes: <span class="text-orange-500">${post.voteSum}</span></p>
+							
+							<div class="card-tags flex items-center justify-start flex-wrap gap-2">
 								${tagElements}
-
 							</div>
+							
 						</div>
 		<div class="card-footer text-muted">${post.createdAt}</div>
 </a>	

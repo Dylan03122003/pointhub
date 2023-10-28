@@ -103,13 +103,13 @@ int currentUserID = (int) Authentication.getCurrentUserID(request);
 
 			<div class="content" id="question">
 				<div class="card-container"></div>
-				<button class="load-more-post-btn" type="button">Load more</button>
+				<div class="flex items-center pb-[10px] justify-center"><button class="load-more-post-btn flex flex-col justify-center pl-[10px] pr-[10px] text-[13px] font-bold items-center text-orange-500 mt-[5px] rounded-lg" type="button">See More<svg xmlns="http://www.w3.org/2000/svg" height="20" fill="orange" viewBox="0 -960 960 960" width="24"><path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/></svg></button>
+				</div>
 			</div>
 			<div class="content" id="bookmark">
 				<div class="card-bookmark-container"></div>
-				<button class="load-more-bookmark-btn" type="button">Load
-					more</button>
-			</div>
+<div class="flex items-center pb-[10px] justify-center"><button class="load-more-bookmark-btn flex  flex-col justify-center pl-[10px] pr-[10px] text-[13px] font-bold items-center text-orange-500 mt-[5px] rounded-lg" type="button">See More<svg xmlns="http://www.w3.org/2000/svg" height="20" fill="orange" viewBox="0 -960 960 960" width="24"><path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/></svg></button>
+				</div>			</div>
 		</div>
 	</div>
 </body>
