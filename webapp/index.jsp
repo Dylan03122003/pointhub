@@ -1,5 +1,7 @@
+<%@page import="DAO.UserDAO"%>
 <%@page import="model.Question"%>
 <%@page import="model.Topic"%>
+<%@page import="model.User"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -39,6 +41,7 @@ ArrayList<Question> questions = (ArrayList<Question>) request.getAttribute("ques
 ArrayList<Topic> topics = (ArrayList<Topic>) request.getAttribute("topics");
 String activeTopic = (String) request.getAttribute("activeTopic");
 String searchKey = (String) request.getAttribute("searchKey");
+ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
 %>
 
 <body>
@@ -46,20 +49,39 @@ String searchKey = (String) request.getAttribute("searchKey");
 	<div id="toast"
 		class="z-10 fixed top-20 right-0 p-4 m-4 text-white rounded-md shadow-lg hidden"></div>
 
-	<form action="questions" method="get">
-		<input type="hidden" name="page" value="1" /> <input
-			type="hidden" name="activeTopic" value="<%=activeTopic%>" /> <input
-			value="<%=searchKey%>"
-			placeholder="How to remove an object in JavaScript.." type="text"
+	<!-- START TOP 5 POPULAR USERS  -------------------------------------------------------------------------------->
+	<div>
+		<c:forEach var="user" items="<%=topFivePopularUsers%>">
+			<a href="user-profile?userID=${user.getUserID()}"> <img alt="" src="img/${user.getPhoto()}"
+				class="w-[70px] h-[70px] object-cover rounded-full">
+				<p>${user.getUsername()}</p>
+				<p>
+					<span>${user.getNumberOfFollowers()}</span> <span>followers</span>
+				</p>
+			</a>
+		</c:forEach>
+	</div>
+
+	<!-- END TOP 5 POPULAR USERS  -------------------------------------------------------------------------------->
+
+
+	<form action="questions" method="get"
+		class="flex items-center justify-center  gap-3">
+		<input type="hidden" name="page" value="1" /> <input type="hidden"
+			name="activeTopic" value="<%=activeTopic%>" /> <input
+			value="<%=searchKey%>" required="required"
+			placeholder="Search questions by title or content" type="text"
 			name="searchQuestionKey"
-			class="py-1 px-3 border-[1px] border-solid border-gray-400 rounded-md" />
-		<button type="submit">Search</button>
+			class="w-[250px] md:w-[600px]  py-1 px-3 border-[1px] border-solid border-gray-400 rounded-md" />
+		<button class="bg-orange-400 text-white px-3 py-1 rounded-md"
+			type="submit">Search</button>
 	</form>
 
 	<div class="right-small-container">
 		<div class="category category-container" style="padding-top: 40px">
 			<c:forEach var="topic" items="<%=topics%>">
-				<a href="questions?activeTopic=${topic.getTopicName()}&searchQuestionKey=<%=searchKey%>"
+				<a
+					href="questions?activeTopic=${topic.getTopicName()}&searchQuestionKey=<%=searchKey%>"
 					class="${topic.getTopicName().equals(activeTopic) ? 'active-topic' : ''}">${topic.getTopicName()}</a>
 			</c:forEach>
 		</div>
@@ -125,7 +147,8 @@ String searchKey = (String) request.getAttribute("searchKey");
 					</c:choose>
 					<div class="flex items-center justify-center gap-5 flex-wrap">
 						<c:forEach var="i" begin="1" end="${totalQuestionPages}">
-							<a href="questions?activeTopic=${activeTopic}&page=${i}&searchQuestionKey=<%=searchKey%>"
+							<a
+								href="questions?activeTopic=${activeTopic}&page=${i}&searchQuestionKey=<%=searchKey%>"
 								class="flex items-center justify-center border border-solid  rounded-md w-8 h-8 ${i == currentQuestionPage ? 'bg-orange-100 text-orange-500 border-orange-400' : 'text-gray-500 border-gray-400'}">${i}
 							</a>
 						</c:forEach>

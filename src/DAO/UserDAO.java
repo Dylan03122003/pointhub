@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.User;
 import util.Authentication;
+import util.CustomLog;
 
 public class UserDAO extends BaseDAO {
 
@@ -335,4 +336,31 @@ public class UserDAO extends BaseDAO {
 			e.printStackTrace();
 		}
 	}
+
+	public ArrayList<User> getTopFivePopularUsers() {
+		ArrayList<User> topFivePopularUsers = new ArrayList<User>();
+		String query = "SELECT f.followed_user_id, COUNT(*) AS follower_count, u.username, u.photo "
+				+ "FROM following_relationships f "
+				+ "JOIN users u ON f.followed_user_id = u.user_id "
+				+ "GROUP BY f.followed_user_id, u.username, u.photo "
+				+ "ORDER BY follower_count DESC " + "LIMIT 5;";
+
+		try {
+			ResultSet resultSet = executeQuery(query);
+			while (resultSet.next()) {
+				int followedUserId = resultSet.getInt("followed_user_id");
+				int followerCount = resultSet.getInt("follower_count");
+				String username = resultSet.getString("username");
+				String photo = resultSet.getString("photo");
+				User user = new User(followedUserId, username, photo,
+						followerCount);
+				topFivePopularUsers.add(user);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return topFivePopularUsers;
+	}
+
 }
