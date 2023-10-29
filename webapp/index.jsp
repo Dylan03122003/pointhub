@@ -96,7 +96,7 @@ ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
                   </c:url>"
 					class="question-item">
 					<div class="question-author">
-						<img src="img/${question.getUserPhoto()}" />
+						<img src="img/${question.getUserPhoto()}" class="object-cover" />
 						<div class="question-author-name">
 							<h4>${question.getUsername()}</h4>
 							<p>${question.getCreatedAt()}</p>
