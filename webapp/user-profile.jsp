@@ -37,6 +37,7 @@ ArrayList<Notification> notifications = new NotificationDAO().getNotifications(c
 	
 	<!-- Notifications ------------------------------------------------------------------------->
 	<div class="bg-blue-100 m-2">
+	<h2 class="text-red-300">Cái này test thôi</h2>
 		<c:forEach var="notification" items="<%=notifications%>">
 			<p>${notification.getMessage()}</p>
 			<p>${notification.getCreatedAt()}</p>
