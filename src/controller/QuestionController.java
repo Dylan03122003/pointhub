@@ -331,4 +331,9 @@ public class QuestionController extends HttpServlet {
 		return totalQuestions;
 	}
 
+	// private ArrayList<Integer> getResponsivePages(double totalPages,
+	// int currentPage) {
+	// return new ArrayList<Integer>();
+	// }
+
 }

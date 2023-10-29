@@ -7,6 +7,7 @@
 	box-sizing: border-box;
 	font-family: 'Poppins', sans-serif;
 }
+
 .navbar {
 	display: flex;
 	padding: 20px 30px 10px;
@@ -17,7 +18,7 @@
 	left: 0;
 	right: 0;
 	background-color: #fff;
-	box-shadow: 0px 5px 15px  rgb(69 67 96 / 10%);
+	box-shadow: 0px 5px 15px rgb(69 67 96 / 10%);
 	z-index: 1;
 }
 
@@ -94,6 +95,7 @@
 .navbar .user-icons>.personal-icon {
 	width: 40px;
 	height: 40px;
+	object-fit: cover;
 }
 
 /* Dropdown menu */
@@ -104,6 +106,7 @@
 	border-radius: 50%;
 	display: block;
 	margin: auto;
+	object-fit: cover;
 }
 
 .user-icons .dropdown-menu {
