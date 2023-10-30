@@ -1,7 +1,7 @@
 let about = document.getElementById("about");
 let question = document.getElementById("question");
 let bookmark = document.getElementById("bookmark");
-
+const requireLoginModal = $(".require-login-modal")
 let aboutNav = document.getElementById("about-nav");
 let questionNav = document.getElementById("posts-nav");
 let bookmarkNav = document.getElementById("bookmarks-nav");
@@ -64,21 +64,19 @@ const handleShowNav = (event) => {
 	question.style.display = "none";
 	bookmark.style.display = "none";
 	questionNav.style.opacity = "0.5";
-	bookmarkNav.style.opacity = "0.5";
+	if (bookmarkNav)
+		bookmarkNav.style.opacity = "0.5";
 	aboutNav.style.opacity = "0.5";
 
 	content.style.display = "block";
 	event.target.style.opacity = "1";
 }
 
-function checkUserLogin() {
-
-}
 
 function handleFollowUser() {
 	const currentUserID = $("body").data("currentuserid");
 	if (currentUserID === -1) {
-		// TODO: show require login modal
+		openRequireLoginModal()
 		return
 	}
 
@@ -117,14 +115,22 @@ function handleShowUserPosts() {
 		dataType: "json",
 		success: function(userPosts) {
 			// questionID, title, createdAt, tagContents, voteSum, topicName
+			const hasPosts = userPosts.length > 0;
 			$(".card-container").empty();
 
-			let userPostTemplates = ""
-			for (const post of userPosts) {
-				userPostTemplates += renderPost(post);
+			if (hasPosts) {
+				let userPostTemplates = ""
+				for (const post of userPosts) {
+					userPostTemplates += renderPost(post);
+				}
+				$(".card-container").data("userpostssize", userPosts.length)
+				$(".card-container").append(userPostTemplates)
+			} else {
+				$(".card-container").append("<p class='text-gray-600 p-5'>There is no posts</p>")
+				$(".load-more-post-btn").remove()
 			}
-			$(".card-container").data("userpostssize", userPosts.length)
-			$(".card-container").append(userPostTemplates)
+
+
 		},
 		error: function() {
 			alert("Failed to load data from the server.");
@@ -165,14 +171,21 @@ function handleShowUserBookmarks() {
 		dataType: "json",
 		success: function(userBookmarks) {
 			// questionID, title, createdAt, tagContents, voteSum, topicName
+			const hasBookmarks = userBookmarks.length > 0;
 			$(".card-bookmark-container").empty();
-
-			let userPostTemplates = ""
-			for (const bookmark of userBookmarks) {
-				userPostTemplates += renderPost(bookmark);
+			if (hasBookmarks) {
+				let userPostTemplates = ""
+				for (const bookmark of userBookmarks) {
+					userPostTemplates += renderPost(bookmark);
+				}
+				$(".card-bookmark-container").data("userbookmarkssize", userBookmarks.length)
+				$(".card-bookmark-container").append(userPostTemplates)
+			} else {
+				$(".card-bookmark-container").append("<p class='text-gray-600 p-5'>There is no bookmarks</p>")
+				$(".load-more-bookmark-btn").remove()
 			}
-			$(".card-bookmark-container").data("userbookmarkssize", userBookmarks.length)
-			$(".card-bookmark-container").append(userPostTemplates)
+
+
 
 		},
 		error: function() {
@@ -232,7 +245,9 @@ function handleShowFollowers() {
 				$(".followers-container").data("followerssize", follwers.length)
 				$(".followers-container").append(followerTemplates);
 			} else {
-
+				$(".followers-container").append("<p class='text-gray-600'>There is no followers</p>");
+				$(".followers-container").removeClass("overflow-y-scroll");
+				$(".view-more-followers-btn").remove();
 			}
 			showFollowersModal()
 
@@ -265,11 +280,26 @@ function handleViewMoreFollowers() {
 	});
 }
 
+export const openRequireLoginModal = () => {
+	requireLoginModal.removeClass("hidden");
+	requireLoginModal.addClass("flex");
+}
+
+const closeRequireLoginModal = () => {
+	requireLoginModal.removeClass("flex");
+	requireLoginModal.addClass("hidden");
+}
+
 // EVENT HANDLERS --------------------------------------------------------------------------------------------
 
 $(".followers-content").click(function(event) {
 	event.stopPropagation();
 });
+
+$(".require-login-content").click(function(event) {
+	event.stopPropagation();
+})
+
 
 $("#about-nav").click(handleShowNav)
 
@@ -296,3 +326,6 @@ $(".view-followers-btn").click(handleShowFollowers)
 $(".followers-modal").click(closeFollowersModal)
 $(".followers-modal-btn").click(closeFollowersModal)
 $(".view-more-followers-btn").click(handleViewMoreFollowers)
+
+requireLoginModal.click(closeRequireLoginModal)
+$(".require-login-close-btn").click(closeRequireLoginModal)

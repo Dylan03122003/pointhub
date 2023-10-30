@@ -28,7 +28,7 @@ ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 %>
 <body>
 	<jsp:include page="navbar.jsp" />
-	
+
 	<div class="userList">
 		<div class="searchItem">
 			<input type="text" placeholder="Search user name"> <i
@@ -52,10 +52,9 @@ ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 					<%
 					for (User user : users) {
 					%>
-					<tr class="row">
-						<td><img
-							src="img/<%=user.getPhoto()%>"
-							alt="" srcset=""></td>
+					<tr class="row cursor-pointer" data-userid="<%=user.getUserID()%>">
+						<td class="flex items-center justify-center mt-[15px]"><img
+							src="img/<%=user.getPhoto()%>" alt="" srcset=""></td>
 						<td><%=user.getUsername()%></td>
 						<td><%=user.getEmail()%></td>
 						<td class="action-links"><a
@@ -70,32 +69,62 @@ ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 		</div>
 	</div>
 
-	<div class="mt-4">
-		<c:choose>
-			<c:when test="${currentUserPage > 1}">
-				<a href="user-list?page=${currentUserPage - 1}"
-					class="text-blue-500 hover:underline">prev</a>
-			</c:when>
-			<c:otherwise>
-				<a href="#" class=" disabled text-gray-500 cursor-not-allowed">prev</a>
-			</c:otherwise>
-		</c:choose>
+	<c:if test="${totalUserPages == 0}">
+		<p class="text-gray-500 text-medium text-center">There is users
+			currently</p>
+	</c:if>
 
-		<c:forEach var="i" begin="1" end="${totalUserPages}">
-			<a href="user-list?page=${i}"
-				class="ml-2 text-blue-500 hover:underline ${i == currentUserPage ? 'active' : ''}">${i}
-			</a>
-		</c:forEach>
+	<c:if test="${totalUserPages > 0}">
+		<div class="flex items-center justify-center gap-6">
+			<c:choose>
+				<c:when test="${currentUserPage > 1}">
+					<a href="user-list?page=${currentUserPage - 1}"
+						class="bg-orange-400 text-white px-3 py-1 rounded-md"> <i
+						class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span>
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a href="#"
+						class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
+						<i class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span>
+					</a>
+				</c:otherwise>
+			</c:choose>
+			<div class="flex items-center justify-center gap-5 flex-wrap">
+				<c:forEach var="i" begin="1" end="${totalUserPages}">
+					<a href="user-list?page=${i}"
+						class="flex items-center justify-center border border-solid  rounded-md w-8 h-8 ${i == currentUserPage ? 'bg-orange-100 text-orange-500 border-orange-400' : 'text-gray-500 border-gray-400'}">${i}
+					</a>
+				</c:forEach>
+			</div>
+			<c:choose>
+				<c:when test="${currentUserPage < totalUserPages}">
+					<a href="user-list?page=${currentUserPage + 1}"
+						class="bg-orange-400 text-white px-3 py-1 rounded-md"> <span
+						class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i></a>
+				</c:when>
+				<c:otherwise>
+					<a href="#"
+						class="bg-gray-100 text-gray-400 px-3 py-1 rounded-md cursor-not-allowed">
+						<span class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i>
+					</a>
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</c:if>
 
-		<c:choose>
-			<c:when test="${currentUserPage < totalUserPages}">
-				<a href="user-list?page=${currentUserPage + 1}"
-					class="ml-2 text-blue-500 hover:underline">next</a>
-			</c:when>
-			<c:otherwise>
-				<a href="#" class=" disabled  ml-2 text-gray-500 cursor-not-allowed">next</a>
-			</c:otherwise>
-		</c:choose>
-	</div>
+
+	<script>
+		const rows = document.querySelectorAll(".row");
+
+		rows.forEach(function(row) {
+			row.addEventListener("click", function() {
+				const userId = this.getAttribute("data-userid");
+				window.location.href = "user-profile?userID=" + userId;
+			});
+		});
+	</script>
+
+
 </body>
 </html>
