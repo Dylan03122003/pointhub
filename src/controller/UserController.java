@@ -59,6 +59,9 @@ public class UserController extends HttpServlet {
 			case "/follow-user" :
 				followUser(request, response);
 				break;
+			case "/view-followers" :
+				viewFollowers(request, response);
+				break;
 			default :
 
 		}
@@ -74,6 +77,25 @@ public class UserController extends HttpServlet {
 			default :
 
 		}
+	}
+
+	private void viewFollowers(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		int followedUserID = Integer
+				.parseInt(request.getParameter("followedUserID"));
+		int currentFollowersSize = 0;
+
+		if (request.getParameter("followersSize") != null) {
+			currentFollowersSize = Integer
+					.parseInt(request.getParameter("followersSize"));
+		}
+		int followersLimit = 2;
+		ArrayList<User> followers = userDAO.getFollowers(followedUserID,
+				followersLimit, currentFollowersSize);
+		String json = new Gson().toJson(followers);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 	}
 
 	private void followUser(HttpServletRequest request,
