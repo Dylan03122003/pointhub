@@ -226,14 +226,13 @@ html {
 	.viewProfile .profile .logo-social {
 		justify-content: center;
 	}
-.body-item {
-	width: 450px;
-}
 	#btn-update,
 	#follow-btn {
 		right: 50px;
 	}
-
+.body-item {
+	width: 450px;
+}
 	.viewProfile .profile img {
 		margin-top: 33px;
 	}
