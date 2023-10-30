@@ -41,9 +41,9 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 			class="fa-solid fa-bars menu-bar"></i>
 		</label> <a href="/PointHubWebsite" class="logo">
 			<div class="logo-img">
-				<img src="./img/logo_1.png" alt="" />
+				<img style="height: auto;" src="./img/logo_1.png" alt="" />
 			</div>
-			<h3>PointHub</h3>
+			<h3 class="font-bold text-lg">PointHub</h3>
 		</a> <input type="checkbox" class="nav-input" id="nav-mobile" /> <label
 			class="navbar-links" for="nav-mobile">
 			<ul>
