@@ -228,7 +228,7 @@ public class QuestionController extends HttpServlet {
 
 		int totalQuestions = getTotalQuestionRecords(activeTopic, activeTopicID,
 				searchKey);
-
+		
 		double totalQuestionsPages = (double) Math
 				.ceil((double) totalQuestions / (double) rowsPerPage);
 
