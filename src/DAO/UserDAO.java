@@ -362,5 +362,33 @@ public class UserDAO extends BaseDAO {
 		}
 		return topFivePopularUsers;
 	}
+	public ArrayList<User> getFollowers(int followedUserID, int limit, int currentFollowersSize) {
+		ArrayList<User> followers = new ArrayList<User>();
+		String query = "SELECT f.user_id, u.username, u.email, u.photo "
+				+ "FROM following_relationships AS f "
+				+ "JOIN users AS u ON f.user_id = u.user_id "
+				+ "WHERE f.followed_user_id = ? LIMIT ? OFFSET ?";
+
+		try {
+			ResultSet result = executeQuery(query, followedUserID, limit, currentFollowersSize);
+			while (result.next()) {
+				int userID = result.getInt("user_id");
+				String username = result.getString("username");
+				String email = result.getString("email");
+				String photo = result.getString("photo");
+
+				User user = new User(userID, username, email, photo);
+
+				followers.add(user);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return followers;
+	}
+
+
 
 }

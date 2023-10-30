@@ -40,6 +40,20 @@ function renderPost(post) {
 `
 }
 
+function renderFollower(follower) {
+	return `
+				<a href="user-profile?userID=${follower.userID}" class="flex gap-4 mb-5">
+					<img class="w-[50px] h-[50px] object-cover rounded-full" alt=""
+						src="img/${follower.photo}">
+					<div>
+						<h2 class="font-medium text-gray-700">@${follower.username}</h2>
+						<p class="text-gray-600">${follower.email}</p>
+					</div>
+				</a>
+	
+	`
+}
+
 
 // FUNCTION HANDLERS
 
@@ -159,7 +173,7 @@ function handleShowUserBookmarks() {
 			}
 			$(".card-bookmark-container").data("userbookmarkssize", userBookmarks.length)
 			$(".card-bookmark-container").append(userPostTemplates)
-			
+
 		},
 		error: function() {
 			alert("Failed to load data from the server.");
@@ -190,7 +204,72 @@ function handleLoadMoreBookmark() {
 	});
 }
 
+function showFollowersModal() {
+	$(".followers-modal").removeClass("hidden")
+	$(".followers-modal").addClass("flex")
+}
+
+function closeFollowersModal() {
+	$(".followers-modal").removeClass("flex")
+	$(".followers-modal").addClass("hidden")
+}
+
+function handleShowFollowers() {
+	const userProfileID = $("body").data("userprofileid");
+
+	$.ajax({
+		type: "GET",
+		url: `view-followers?followedUserID=${userProfileID}`,
+		dataType: "json",
+		success: function(follwers) {
+			$(".followers-container").empty()
+			const hasFollowers = follwers.length !== 0;
+			if (hasFollowers) {
+				let followerTemplates = "";
+				for (const follower of follwers) {
+					followerTemplates += renderFollower(follower);
+				}
+				$(".followers-container").data("followerssize", follwers.length)
+				$(".followers-container").append(followerTemplates);
+			} else {
+
+			}
+			showFollowersModal()
+
+		},
+		error: function() {
+			alert("Failed to load data from the server.");
+		},
+	});
+}
+
+function handleViewMoreFollowers() {
+	const userProfileID = $("body").data("userprofileid");
+	const currentFollowersSize = $(".followers-container").data("followerssize");
+
+	$.ajax({
+		type: "GET",
+		url: `view-followers?followedUserID=${userProfileID}&followersSize=${currentFollowersSize}`,
+		dataType: "json",
+		success: function(follwers) {
+			let followerTemplates = ""
+			for (const follower of follwers) {
+				followerTemplates += renderFollower(follower);
+			}
+			$(".followers-container").data("followerssize", currentFollowersSize + follwers.length)
+			$(".followers-container").append(followerTemplates)
+		},
+		error: function() {
+			alert("Failed to load data from the server.");
+		},
+	});
+}
+
 // EVENT HANDLERS --------------------------------------------------------------------------------------------
+
+$(".followers-content").click(function(event) {
+	event.stopPropagation();
+});
 
 $("#about-nav").click(handleShowNav)
 
@@ -212,3 +291,8 @@ $("#follow-btn").click(handleFollowUser)
 
 $(".load-more-post-btn").click(handleLoadMoreQuestions)
 $(".load-more-bookmark-btn").click(handleLoadMoreBookmark)
+$(".view-followers-btn").click(handleShowFollowers)
+
+$(".followers-modal").click(closeFollowersModal)
+$(".followers-modal-btn").click(closeFollowersModal)
+$(".view-more-followers-btn").click(handleViewMoreFollowers)
