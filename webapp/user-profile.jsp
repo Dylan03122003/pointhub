@@ -35,6 +35,7 @@ ArrayList<Notification> notifications = new NotificationDAO().getNotifications(c
 	data-currentuserid="<%=currentUserID%>">
 	<jsp:include page="navbar.jsp" />
 
+
 	<!-- Notifications ------------------------------------------------------------------------->
 	<div class="bg-blue-100 m-2">
 		<h2 class="text-red-300">Cái này test thôi</h2>
@@ -100,7 +101,7 @@ ArrayList<Notification> notifications = new NotificationDAO().getNotifications(c
 	<button class="view-followers-btn">View followers (Để tạm
 		thôi)</button>
 
-	<div class="viewProfile">
+	<div class="viewProfile flex flex-col">
 		<div class="profile">
 			<img alt="" src="img/<%=user.getPhoto()%>">
 			<div class="content">

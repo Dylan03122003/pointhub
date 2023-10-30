@@ -19,6 +19,7 @@ html {
 	margin-top: 70px;
 	box-sizing: border-box;
 	width: fit-content;
+	justify-content: center;dđ
 }
 
 .viewProfile .profile {
@@ -41,7 +42,7 @@ html {
 
 .viewProfile .profile #username {
 	font-size: 30px;
-	font-weight: 600;
+	font-weight: 500;
 	letter-spacing: 1px;
 }
 
@@ -128,7 +129,7 @@ html {
 /* ------ BODY ----- */
 .body-item {
 	margin-top: 30px;
-	width: 100%;
+	width: 920px;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	font-size: 18px;
 	border-radius: 5px;
@@ -185,13 +186,15 @@ html {
 		width: 100%;
 		min-width: 360px;
 	}
+	.body-item {
+		width: 680px;
+	}
 }
 
-@media (max-width: 729px) {
+@media (max-width: 732px) {
 	.viewProfile {
 		margin: 10px;
 	}
-
 	.viewProfile .profile .stats1 {
 		display: none;
 	}
@@ -204,11 +207,14 @@ html {
 		margin-top: auto;
 		margin-bottom: auto;
 	}
+	.body-item{
+		width: 500px;
+	}
 }
 
 @media (max-width: 600px) {
 	.viewProfile .profile {
-		display: block;
+		justify-content: center;
 		text-align: center;
 	}
 
@@ -223,7 +229,7 @@ html {
 
 	#btn-update,
 	#follow-btn {
-		right: 10px;
+		right: 50px;
 	}
 
 	.viewProfile .profile img {
