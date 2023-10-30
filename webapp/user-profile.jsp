@@ -31,7 +31,7 @@ int currentUserID = (int) Authentication.getCurrentUserID(request);
 	data-currentuserid="<%=currentUserID%>">
 	<jsp:include page="navbar.jsp" />
 
-	<div class="viewProfile">
+	<div class="viewProfile flex flex-col">
 		<div class="profile">
 			<img alt="" src="img/<%=user.getPhoto()%>">
 			<div class="content">
