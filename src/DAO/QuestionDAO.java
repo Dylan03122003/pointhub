@@ -27,34 +27,61 @@ public class QuestionDAO extends BaseDAO {
 	}
 
 	public ArrayList<Question> getNewestQuestions(String topicName,
-			int rowsPerPage, int currentPage) {
+			int rowsPerPage, int currentPage, String searchKey) {
 
 		ArrayList<Question> questions = new ArrayList<Question>();
 		String query = null;
 		ResultSet result = null;
+		boolean hasSearchKey = searchKey != null && !searchKey.isEmpty();
+
+		if (hasSearchKey)
+			searchKey = "%" + searchKey + "%";
+
 		try {
 
 			if (topicName.equals("All topics")) {
 				query = "SELECT "
 						+ "q.question_id, u.user_id, u.username, u.photo, q.created_at AS createdAt, "
-						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
-						+ "FROM questions q JOIN users u ON q.user_id = u.user_id "
-						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
-						+ "ORDER BY createdAt DESC " + "LIMIT ? OFFSET ?";
-				result = executeQuery(query, rowsPerPage,
-						(currentPage - 1) * rowsPerPage);
+						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content, v.view_count "
+						+ "FROM questions q "
+						+ "JOIN users u ON q.user_id = u.user_id "
+						+ "LEFT JOIN question_views v ON q.question_id = v.question_id ";
+
+				if (hasSearchKey)
+					query += "WHERE q.title LIKE ? OR q.question_content LIKE ? ";
+
+				query += "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content, v.view_count "
+						+ "ORDER BY createdAt DESC LIMIT ? OFFSET ?";
+				if (hasSearchKey) {
+					result = executeQuery(query, searchKey, searchKey,
+							rowsPerPage, (currentPage - 1) * rowsPerPage);
+				} else {
+					result = executeQuery(query, rowsPerPage,
+							(currentPage - 1) * rowsPerPage);
+				}
 
 			} else {
 				query = "SELECT q.question_id, u.user_id, u.username, u.photo, q.created_at AS createdAt, "
-						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content "
+						+ "q.title, q.question_content AS questionContent, q.tags AS tag_content, v.view_count "
 						+ "FROM questions q "
 						+ "JOIN users u ON q.user_id = u.user_id "
 						+ "JOIN topics t ON q.topic_id = t.topic_id "
-						+ "WHERE t.topic_name = ? "
-						+ "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content "
+						+ "LEFT JOIN question_views v ON q.question_id = v.question_id "
+						+ "WHERE t.topic_name = ? ";
+
+				if (hasSearchKey)
+					query += "AND (q.title LIKE ? OR q.question_content LIKE ?) ";
+
+				query += "GROUP BY q.question_id, u.user_id, u.username, createdAt, q.title, questionContent, tag_content, v.view_count "
 						+ "ORDER BY createdAt DESC LIMIT ? OFFSET ?";
-				result = executeQuery(query, topicName, rowsPerPage,
-						(currentPage - 1) * rowsPerPage);
+				if (hasSearchKey) {
+					result = executeQuery(query, topicName, searchKey,
+							searchKey, rowsPerPage,
+							(currentPage - 1) * rowsPerPage);
+				} else {
+					result = executeQuery(query, topicName, rowsPerPage,
+							(currentPage - 1) * rowsPerPage);
+				}
 
 			}
 
@@ -68,9 +95,11 @@ public class QuestionDAO extends BaseDAO {
 				String[] tagContents = result.getString("tag_content")
 						.split(",");
 				String photo = result.getString("photo");
+				int viewCount = result.getInt("view_count");
 				Question question = new Question(userID, questionID, username,
 						createdAt, title, questionContent, tagContents);
 				question.setUserPhoto(photo);
+				question.setViewCount(viewCount);
 				questions.add(question);
 			}
 
@@ -243,6 +272,42 @@ public class QuestionDAO extends BaseDAO {
 
 	public int getTotalQuestionRecords() {
 		return getTotalRecords("questions");
+	}
+
+	public int getTotalQuestionRecordsBySearchkey(String searchKey) {
+		searchKey = "%" + searchKey + "%";
+		String query = "SELECT COUNT(*) as total_questions FROM questions WHERE title LIKE ? OR question_content LIKE ?";
+
+		try {
+			ResultSet result = executeQuery(query, searchKey, searchKey);
+			if (result.next()) {
+				return result.getInt("total_questions");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
+
+	public int getTotalQuestionRecordsBySearchkeyAndTopic(String searchKey,
+			int topicID) {
+		searchKey = "%" + searchKey + "%";
+		String query = "SELECT COUNT(*) as total_questions FROM questions WHERE topic_id = ? AND (title LIKE ? OR question_content LIKE ?)";
+
+		try {
+			ResultSet result = executeQuery(query, topicID, searchKey,
+					searchKey);
+			if (result.next()) {
+				return result.getInt("total_questions");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return -1;
 	}
 
 	public int getTotalQuestionsByTopic(int topicID) {
@@ -455,6 +520,45 @@ public class QuestionDAO extends BaseDAO {
 		}
 
 		throw new Error("There is not username with that questionID");
+	}
+
+	public void increaseQuestionViews(int questionID) {
+		String query = "SELECT 1 FROM question_views WHERE question_id = ?";
+		String insertCommand = "INSERT INTO question_views (question_id, view_count) VALUES (?, 1)";
+		String updateCommand = "UPDATE question_views "
+				+ "SET view_count = view_count + 1 WHERE question_id = ?;";
+
+		try {
+
+			boolean hasView = executeQuery(query, questionID).next();
+
+			if (hasView) {
+				executeUpdate(updateCommand, questionID);
+			} else {
+				executeNonQuery(insertCommand, questionID);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public int getQuestionViews(int questionID) {
+		String query = "SELECT view_count FROM question_views WHERE question_id = ?";
+
+		try {
+			ResultSet result = executeQuery(query, questionID);
+			if (result.next()) {
+				int viewCount = result.getInt("view_count");
+				return viewCount;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return -1;
 	}
 
 	public static void main(String[] args) {

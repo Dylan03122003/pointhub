@@ -163,6 +163,9 @@ public class QuestionController extends HttpServlet {
 
 		Question questionDetail = questionDAO.getQuestionByID(questionID,
 				currentUserID, userIDOfQuestion);
+
+		questionDAO.increaseQuestionViews(questionID);
+
 		request.setAttribute("questionDetail", questionDetail);
 
 		MyDispatcher.dispatch(request, response, "question-detail.jsp");
@@ -201,6 +204,9 @@ public class QuestionController extends HttpServlet {
 	private void getNewestQuestionsHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String activeTopic = (String) request.getAttribute("activeTopic");
+		String searchKey = (String) request.getParameter("searchQuestionKey");
+		boolean hasSearchKey = searchKey != null && !searchKey.isEmpty();
+
 		ArrayList<Topic> topics = (ArrayList<Topic>) request
 				.getAttribute("topics");
 		int activeTopicID = 1;
@@ -217,19 +223,20 @@ public class QuestionController extends HttpServlet {
 				? 1
 				: Integer.parseInt(request.getParameter("page"));
 
-		ArrayList<Question> questions = questionDAO
-				.getNewestQuestions(activeTopic, rowsPerPage, currentPage);
+		ArrayList<Question> questions = questionDAO.getNewestQuestions(
+				activeTopic, rowsPerPage, currentPage, searchKey);
 
-		int totalQuestions = activeTopic.equals("All topics")
-				? questionDAO.getTotalQuestionRecords()
-				: questionDAO.getTotalQuestionsByTopic(activeTopicID);
-
+		int totalQuestions = getTotalQuestionRecords(activeTopic, activeTopicID,
+				searchKey);
+		
 		double totalQuestionsPages = (double) Math
 				.ceil((double) totalQuestions / (double) rowsPerPage);
 
 		request.setAttribute("currentQuestionPage", currentPage);
 		request.setAttribute("totalQuestionPages", totalQuestionsPages);
 		request.setAttribute("question_list", questions);
+		request.setAttribute("searchKey", hasSearchKey ? searchKey : "");
+
 		MyDispatcher.dispatch(request, response, "/index.jsp");
 	}
 
@@ -296,5 +303,37 @@ public class QuestionController extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);
 	}
+
+	private int getTotalQuestionRecords(String activeTopic, int activeTopicID,
+			String searchKey) {
+		int totalQuestions = 0;
+		boolean hasSearchKey = searchKey != null && !searchKey.isEmpty();
+
+		if (activeTopic.equals("All topics")) {
+			if (hasSearchKey) {
+				totalQuestions = questionDAO
+						.getTotalQuestionRecordsBySearchkey(searchKey);
+			} else {
+				totalQuestions = questionDAO.getTotalQuestionRecords();
+			}
+
+		} else {
+			if (hasSearchKey) {
+				totalQuestions = questionDAO
+						.getTotalQuestionRecordsBySearchkeyAndTopic(searchKey,
+								activeTopicID);
+			} else {
+				totalQuestions = questionDAO
+						.getTotalQuestionsByTopic(activeTopicID);
+			}
+		}
+
+		return totalQuestions;
+	}
+
+	// private ArrayList<Integer> getResponsivePages(double totalPages,
+	// int currentPage) {
+	// return new ArrayList<Integer>();
+	// }
 
 }

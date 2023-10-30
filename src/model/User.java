@@ -121,6 +121,17 @@ public class User {
 		this.district = district;
 		this.province = province;
 	}
+	
+	// Used for getTopFivePopularUsers
+	public User(int userID, String username, String photo,
+			int numberOfFollowers) {
+		this.userID = userID;
+		this.username = username;
+		this.photo = photo;
+		this.numberOfFollowers = numberOfFollowers;
+	}
+	
+	
 
 	public int getUserID() {
 		return userID;

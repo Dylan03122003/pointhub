@@ -20,6 +20,7 @@
 	crossorigin="anonymous"></script>
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
 	rel="stylesheet" />
+
 <title>Insert title here</title>
 
 
@@ -40,9 +41,9 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 			class="fa-solid fa-bars menu-bar"></i>
 		</label> <a href="/PointHubWebsite" class="logo">
 			<div class="logo-img">
-				<img src="./img/logo_1.png" alt="" />
+				<img style="height: auto;" src="./img/logo_1.png" alt="" />
 			</div>
-			<h3>PointHub</h3>
+			<h3 class="font-bold text-lg">PointHub</h3>
 		</a> <input type="checkbox" class="nav-input" id="nav-mobile" /> <label
 			class="navbar-links" for="nav-mobile">
 			<ul>
@@ -53,7 +54,7 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 				</c:if>
 
 				<c:if test="<%=isAdmin%>">
-				<li><a href="topics">Manage Topics</a></li>
+					<li><a href="topics">Manage Topics</a></li>
 					<li><a href="question-reports">Question Reports</a></li>
 					<li><a href="user-list">UserList</a></li>
 
@@ -72,13 +73,13 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 		<c:if test="<%=isLoggedIn%>">
 			<div class="user-icons">
 				<span class="notice-icon"><i class="fa-regular fa-bell"></i></span>
-				<img src="img/<%=userPhoto%>" class="personal-icon" id="iconPhoto" />
+				<img src="img/<%=userPhoto%>" class="personal-icon " id="iconPhoto" />
 
 				<div class="dropdown-menu" id="dropdown-menu">
 					<ul class="dropdown-menu-content">
 						<li class="dropdown-header">
 							<div class="dropdown-header-img">
-								<img src="img/<%=userPhoto%>" class="personal-icon" />
+								<img src="img/<%=userPhoto%>" class="personal-icon  max-w-none" />
 
 							</div>
 							<div class="dropdown-header-content">

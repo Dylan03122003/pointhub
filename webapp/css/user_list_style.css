@@ -165,7 +165,7 @@ html {
 }
 
 /*---------------------------------------*/
-.mt-4 {
+/*.mt-4 {
 	position: fixed;
 	bottom: 0;
 	right: 0;
@@ -205,3 +205,4 @@ html {
 .disabled:hover {
 	background-color: #e0e0e0;
 }
+*/
