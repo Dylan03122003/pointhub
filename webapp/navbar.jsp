@@ -72,8 +72,18 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 
 		<c:if test="<%=isLoggedIn%>">
 			<div class="user-icons">
-				<span class="notice-icon"><i class="fa-regular fa-bell"></i></span>
-				<img src="img/<%=userPhoto%>" class="personal-icon " id="iconPhoto" />
+				<span class="notice-icon"> <i class="fa-regular fa-bell notice-bell-icon"
+					id="iconBell"></i>
+					<div class="dropdown-menu" id="dropdown-menu-bell">
+						<ul class="dropdown-menu-content">
+							<li>Notice</li>
+							<li>Notice</li>
+							<li>Notice</li>
+						</ul>
+					</div>
+				</span> 
+				<img src="img/<%=userPhoto%>" class="personal-icon" id="iconPhoto" />
+
 
 				<div class="dropdown-menu" id="dropdown-menu">
 					<ul class="dropdown-menu-content">
@@ -99,7 +109,9 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 	<div style="margin-bottom: 100px"></div>
 	<script>
 		const iconPhoto = document.getElementById("iconPhoto");
+		const iconBell = document.getElementById("iconBell");
 		const dropdownMenu = document.getElementById("dropdown-menu");
+		const dropdownMenuBell = document.getElementById("dropdown-menu-bell");
 		const dropdownMenuContent = document
 				.querySelector(".dropdown-menu-content");
 		const toggleButton = document.querySelector(".toggle-button");
@@ -112,6 +124,14 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 
 							console.log('dm')
 							dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none"
+									: "block";
+						});
+
+		iconBell
+				.addEventListener(
+						"click",
+						function() {
+							dropdownMenuBell.style.display = dropdownMenuBell.style.display === "block" ? "none"
 									: "block";
 						});
 

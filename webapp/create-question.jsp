@@ -28,7 +28,9 @@
 	crossorigin="anonymous"></script>
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
 	rel="stylesheet" />
-	
+
+
+
 <title>Post Edit</title>
 </head>
 
@@ -42,23 +44,30 @@ ArrayList<Topic> topics = new TopicDAO().getTopics();
 	<div class="container">
 		<div class="small-container">
 			<form class="content" action="create-question" method="post">
-				<select required="required" name="questionTopic" id="">
+				<label>Your topic<i class="fa-solid fa-star-of-life"></i></label> 
+				<select required="required"
+					name="questionTopic" id="">
 					<option value="">Choose one topic</option>
 					<c:forEach var="topic" items="<%=topics%>">
 						<option value="${topic.getTopicID()}">${topic.getTopicName()}</option>
 					</c:forEach>
-				</select> <input required="required" name="title" type="text"
-					placeholder="Type catching attention title" /> <input
-					required="required" name="tags" type="text"
-					placeholder="Type tags (comma-separated)" />
-
-
+				</select> 
+				
+				<label>Your title<i class="fa-solid fa-star-of-life"></i></label>
+				<input required="required" name="title"
+					type="text" placeholder="Type catching attention title" />
+					
+				<label>Your tag<i class="fa-solid fa-star-of-life"></i></label> 
+					<input required="required" name="tags" type="text"
+					placeholder="Type tags (comma-separated)" /> 
+					
+				<label>Your question<i class="fa-solid fa-star-of-life"></i></label>
 				<textarea required="required" name="question_content"
 					id="second-input" cols="86" rows="10"
 					placeholder="Type your question"></textarea>
-
-				<textarea name="code_block"
-					id="second-input" cols="86" rows="10"
+					
+				<label>Your code</label>
+				<textarea name="code_block" id="second-input" cols="86" rows="10"
 					placeholder="Paste your code"></textarea>
 
 				<div class="btn-toggle">
