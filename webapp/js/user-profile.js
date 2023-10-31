@@ -321,7 +321,6 @@ $("#follow-btn").click(handleFollowUser)
 
 $(".load-more-post-btn").click(handleLoadMoreQuestions)
 $(".load-more-bookmark-btn").click(handleLoadMoreBookmark)
-$(".view-followers-btn").click(handleShowFollowers)
 
 $(".followers-modal").click(closeFollowersModal)
 $(".followers-modal-btn").click(closeFollowersModal)
@@ -329,3 +328,4 @@ $(".view-more-followers-btn").click(handleViewMoreFollowers)
 
 requireLoginModal.click(closeRequireLoginModal)
 $(".require-login-close-btn").click(closeRequireLoginModal)
+$("#followers-sum-container").click(handleShowFollowers)

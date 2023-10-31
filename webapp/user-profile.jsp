@@ -98,9 +98,6 @@ ArrayList<Notification> notifications = new NotificationDAO().getNotifications(c
 	</div>
 
 
-	<button class="view-followers-btn">View followers (Để tạm
-		thôi)</button>
-
 	<div class="viewProfile flex flex-col">
 		<div class="profile">
 			<img alt="" src="img/<%=user.getPhoto()%>">
@@ -115,19 +112,19 @@ ArrayList<Notification> notifications = new NotificationDAO().getNotifications(c
 					<%=user.getEmail()%>
 				</p>
 				<div class="logo-social">
-					<a href="<%=user.getFacebookLink()%>"><i
-						class="fa-brands fa-facebook"></i></a> <a
+					<a target="_blank" href="<%=user.getFacebookLink()%>"><i
+						class="fa-brands fa-facebook"></i></a> <a target="_blank"
 						href="<%=user.getTwitterLink()%>"><i
-						class="fa-brands fa-square-x-twitter"></i></a> <a
+						class="fa-brands fa-square-x-twitter"></i></a> <a target="_blank"
 						href="<%=user.getInstagramLink()%>"><i
-						class="fa-brands fa-instagram"></i></a> <a
+						class="fa-brands fa-instagram"></i></a> <a target="_blank"
 						href="<%=user.getGithubLink()%>"><i
 						class="fa-brands fa-github"></i></a>
 				</div>
 				<div class="stats stats1">
 					<span> <i class="fa-regular fa-circle-question"></i> <span><%=user.getTotalQuestions()%></span>
 						Questions
-					</span> <span> <i class="fa-solid fa-user-group"></i> <span
+					</span> <span id="followers-sum-container" class="cursor-pointer"> <i class="fa-solid fa-user-group"></i> <span
 						id="followers-sum"><%=user.getNumberOfFollowers()%> </span>
 						Followers
 					</span>
