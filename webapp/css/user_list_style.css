@@ -164,45 +164,4 @@ html {
 	}
 }
 
-/*---------------------------------------*/
-/*.mt-4 {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	display: flex;
-	height: max-content;
-	justify-content: right;
-	background-color: #fff;
-	padding: 7px 0;
-	padding-right: 5px;
-}
 
-
-.disabled,
-.ml-2,
-.text-blue-500 {
-	display: block;
-	border-radius: 3px;
-	padding: 10px 10px;
-	color: #000;
-}
-
-.disabled {
-	cursor: not-allowed;
-	pointer-events: none;
-}
-
-.active {
-	color: red;
-	padding: 10px 10px;
-}
-
-.ml-2:hover {
-	background-color: #e0e0e0;
-}
-
-.disabled:hover {
-	background-color: #e0e0e0;
-}
-*/

@@ -15,11 +15,174 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
 	integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="css/user_list_style.css">
+<!--<link rel="stylesheet" href="css/user_list_style.css"> -->
 <!-- Keep both style sections -->
 <script src="https://cdn.tailwindcss.com"></script>
 
 <title>Document</title>
+
+<style>
+@charset "UTF-8";
+
+@import
+	url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&family=Roboto:wght@100;400&display=swap')
+	;
+
+* {
+	margin: 0;
+	padding: 0;
+	transition: 0.2s linear;
+	border: none;
+	outline: none;
+	text-decoration: none;
+	font-family: 'Poppins', sans-serif;
+}
+
+html {
+	background: #FAFAFA;
+}
+
+.userList {
+	margin-top: 60px;
+	margin-bottom: 80px;
+}
+
+.userList .searchItem {
+	display: flex;
+	margin: auto;
+	width: 100%;
+	max-width: 1200px;
+	padding: 20px 36px;
+	box-sizing: border-box;
+	background-color: #fff;
+}
+
+.userList .searchItem i {
+	order: 1;
+	color: #C2CFE0;
+	margin-right: 10px;
+	font-size: 18px;
+}
+
+.userList .searchItem input {
+	font-size: 14px;
+	order: 2;
+	width: 100%;
+	color: #90A0B7;
+}
+
+.userList .searchItem input::placeholder {
+	color: #90A0B7;
+}
+
+.userList .div-btn {
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.userList .btnAdd {
+	display: block;
+	width: fit-content;
+	margin-top: 50px;
+	margin-left: 4%;
+	color: #fff;
+	padding: 11px 40px;
+	background-color: #152C70;
+	color: #FFF;
+	text-align: center;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 500;
+	letter-spacing: 0.16px;
+	border-radius: 4px;
+	box-shadow: 0 4px 10px 0 rgba(16, 156, 241, 0.24);
+}
+
+.userList .table-container {
+	overflow-x: auto;
+}
+
+.userList table {
+	border-spacing: 0px;
+	background-color: #fff;
+	margin: auto;
+	margin-top: 50px;
+	width: 1200px;
+	text-align: center;
+	background-color: #fff;
+}
+
+/* Cho trình duyệt WebKit */
+.table-container::-webkit-scrollbar {
+	height: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+	background-color: #bdbdbd85;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+	background-color: rgb(192, 190, 190);
+}
+
+.table-container::-webkit-scrollbar-track {
+	background-color: #ddd;
+}
+
+.userList table thead {
+	box-shadow: 0 0.5px 0 #ced1d2;
+}
+
+.userList table tr {
+	font-size: 14px;
+	letter-spacing: 0.15px;
+	height: 64px;
+	color: #323C47;
+	font-weight: 500;
+	box-sizing: border-box;
+}
+
+.userList table .row:hover {
+	background-color: #f4f4f4;
+}
+
+.userList table img {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.userList i {
+	cursor: pointer;
+}
+
+@media ( min-width : 1600px) {
+	.userList .searchItem {
+		max-width: 1500px;
+		padding: 20px 36px;
+	}
+	.userList .searchItem input {
+		font-size: 16px;
+	}
+	.userList table {
+		margin-top: 50px;
+		width: 1500px;
+	}
+	.userList table tr {
+		font-size: 16px;
+		letter-spacing: 0.16px;
+		height: 66px;
+	}
+	.userList .div-btn {
+		max-width: 1500px;
+	}
+	.userList .btnAdd {
+		font-size: 15px;
+	}
+}
+</style>
 
 </head>
 
