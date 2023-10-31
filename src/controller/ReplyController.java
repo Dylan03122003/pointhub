@@ -139,6 +139,14 @@ public class ReplyController extends HttpServlet {
 				replyContent, userReplyID);
 		replyComment.setCreatedAt(currentDate);
 
+		if (!commentDAO.canReply(currentUserID, commentID)) {
+			String json = new Gson().toJson(null);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json);
+			return;
+		}
+
 		int replyID = commentDAO.replyComment(replyComment);
 
 		String currentUsername = Authentication.getCurrentUsername(request);
