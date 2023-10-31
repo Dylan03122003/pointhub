@@ -144,6 +144,14 @@ public class CommentController extends HttpServlet {
 
 		Comment newComment = new Comment(currentUserID, questionID,
 				commentContent);
+		
+		if (!commentDAO.canCommnet(currentUserID, questionID)) {
+			String json = new Gson().toJson(null);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json);
+			return;
+		}
 
 		int commentID = commentDAO.createComment(newComment);
 

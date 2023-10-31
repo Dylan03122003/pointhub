@@ -301,10 +301,10 @@ public class CommentDAO extends BaseDAO {
 
 		return false;
 	}
-	
+
 	public int getUserIDOfComment(int commentID) {
 		String query = "SELECT user_id FROM comments WHERE comment_id = ?";
-		
+
 		try {
 			ResultSet result = executeQuery(query, commentID);
 			if (result.next()) {
@@ -314,14 +314,14 @@ public class CommentDAO extends BaseDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		throw new Error("There is no userID with that commentID");
-		
+
 	}
-	
+
 	public int getQuestionIDOfComment(int commentID) {
 		String query = "SELECT question_id FROM comments WHERE comment_id = ?";
-		
+
 		try {
 			ResultSet result = executeQuery(query, commentID);
 			if (result.next()) {
@@ -331,14 +331,14 @@ public class CommentDAO extends BaseDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		throw new Error("There is no question_id with that commentID");
-		
+
 	}
-	
+
 	public int getUserIDOfReply(int replyID) {
 		String query = "SELECT user_id FROM replies WHERE reply_id = ?";
-		
+
 		try {
 			ResultSet result = executeQuery(query, replyID);
 			if (result.next()) {
@@ -348,13 +348,64 @@ public class CommentDAO extends BaseDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		throw new Error("There is no user_id with that replyID");
-		
+
 	}
 
-	// public static void main(String[] args) {
-	// CommentDAO commentDAO = new CommentDAO();
-	// }
+	public boolean canCommnet(int currentUserID, int questionID) {
+		String select = "SELECT COUNT(*) AS comment_count "
+				+ "FROM comments WHERE user_id = ? " + "AND question_id = ?";
+
+		try {
+			ResultSet result = executeQuery(select, currentUserID, questionID);
+			if (result.next()) {
+				int commentCount = result.getInt("comment_count");
+
+				if (commentCount < 3) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+
+		return false;
+
+	}
+	
+	public boolean canReply(int currentUserID, int commentID) {
+		String select = "SELECT COUNT(*) AS reply_count "
+				+ "FROM replies WHERE user_id = ? " + "AND comment_id = ?";
+
+		try {
+			ResultSet result = executeQuery(select, currentUserID, commentID);
+			if (result.next()) {
+				int replyCount = result.getInt("reply_count");
+
+				if (replyCount < 3) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+
+		return false;
+
+	}
+
+	public static void main(String[] args) {
+		CommentDAO commentDAO = new CommentDAO();
+		commentDAO.canCommnet(23, 26);
+	}
 
 }
