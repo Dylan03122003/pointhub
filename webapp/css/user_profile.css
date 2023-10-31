@@ -59,7 +59,7 @@ html {
 }
 
 .viewProfile .profile #email span {
-	font-weight: 600;
+	font-weight: 500;
 }
 
 .viewProfile .profile .logo-social {
@@ -84,7 +84,7 @@ html {
 }
 
 .viewProfile .profile .stats span {
-	font-weight: 800;
+	font-weight: 600;
 	display: flex;
 	gap: 1rem;
 	font-size: 15px;
@@ -226,12 +226,13 @@ html {
 	.viewProfile .profile .logo-social {
 		justify-content: center;
 	}
-
 	#btn-update,
 	#follow-btn {
 		right: 50px;
 	}
-
+.body-item {
+	width: 450px;
+}
 	.viewProfile .profile img {
 		margin-top: 33px;
 	}
