@@ -7,6 +7,7 @@
 	box-sizing: border-box;
 	font-family: 'Poppins', sans-serif;
 }
+
 .navbar {
 	display: flex;
 	padding: 20px 30px 10px;
@@ -17,7 +18,7 @@
 	left: 0;
 	right: 0;
 	background-color: #fff;
-	box-shadow: 0px 5px 15px  rgb(69 67 96 / 10%);
+	box-shadow: 0px 5px 15px rgb(69 67 96 / 10%);
 	z-index: 1;
 }
 
@@ -62,7 +63,10 @@
 	text-decoration: none;
 	color: black;
 	font-size: 15px;
-	font-weight: 550;
+	font-weight: 400;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .navbar-links .navbar-icons {
@@ -71,7 +75,7 @@
 
 .navbar .user-icons {
 	position: absolute;
-	top: 50%;
+	top: 57%;
 	transform: translateY(-50%);
 	right: 30px;
 	cursor: pointer;
@@ -84,16 +88,25 @@
 	bottom: 8px;
 }
 
+
 .user-icons .notice-icon .notice-bell-icon:hover {
   background: none;
   border-radius: 0;
   color: #f48023;
+
+.user-icons .notice-icon:hover {
+	background: none;
+	border-radius: 0;
+	color: #f48023;
+	animation-delay: 200;
+
 }
 
 
 .navbar .user-icons > .personal-icon {
 	width: 40px;
 	height: 40px;
+	object-fit: cover;
 }
 
 .dropdown-header img {
@@ -107,6 +120,7 @@
 	border-radius: 50%;
 	display: block;
 	margin: auto;
+	object-fit: cover;
 }
 
 .user-icons .dropdown-menu {
@@ -208,6 +222,7 @@
 	background-color: #f48023;
 	border-radius: 5px;
 	color: #fff;
+	animation-delay: 200;
 }
 
 .navbar-links ul li:hover a {
@@ -238,6 +253,9 @@
 
 .nav-input {
 	display: none;
+}
+.Ask-icon {
+	padding-right: 5px;
 }
 
 @media screen and (max-width: 1000px) {
@@ -273,10 +291,13 @@
 		text-align: center;
 		width: 100%;
 		padding: 15px 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.navbar .user-icons {
-		top: 35px;
+		top: 30px;
 	}
 
 	.navbar .logo {

@@ -130,6 +130,8 @@ public class User {
 		this.photo = photo;
 		this.numberOfFollowers = numberOfFollowers;
 	}
+	
+	
 
 	public int getUserID() {
 		return userID;

@@ -67,7 +67,8 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 %>
 
 <body class="" data-questionID="<%=question.getQuestionID()%>"
-	data-userID="<%=Authentication.getCurrentUserID(request)%>" data-userIDOfQuestion="<%=question.getUserID()%>">
+	data-userID="<%=Authentication.getCurrentUserID(request)%>"
+	data-userIDOfQuestion="<%=question.getUserID()%>">
 
 	<!-- Confirm delete question modal --------------------------------------------------------------------->
 	<div
@@ -91,8 +92,8 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 		class="require-login-modal  fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 hidden justify-center items-center">
 		<div
 			class="require-login-content flex flex-col justify-center items-center gap-5  bg-white w-[340px] sm:w-[600px] p-4 relative rounded-md">
-			<h2 class="text-2xl text-center font-bold mb-4 mt-8">Join the Pointhub
-				community</h2>
+			<h2 class="text-2xl text-center font-bold mb-4 mt-8">Join the
+				Pointhub community</h2>
 			<p class="text-gray-600 text-center">Join Pointhubto start
 				earning reputation and unlocking new privileges like voting and
 				commenting.</p>
@@ -181,7 +182,9 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 					<div class="profile_info">
 						<a class="text-gray-600 font-medium"
 							href="user-profile?userID=<%=question.getUserID()%>"> @<%=question.getUsername()%></a>
-						<p class="text-gray-500"><%=question.getCreatedAt()%></p>
+						<p class="text-gray-500"
+							data-created-at="<%=question.getCreatedAt()%>"><%=question.getCreatedAt()%></p>
+
 					</div>
 				</div>
 				<div class="md:block hidden">
@@ -287,5 +290,7 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 	<script>
 		hljs.highlightAll();
 	</script>
+
+
 </body>
 </html>

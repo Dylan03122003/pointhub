@@ -106,6 +106,7 @@ ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
                       <c:param name='question_id' value='${question.getQuestionID()}' />
                       <c:param name='user_id' value='${question.getUserID()}' />
                   </c:url>"
+
 							class="question-item">
 							<div class="question-author">
 								<img src="img/${question.getUserPhoto()}" />
@@ -181,6 +182,7 @@ ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
 									</a>
 								</c:otherwise>
 							</c:choose>
+
 						</div>
 					</c:if>
 
