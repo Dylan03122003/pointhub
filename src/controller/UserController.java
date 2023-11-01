@@ -74,11 +74,27 @@ public class UserController extends HttpServlet {
 			case "/update-profile" :
 				updateProfile(request, response);
 				break;
+			case "/check-notification" :
+				checkNotificationHandler(request, response);
+				break;
 			default :
 
 		}
 	}
 
+	private void checkNotificationHandler(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		int notificationID = Integer
+				.parseInt(request.getParameter("notificationID"));
+		boolean isChecked = new NotificationDAO()
+				.checkNotification(notificationID);
+
+		String json = new Gson().toJson(isChecked);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
+	}
 	private void viewFollowers(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		int followedUserID = Integer
@@ -109,8 +125,7 @@ public class UserController extends HttpServlet {
 
 			if (isFollowed) {
 				NotificationDAO notificationDAO = new NotificationDAO();
-				String notificationMessage = Authentication
-						.getCurrentUsername(request) + " have followed you.";
+				String notificationMessage = "have followed you.";
 				notificationDAO.notifyFollowing(followedUserID, currentUserID,
 						notificationMessage);
 			}

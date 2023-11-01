@@ -115,6 +115,7 @@
 		<url-pattern>/user-profile</url-pattern>
 		<url-pattern>/follow-user</url-pattern>
 		<url-pattern>/view-followers</url-pattern>
+		<url-pattern>/check-notification</url-pattern>
 
 	</servlet-mapping>
 	<servlet>

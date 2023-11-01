@@ -9,18 +9,21 @@ import java.util.TimeZone;
 public class Notification {
 	private int notificationID;
 	private int notifiedUserID;
-	private int followerID;
+	private User follower;
 	private int questionID;
+	private User userInteract;
 	private String message;
 	private Date createdAt;
 	private boolean checked;
 
-	public Notification(int notificationID, int notifiedUserID, int followerID,
-			int questionID, String message, Date createdAt, boolean checked) {
+	public Notification(int notificationID, int notifiedUserID, User follower,
+			int questionID, User userInteract, String message, Date createdAt,
+			boolean checked) {
 		this.notificationID = notificationID;
 		this.notifiedUserID = notifiedUserID;
-		this.followerID = followerID;
+		this.follower = follower;
 		this.questionID = questionID;
+		this.userInteract = userInteract;
 		this.message = message;
 		this.createdAt = createdAt;
 		this.checked = checked;
@@ -40,14 +43,6 @@ public class Notification {
 
 	public void setNotifiedUserID(int notifiedUserID) {
 		this.notifiedUserID = notifiedUserID;
-	}
-
-	public int getFollowerID() {
-		return followerID;
-	}
-
-	public void setFollowerID(int followerID) {
-		this.followerID = followerID;
 	}
 
 	public int getQuestionID() {
@@ -116,19 +111,27 @@ public class Notification {
 	}
 
 	public boolean hasNewFollower() {
-		return this.followerID != 0;
+		return this.follower != null;
 	}
 
 	public boolean hasQuestionInteraction() {
 		return this.questionID != 0;
 	}
-	@Override
-	public String toString() {
-		return "Notification [notificationID=" + notificationID
-				+ ", notifiedUserID=" + notifiedUserID + ", followerID="
-				+ followerID + ", questionID=" + questionID + ", message="
-				+ message + ", createdAt=" + createdAt + ", checked=" + checked
-				+ "]";
+
+	public User getFollower() {
+		return follower;
+	}
+
+	public void setFollower(User follower) {
+		this.follower = follower;
+	}
+
+	public User getUserInteract() {
+		return userInteract;
+	}
+
+	public void setUserInteract(User userInteract) {
+		this.userInteract = userInteract;
 	}
 
 }
