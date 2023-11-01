@@ -333,22 +333,12 @@ html {
 User user = (User) request.getAttribute("userProfile");
 boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 int currentUserID = (int) Authentication.getCurrentUserID(request);
-ArrayList<Notification> notifications = new NotificationDAO().getNotifications(currentUserID);
 %>
 <body data-userprofileid="<%=user.getUserID()%>"
 	data-currentuserid="<%=currentUserID%>">
 	<jsp:include page="navbar.jsp" />
 
 
-	<!-- Notifications ------------------------------------------------------------------------->
-	<div class="bg-blue-100 m-2">
-		<h2 class="text-red-300">Cái này test thôi</h2>
-		<c:forEach var="notification" items="<%=notifications%>">
-			<p>${notification.getMessage()}</p>
-			<p>${notification.getCreatedAt()}</p>
-		</c:forEach>
-	</div>
-	<!--END Notifications ------------------------------------------------------------------------->
 
 	<!-- Followers Modal -------------------------------------------------------------------------------------------->
 	<div

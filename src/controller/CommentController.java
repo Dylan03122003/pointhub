@@ -83,12 +83,11 @@ public class CommentController extends HttpServlet {
 
 		if (!commentOfCurrentUser && isDisliked) {
 			NotificationDAO notificationDAO = new NotificationDAO();
-			String notificationMessage = Authentication
-					.getCurrentUsername(request) + " disliked your comment.";
+			String notificationMessage = "disliked your comment.";
 
 			int questionID = commentDAO.getQuestionIDOfComment(commentID);
 			notificationDAO.notifyInteractingQuestion(userIDOfComment,
-					questionID, notificationMessage);
+					questionID, currentUserID, notificationMessage);
 		}
 
 		String json = new Gson().toJson(isDisliked);
@@ -119,12 +118,11 @@ public class CommentController extends HttpServlet {
 
 		if (!commentOfCurrentUser && isLiked) {
 			NotificationDAO notificationDAO = new NotificationDAO();
-			String notificationMessage = Authentication
-					.getCurrentUsername(request) + " liked your comment.";
+			String notificationMessage = "liked your comment.";
 
 			int questionID = commentDAO.getQuestionIDOfComment(commentID);
 			notificationDAO.notifyInteractingQuestion(userIDOfComment,
-					questionID, notificationMessage);
+					questionID, currentUserID, notificationMessage);
 		}
 
 		String json = new Gson().toJson(isLiked);
@@ -144,14 +142,6 @@ public class CommentController extends HttpServlet {
 
 		Comment newComment = new Comment(currentUserID, questionID,
 				commentContent);
-		
-		if (!commentDAO.canCommnet(currentUserID, questionID)) {
-			String json = new Gson().toJson(null);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(json);
-			return;
-		}
 
 		int commentID = commentDAO.createComment(newComment);
 
@@ -163,10 +153,9 @@ public class CommentController extends HttpServlet {
 				.getUserIDOfQuestion(questionID);
 		boolean commentedByCurrentUser = currentUserID == userIDOfQuestion;
 		if (!commentedByCurrentUser) {
-			String notificationMessage = Authentication.getCurrentUsername(
-					request) + " have commented your question.";
+			String notificationMessage = "have commented your question.";
 			notificationDAO.notifyInteractingQuestion(userIDOfQuestion,
-					questionID, notificationMessage);
+					questionID, currentUserID, notificationMessage);
 		}
 
 		String json = new Gson().toJson(createdComment);

@@ -362,7 +362,8 @@ public class UserDAO extends BaseDAO {
 		}
 		return topFivePopularUsers;
 	}
-	public ArrayList<User> getFollowers(int followedUserID, int limit, int currentFollowersSize) {
+	public ArrayList<User> getFollowers(int followedUserID, int limit,
+			int currentFollowersSize) {
 		ArrayList<User> followers = new ArrayList<User>();
 		String query = "SELECT f.user_id, u.username, u.email, u.photo "
 				+ "FROM following_relationships AS f "
@@ -370,7 +371,8 @@ public class UserDAO extends BaseDAO {
 				+ "WHERE f.followed_user_id = ? LIMIT ? OFFSET ?";
 
 		try {
-			ResultSet result = executeQuery(query, followedUserID, limit, currentFollowersSize);
+			ResultSet result = executeQuery(query, followedUserID, limit,
+					currentFollowersSize);
 			while (result.next()) {
 				int userID = result.getInt("user_id");
 				String username = result.getString("username");
@@ -389,6 +391,27 @@ public class UserDAO extends BaseDAO {
 		return followers;
 	}
 
+	public User getUserForNotification(int userID) {
+		String query = "SELECT username, photo FROM users WHERE user_id = ?";
+		try {
+			ResultSet result = executeQuery(query, userID);
+			if (result.next()) {
+				String username = result.getString("username");
+				String photo = result.getString("photo");
 
+				User user = new User();
+				user.setUserID(userID);
+				user.setUsername(username);
+				user.setPhoto(photo);
+
+				return user;
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 }

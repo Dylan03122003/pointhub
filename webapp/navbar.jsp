@@ -1,9 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<%@page import="java.util.ArrayList"%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ page import="model.User"%>
 <%@ page import="model.Question"%>
+<%@ page import="model.Notification"%>
+
+<%@ page import="DAO.NotificationDAO"%>
 
 <%@ page import="util.Authentication"%>
 
@@ -20,11 +26,13 @@
 	crossorigin="anonymous"></script>
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
 	rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script defer="defer" type="module" src="js/navbar.js"></script>
 
 <title>Insert title here</title>
 
 <style>
-
 @charset "UTF-8";
 
 /* Navbar menu */
@@ -45,7 +53,7 @@
 	left: 0;
 	right: 0;
 	background-color: #fff;
-	box-shadow: 0px 5px 15px rgb(69 67 96 / 10%);
+	box-shadow: 0px 5px 15px rgb(69 67 96/ 10%);
 	z-index: 1;
 }
 
@@ -115,22 +123,20 @@
 	bottom: 8px;
 }
 
-
 .user-icons .notice-icon .notice-bell-icon:hover {
-  background: none;
-  border-radius: 0;
-  color: #f48023;
+	background: none;
+	border-radius: 0;
+	color: #f48023;
 }
+
 .user-icons .notice-icon:hover {
 	background: none;
 	border-radius: 0;
 	color: #f48023;
 	animation-delay: 200;
-
 }
 
-
-.navbar .user-icons > .personal-icon {
+.navbar .user-icons>.personal-icon {
 	width: 40px;
 	height: 40px;
 	object-fit: cover;
@@ -142,70 +148,84 @@
 }
 
 /* Dropdown menu */
-.navbar .personal-icon,
-.dropdown-header img {
+.navbar .personal-icon, .dropdown-header img {
 	border-radius: 50%;
 	display: block;
 	margin: auto;
 	object-fit: cover;
 }
 
-.user-icons .dropdown-menu {
+.user-icons #dropdown-menu {
 	position: absolute;
 	display: none;
 	right: 10px;
 	top: 50px;
 	background-color: #fff;
-	padding: 0px 20px 8px;
+	padding: 0 20px 8px;
+	border: 1px solid #ccccccd2;
+	border-radius: 5px;
+	border: 1px solid #ccccccd2;
+}
+
+.user-icons #dropdown-menu-bell {
+	position: absolute;
+	display: none;
+	right: 10px;
+	top: 50px;
+	background-color: #fff;
 	border: 1px solid #ccccccd2;
 	border-radius: 5px;
 }
 
 .notice-icon {
-  position: relative;
+	position: relative;
 }
 
-.notice-icon > .dropdown-menu {
-  position: absolute;
-  /* display: block; */
-  display: none;
-  z-index: 5;
+.notice-icon>.dropdown-menu {
+	position: absolute;
+	/* display: block; */
+	display: none;
+	z-index: 5;
 }
 
-.notice-icon > .dropdown-menu .dropdown-menu-content {
-  width: 100%;
-  display: block;
+.notice-icon>.dropdown-menu .dropdown-menu-content {
+	width: 400px;
+	max-height: 400px;
+	min-height: 100px;
+	display: block;
+	overflow-y: scroll; /* Add vertical scrollbar */
+	padding: 0 10px;
+	display: block;
 }
 
-.notice-icon > .dropdown-menu li {
-  transition: all 200ms ease-in-out;
-  width: 100%;
-  display: block;
+.notice-icon>.dropdown-menu li {
+	transition: all 200ms ease-in-out;
+	width: 100%;
+	display: block;
 }
 
-.notice-icon > .dropdown-menu li:hover {
-  color: #888;
+.notice-icon>.dropdown-menu li:hover {
+	color: #888;
 }
 
-.notice-icon > .dropdown-menu li::after {
-  content: "";
-  width: 0%;
-  /* width: 100%; */
-  height: 2px;
-  background: #f48023;
-  display: block;
-  margin: auto;
-  transition: 0.5s;
+.notice-icon>.dropdown-menu li::after {
+	content: "";
+	width: 0%;
+	/* width: 100%; */
+	height: 2px;
+	background: #f48023;
+	display: block;
+	margin: auto;
+	transition: 0.5s;
 }
 
-.notice-icon > .dropdown-menu li:hover::after {
-  width: 100%;
+.notice-icon>.dropdown-menu li:hover::after {
+	width: 100%;
 }
 
 /*.notice-bell-icon:hover ~ .dropdown-menu {
   display: block;
 }*/
-
 .user-icons .dropdown-menu li {
 	font-weight: 400;
 	padding-top: 14px;
@@ -256,9 +276,6 @@
 	color: inherit;
 }
 
-
-
-
 .toggle-button {
 	position: absolute;
 	display: none;
@@ -281,8 +298,13 @@
 .nav-input {
 	display: none;
 }
+
 .Ask-icon {
 	padding-right: 5px;
+}
+
+.notification-checked {
+	background: gray;
 }
 
 @media screen and (max-width: 1000px) {
@@ -293,7 +315,6 @@
 		padding-bottom: 10px;
 		padding-top: 15px;
 	}
-
 	.navbar-links {
 		display: none;
 		padding-bottom: 10px;
@@ -306,13 +327,11 @@
 		width: 100%;
 		transition: 0.2s linear;
 	}
-
 	.navbar-links ul {
 		width: 100%;
 		flex-direction: column;
 		margin-right: 0;
 	}
-
 	.navbar-links ul li {
 		margin-right: 0;
 		text-align: center;
@@ -322,29 +341,23 @@
 		justify-content: center;
 		align-items: center;
 	}
-
 	.navbar .user-icons {
 		top: 30px;
 	}
-
 	.navbar .logo {
 		display: flex;
 		align-items: center;
 		margin-left: 70px;
-
 	}
-
 	.navbar .logo h3 {
 		text-decoration: none;
 		color: black;
 	}
-
 	.toggle-button {
 		display: block;
 		/* margin-right: 10px; */
 	}
-
-	.nav-input:checked~.navbar-links {
+	.nav-input:checked ~.navbar-links {
 		display: flex;
 	}
 }
@@ -353,16 +366,22 @@
 	.navbar .logo h3 {
 		visibility: hidden;
 	}
+	.notice-icon>.dropdown-menu .dropdown-menu-content {
+		width: 200px;
+		height: 200px;
+		display: block;
+		overflow-y: scroll; /* Add vertical scrollbar */
+	}
 }
 
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-	}
+@
+keyframes fadeIn {from { opacity:0;
+	
+}
 
-	to {
-		opacity: 1;
-	}
+to {
+	opacity: 1;
+}
 }
 </style>
 
@@ -375,6 +394,8 @@ String role = (String) Authentication.getCurrentUserRole(request);
 String userPhoto = (String) Authentication.getCurrentUserPhoto(request);
 String email = (String) Authentication.getCurrentEmail(request);
 boolean isAdmin = isLoggedIn && role.equals("admin");
+int currentUserID = (int) Authentication.getCurrentUserID(request);
+ArrayList<Notification> notifications = new NotificationDAO().getNotifications(currentUserID);
 %>
 
 <body>
@@ -418,9 +439,33 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 					class="fa-regular fa-bell notice-bell-icon" id="iconBell"></i>
 					<div class="dropdown-menu" id="dropdown-menu-bell">
 						<ul class="dropdown-menu-content">
-							<li>Notice</li>
-							<li>Notice</li>
-							<li>Notice</li>
+							<c:if test="<%=notifications.size() == 0%>">
+								<li>Your notifications are empty. Interact with others to
+									get noticed!</li>
+							</c:if>
+							<c:forEach var="notification" items="<%=notifications%>">
+								<li data-hasnewfollower="${notification.hasNewFollower()}"
+									data-notificationid="${notification.getNotificationID()}"
+									data-followerid="${notification.getFollower() == null ? 0 : notification.getFollower().getUserID()}"
+									data-questionid="${notification.getQuestionID()}"
+									class="notification-item">
+									<div
+										class="${notification.isChecked() ? 'notification-checked' : ''}"
+										style="display: flex; align-items: center; gap: 10px">
+										<img alt="user-photo"
+											style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover"
+											src="img/${notification.hasNewFollower() ? notification.getFollower().getPhoto() : notification.getUserInteract().getPhoto()}">
+										<div>
+											<p>
+												<span>${notification.hasNewFollower() ? notification.getFollower().getUsername() : notification.getUserInteract().getUsername()}
+												</span> ${notification.getMessage()}
+											</p>
+											<p>${notification.getCreatedAt()}</p>
+										</div>
+									</div>
+								</li>
+
+							</c:forEach>
 						</ul>
 					</div>
 				</span> <img src="img/<%=userPhoto%>" class="personal-icon" id="iconPhoto" />

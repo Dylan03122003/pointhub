@@ -76,12 +76,11 @@ public class ReplyController extends HttpServlet {
 
 		if (!replyOfCurrentUser && isDisliked) {
 			NotificationDAO notificationDAO = new NotificationDAO();
-			String notificationMessage = Authentication
-					.getCurrentUsername(request) + " disliked your reply.";
+			String notificationMessage = "disliked your reply.";
 
 			int questionID = commentDAO.getQuestionIDOfComment(commentID);
 			notificationDAO.notifyInteractingQuestion(userIDOfReply, questionID,
-					notificationMessage);
+					currentUserID, notificationMessage);
 		}
 
 		String json = new Gson().toJson(isDisliked);
@@ -113,12 +112,11 @@ public class ReplyController extends HttpServlet {
 
 		if (!replyOfCurrentUser && isLiked) {
 			NotificationDAO notificationDAO = new NotificationDAO();
-			String notificationMessage = Authentication
-					.getCurrentUsername(request) + " liked your reply.";
+			String notificationMessage = "liked your reply.";
 
 			int questionID = commentDAO.getQuestionIDOfComment(commentID);
 			notificationDAO.notifyInteractingQuestion(userIDOfReply, questionID,
-					notificationMessage);
+					currentUserID, notificationMessage);
 		}
 
 		String json = new Gson().toJson(isLiked);
@@ -138,14 +136,6 @@ public class ReplyController extends HttpServlet {
 		ReplyComment replyComment = new ReplyComment(commentID, currentUserID,
 				replyContent, userReplyID);
 		replyComment.setCreatedAt(currentDate);
-
-		if (!commentDAO.canReply(currentUserID, commentID)) {
-			String json = new Gson().toJson(null);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(json);
-			return;
-		}
 
 		int replyID = commentDAO.replyComment(replyComment);
 
@@ -168,10 +158,9 @@ public class ReplyController extends HttpServlet {
 		reply.setDislikes(0);
 
 		NotificationDAO notificationDAO = new NotificationDAO();
-		String notificationMessage = currentUsername
-				+ " have replied your comment";
+		String notificationMessage = "have replied your comment";
 		notificationDAO.notifyInteractingQuestion(userReplyID, questionID,
-				notificationMessage);
+				currentUserID, notificationMessage);
 
 		String json = new Gson().toJson(reply);
 		response.setContentType("application/json");
