@@ -19,10 +19,6 @@ const replyComment = (questionID, commentID, userReplyID, replyContent, currentU
 		url: "reply-comment",
 		data: data,
 		success: function(data) {
-			if (!data) {
-				showToast("You can only reply each comment 3 times!", false);
-				return;
-			}
 			const replyTemplate = renderReply(data, currentUserID)
 			const repliesContainers = $(".replies-container")
 			repliesContainers.each(function(index, repliesContainer) {
@@ -32,6 +28,10 @@ const replyComment = (questionID, commentID, userReplyID, replyContent, currentU
 					$(repliesContainer).append(replyTemplate)
 				}
 			});
+
+			$(".reply-error").removeClass("opacity-1")
+			$(".reply-error").addClass("opacity-0")
+			$(".reply-error").text("")
 		},
 		error: function() {
 			alert("Failed to submit the reply.");
@@ -146,13 +146,11 @@ const createComment = (questionID, currentUserID, commentContent) => {
 		data: data,
 		dataType: "json",
 		success: function(data) {
-			if (!data) {
-				showToast("You can only comment less than 3 times!", false)
-				return
-			}
 			const commentTemplate = renderComment(data, currentUserID);
 			$("#comments-container").append(commentTemplate);
 			$(".comment-content").val("")
+			$(".comment-error").removeClass("opacity-1")
+			$(".comment-error").addClass("opacity-0")
 		},
 		error: function() {
 			alert("Failed to load data from the server.");
@@ -163,6 +161,9 @@ const createComment = (questionID, currentUserID, commentContent) => {
 const closeModal = () => {
 	$(".reply-modal").removeClass("flex");
 	$(".reply-modal").addClass("hidden");
+	$(".reply-error").removeClass("opacity-1")
+	$(".reply-error").addClass("opacity-0")
+	$(".reply-error").text("")
 }
 
 const openModal = () => {
@@ -245,10 +246,30 @@ $(document).ready(function() {
 	});
 
 	// Handle submitting reply ---------------------------------
-	$(".reply-submit-btn").click(function() {
+	$(".reply-form").submit(function(e) {
+		e.preventDefault();
 		const commentID = $(".reply-submit-btn").data("commentid");
 		const userReplyID = $(".reply-submit-btn").data("userreplyid");
 		const replyContent = $(".reply-content").val();
+
+		const captchaResponse = grecaptcha.getResponse(0);
+
+		if (replyContent.length < 20) {
+			$(".reply-error").removeClass("opacity-0")
+			$(".reply-error").addClass("opacity-1")
+			$(".reply-error").text("Reply must be at least 20 characters")
+
+			return;
+		}
+
+		if (!captchaResponse.length > 0) {
+			$(".reply-error").removeClass("opacity-0")
+			$(".reply-error").addClass("opacity-1")
+			$(".reply-error").text("Must tick the checkbox to validate you are human")
+			return
+		}
+
+		grecaptcha.reset();
 
 		replyComment(questionID, commentID, userReplyID, replyContent, currentUserID);
 		$(".reply-content").val("");
@@ -264,12 +285,34 @@ $(document).ready(function() {
 	});
 
 	// Handle commenting 
-	$(".comment-btn").click(function() {
+	$("#comment-form").submit(function(e) {
+		e.preventDefault();
 		if (currentUserID === -1) {
 			openRequireLoginModal()
 			return;
 		}
+
+		const captchaResponse = grecaptcha.getResponse(1);
+
 		const commentContent = $(".comment-content").val()
+
+		if (commentContent.length < 20) {
+			$(".comment-error").removeClass("opacity-0")
+			$(".comment-error").addClass("opacity-1")
+			$(".comment-error").text("Comment must be at least 20 characters")
+
+			return;
+		}
+
+		if (!captchaResponse.length > 0) {
+			$(".comment-error").removeClass("opacity-0")
+			$(".comment-error").addClass("opacity-1")
+			$(".comment-error").text("Must tick the checkbox to validate you are human")
+			return
+		}
+
+		grecaptcha.reset(1);
+
 		if (commentContent.trim())
 			createComment(questionID, currentUserID, commentContent)
 	})
