@@ -33,6 +33,36 @@
 .active-page {
 	color: red
 }
+
+.all-container {
+display: flex;
+justify-content: space-evenly;
+overflow: hidden;
+width: 100%;
+}
+
+.users {
+	display: flex;
+	flex-direction: column;
+}
+
+/*.question-area {
+display: flex;
+flex-direction: column;
+align-items: space-between;
+}*/
+
+@media only screen and (max-width: 880px) {
+.all-container {
+	  flex-direction: column;
+  }
+  
+  .users {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+}
 </style>
 </head>
 
@@ -49,36 +79,37 @@ ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
 	<div id="toast"
 		class="z-10 fixed top-20 right-0 p-4 m-4 text-white rounded-md shadow-lg hidden"></div>
 
-	
-		<!-- START TOP 5 POPULAR USERS  -------------------------------------------------------------------------------->
-		<div class="popular-users" >
-			<h2 style="text-align: center; font-size: 1.5rem">Top 5 popular users</h2>
-			<div class="users" style="max-width: 1000px;  display: flex; justify-content: center;  flex-wrap: wrap; padding: 10px; margin-bottom: 30px; margin-inline: auto">
-			<c:forEach var="user" items="<%=topFivePopularUsers%>">
-				<a href="user-profile?userID=${user.getUserID()}"
-				style="display: inline-block;  padding: 15px 30px"
-					class="popular-user-profile"> <img alt=""
-					src="img/${user.getPhoto()}"
-					style="margin: auto"
-					class="w-[70px] h-[70px] object-cover rounded-full">
-					<div style="padding-top: 15px">
-						<p style="color: #888; text-align: center">${user.getUsername()}</p>
-						<p style="color: #888; text-align: center">
-							<span>${user.getNumberOfFollowers()}</span> <span>followers</span>
-						</p>
-					</div>
+	<div class="all-container">
 
-				</a>
-			</c:forEach>
+		<!-- START TOP 5 POPULAR USERS  -------------------------------------------------------------------------------->
+		<div class="popular-users">
+			<h2 style="color: #888; font-weight: 550;text-align: center; font-size: 1.2rem; margin-left: 15px">Top 5 popular
+				users</h2>
+			<div class="users"
+				style="max-width: 1000px; display: flex; justify-content: center; flex-wrap: wrap; padding: 10px; margin-bottom: 30px; margin-inline: auto">
+				<c:forEach var="user" items="<%=topFivePopularUsers%>">
+					<a href="user-profile?userID=${user.getUserID()}"
+						style="display: inline-block; padding: 15px 20px"
+						class="popular-user-profile"> <img alt=""
+						src="img/${user.getPhoto()}" style="margin: auto"
+						class="w-[70px] h-[70px] object-cover rounded-full">
+						<div style="padding-top: 8px; margin: auto">
+							<p style="color: #888; text-align: center; font-size: 16px; font-weight: 450">${user.getUsername()}</p>
+							<p style="color: #888; text-align: center; font-size: 15px">
+								<span>${user.getNumberOfFollowers()}</span> <span>followers</span>
+							</p>
+						</div>
+					</a>
+				</c:forEach>
 			</div>
 		</div>
 
 		<!-- END TOP 5 POPULAR USERS  -------------------------------------------------------------------------------->
 
 
-		<div class="question-area">
+		<div class="question-area" style="margin: 0 15px">
 			<form action="questions" method="get"
-				class="flex items-center justify-center  gap-3">
+				class="flex items-center justify-center  gap-3" style="margin: 0 15px">
 				<input type="hidden" name="page" value="1" /> <input type="hidden"
 					name="activeTopic" value="<%=activeTopic%>" /> <input
 					value="<%=searchKey%>" required="required"
@@ -90,7 +121,7 @@ ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
 			</form>
 
 			<div class="right-small-container">
-				<div class="category category-container" style="padding-top: 40px">
+				<div class="category category-container" >
 					<c:forEach var="topic" items="<%=topics%>">
 						<a
 							href="questions?activeTopic=${topic.getTopicName()}&searchQuestionKey=<%=searchKey%>"
@@ -191,6 +222,6 @@ ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
 			</div>
 
 		</div>
-	
+	</div>
 </body>
 </html>
