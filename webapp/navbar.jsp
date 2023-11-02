@@ -189,7 +189,7 @@
 }
 
 .notice-icon>.dropdown-menu .dropdown-menu-content {
-	width: 400px;
+	width: 500px;
 	max-height: 400px;
 	min-height: 100px;
 	display: block;
@@ -303,7 +303,7 @@
 }
 
 .notification-checked {
-	background: gray;
+	background: #fff3e0;
 }
 
 @media screen and (max-width: 1000px) {
@@ -450,16 +450,16 @@ ArrayList<Notification> notifications = new NotificationDAO().getNotifications(c
 									class="notification-item">
 									<div
 										class="${notification.isChecked() ? 'notification-checked' : ''}"
-										style="display: flex; align-items: center; gap: 10px">
+										style="display: flex; align-items: center; gap: 10px; padding: 5px; border-radius: 5px">
 										<img alt="user-photo"
 											style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover"
 											src="img/${notification.hasNewFollower() ? notification.getFollower().getPhoto() : notification.getUserInteract().getPhoto()}">
 										<div>
-											<p>
-												<span>${notification.hasNewFollower() ? notification.getFollower().getUsername() : notification.getUserInteract().getUsername()}
+											<p style="color: #616161">
+												<span style="color: #424242; font-weight: 600">${notification.hasNewFollower() ? notification.getFollower().getUsername() : notification.getUserInteract().getUsername()}
 												</span> ${notification.getMessage()}
 											</p>
-											<p>${notification.getCreatedAt()}</p>
+											<p style="font-size: 12px; color: #616161">${notification.getCreatedAt()}</p>
 										</div>
 									</div>
 								</li>
