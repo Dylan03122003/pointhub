@@ -343,7 +343,7 @@ public class UserDAO extends BaseDAO {
 				+ "FROM following_relationships f "
 				+ "JOIN users u ON f.followed_user_id = u.user_id "
 				+ "GROUP BY f.followed_user_id, u.username, u.photo "
-				+ "ORDER BY follower_count DESC " + "LIMIT 5;";
+				+ "ORDER BY follower_count DESC, u.created_at ASC LIMIT 5;";
 
 		try {
 			ResultSet resultSet = executeQuery(query);
