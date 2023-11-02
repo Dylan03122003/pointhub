@@ -7,10 +7,7 @@
   font-family: "Poppins", sans-serif;
 }
 
-.users {
-	display: flex;
-	flex-direction: column;
-}
+
 
 
 .right-small-container {
@@ -21,14 +18,7 @@
   padding: 0 30px;
 }
 
-.right-small-container .category {
-	padding-bottom: 20px;
-  padding-top: 20px;
-  cursor: pointer;
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-}
+
 
 .right-small-container .category a {
   padding: 5px 10px;
