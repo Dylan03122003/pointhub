@@ -25,6 +25,9 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tomorrow-night-blue.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+
 <script defer type="module" src="js/question-detail-script.js"></script>
 <script defer type="module" src="js/main-question-detail.js"></script>
 
@@ -122,15 +125,24 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 			class="reply-container bg-white w-[90%] sm:w-[70%] md:w-[60%] p-4 relative rounded-sm">
 			<h2 class="text-2xl font-bold mb-4 text-gray-500">Reply to
 				Comment</h2>
-			<form class="reply-form">
+			<form class="reply-form" method="post"
+				action="javascript:alert(grecaptcha.getResponse(widgetId1));">
 				<div class="mb-4">
-					<label for="replyText"
-						class="block font-medium text-sm text-gray-500 mb-4">Your
-						Reply</label>
+					<div
+						class="flex sm:flex-row flex-col items-center justify-between mb-4">
+						<label for="replyText"
+							class="block font-medium text-sm text-gray-500 ">Your
+							Reply</label>
+						<p class="reply-error text-red-400 opacity-0">Reply must be at
+							least 20 characters</p>
+					</div>
 					<textarea class="reply-content w-full border rounded p-2" rows="4"></textarea>
 				</div>
-				<div class="flex justify-end">
-					<button type="button"
+				<div class="flex sm:flex-row flex-col items-end justify-between">
+					<div class="sm:mb-0 mb-4">
+						<div id="recaptcha1"></div>
+					</div>
+					<button type="submit"
 						class="reply-submit-btn bg-blue-500 text-white px-4 py-2 rounded">
 						Submit</button>
 				</div>
@@ -266,12 +278,27 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 		<div
 			class="bg-white mt-10 p-4 flex flex-col gap-2 items-center justify-center">
 			<h2 class="font-medium text-xl">Comment</h2>
-			<form class="w-full flex flex-col gap-4 justify-center items-end">
+			<form id="comment-form"
+				action="javascript:grecaptcha.reset(widgetId2);"
+				class="w-full flex flex-col gap-4 justify-center" method="post">
+				<div class="flex sm:flex-row flex-col items-center justify-between">
+					<label class="block font-medium text-sm text-gray-500 ">Your
+						comment</label>
+					<p class="comment-error text-red-400 opacity-0">Comment must be
+						at least 20 characters</p>
+				</div>
 				<textarea required="required"
 					class="comment-content w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
-				<button
-					class="comment-btn px-4 py-1 rounded-md bg-orange-400 text-white"
-					type="button">Comment</button>
+
+				<div
+					class="flex sm:flex-row flex-col items-end justify-between gap-4">
+					<div id="recaptcha2"></div>
+					<button
+						class="comment-btn px-4 py-1 rounded-md bg-orange-400 text-white"
+						type="submit">Comment</button>
+				</div>
+
+
 			</form>
 		</div>
 
@@ -290,6 +317,21 @@ int currentUserID = isLoggedIn ? Authentication.getCurrentUserID(request) : -1;
 	<script>
 		hljs.highlightAll();
 	</script>
+	<script type="text/javascript">
+		var CaptchaCallback = function() {
+			grecaptcha.render('recaptcha1', {
+				'sitekey' : '6Le4X-goAAAAAO2MV2PnLayGBGOv6f5Fr2BGI3wD'
+			});
+			const widget2 = grecaptcha.render('recaptcha2', {
+				'sitekey' : '6Le4X-goAAAAAO2MV2PnLayGBGOv6f5Fr2BGI3wD'
+			});
+		};
+	</script>
+
+	<script
+		src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit"
+		async defer></script>
+
 
 
 </body>
