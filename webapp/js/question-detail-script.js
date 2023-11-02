@@ -1,6 +1,6 @@
 
 import { renderReply, renderComment } from "./template.js"
-import { openRequireLoginModal } from "./main-question-detail.js"
+import { openRequireLoginModal, showToast } from "./main-question-detail.js"
 
 
 
@@ -19,7 +19,10 @@ const replyComment = (questionID, commentID, userReplyID, replyContent, currentU
 		url: "reply-comment",
 		data: data,
 		success: function(data) {
-			console.log(data)
+			if (!data) {
+				showToast("You can only reply each comment 3 times!", false);
+				return;
+			}
 			const replyTemplate = renderReply(data, currentUserID)
 			const repliesContainers = $(".replies-container")
 			repliesContainers.each(function(index, repliesContainer) {
@@ -143,6 +146,10 @@ const createComment = (questionID, currentUserID, commentContent) => {
 		data: data,
 		dataType: "json",
 		success: function(data) {
+			if (!data) {
+				showToast("You can only comment less than 3 times!", false)
+				return
+			}
 			const commentTemplate = renderComment(data, currentUserID);
 			$("#comments-container").append(commentTemplate);
 			$(".comment-content").val("")

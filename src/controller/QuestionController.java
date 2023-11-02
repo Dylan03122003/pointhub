@@ -158,8 +158,13 @@ public class QuestionController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		int questionID = Integer.parseInt(request.getParameter("question_id"));
 		int currentUserID = Authentication.getCurrentUserID(request);
-		int userIDOfQuestion = Integer
-				.parseInt(request.getParameter("user_id"));
+		int userIDOfQuestion = 0;
+		if (request.getParameter("user_id") != null) {
+			userIDOfQuestion = Integer
+					.parseInt(request.getParameter("user_id"));
+		} else {
+			userIDOfQuestion = questionDAO.getUserIDOfQuestion(questionID);
+		}
 
 		Question questionDetail = questionDAO.getQuestionByID(questionID,
 				currentUserID, userIDOfQuestion);
@@ -285,17 +290,14 @@ public class QuestionController extends HttpServlet {
 		boolean votedByCurrentUser = userIDOfQuestion == currentUserID;
 		if (!votedByCurrentUser) {
 			String notificationMessage = "";
-			String currentUsername = Authentication.getCurrentUsername(request);
 			if (voteType.equals("upvote")) {
-				notificationMessage = currentUsername
-						+ " have upvoted your question.";
+				notificationMessage = "have upvoted your question.";
 			} else if (voteType.equals("downvote")) {
-				notificationMessage = currentUsername
-						+ " have downvoted your question.";
+				notificationMessage = "have downvoted your question.";
 
 			}
 			notificationDAO.notifyInteractingQuestion(userIDOfQuestion,
-					questionID, notificationMessage);
+					questionID, currentUserID, notificationMessage);
 		}
 
 		json = new Gson().toJson(isVoted);
@@ -330,5 +332,10 @@ public class QuestionController extends HttpServlet {
 
 		return totalQuestions;
 	}
+
+	// private ArrayList<Integer> getResponsivePages(double totalPages,
+	// int currentPage) {
+	// return new ArrayList<Integer>();
+	// }
 
 }

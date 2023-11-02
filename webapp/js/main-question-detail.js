@@ -17,7 +17,7 @@ const votesSum = $(".votes-sum")
 const requireLoginModal = $(".require-login-modal")
 // DEFINING FUNCTIONS
 
-const showToast = (message, isSuccess) => {
+export const showToast = (message, isSuccess) => {
 	const toastElm = $("#toast");
 	toastElm.text(message)
 	toastElm.removeClass("hidden")

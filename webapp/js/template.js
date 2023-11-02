@@ -1,3 +1,35 @@
+export function formatRelativeTime(timestamp) {
+	const currentDate = new Date();
+	const inputDate = new Date(timestamp);
+	let timeDifference = currentDate - inputDate;
+
+	// Subtract 3 hours and 8 minutes (3 * 60 * 60 * 1000 + 8 * 60 * 1000 milliseconds) from the time difference
+	timeDifference -= (7 * 60 * 60 * 1000 * 60 * 1000);
+
+	const seconds = Math.floor(currentDate / 1000);
+	if (seconds < 60) {
+		return seconds + " seconds ago";
+	}
+
+	const minutes = Math.floor(timeDifference / 1000 / 60);
+	if (minutes < 60) {
+		return minutes + " minutes ago";
+	}
+
+	const hours = Math.floor(timeDifference / 1000 / 60 / 60);
+	if (hours < 24) {
+		return hours + " hours ago";
+	}
+
+	const days = Math.floor(timeDifference / 1000 / 60 / 60 / 24);
+	if (days < 30) {
+		return days + " days ago";
+	}
+
+	const months = Math.floor(timeDifference / 1000 / 60 / 60 / 24 / 30);
+	return months + " months ago";
+}
+
 
 export const renderReply = (reply, currentUserID) => {
 	return `
