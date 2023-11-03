@@ -70,31 +70,38 @@ html {
 
 .viewProfile .profile #username {
 	font-size: 30px;
+	color: #37474f;
 	font-weight: 500;
 	letter-spacing: 1px;
+		margin-bottom: 20px;
+	
 }
 
 .viewProfile .profile #contact {
-	margin: 20px 0;
-	font-size: 23px;
+	margin-top: 20px; 
+	font-size : 18px;
 	font-weight: 600;
 	letter-spacing: 1px;
+	color: #212121;
+	font-size: 18px;
 }
 
 .viewProfile .profile #email {
-	margin: 20px 0;
+	margin-top: 10px;
 	font-size: 14px;
+	color: #546e7a;
 }
 
 .viewProfile .profile #email span {
-	font-weight: 500;
+	font-weight: 600;
 }
 
 .viewProfile .profile .logo-social {
 	gap: 13px;
 	display: flex;
 	font-size: 16px;
-	margin: 20px 0;
+	margin-bottom: 30px;
+	margin-top: 10px;
 }
 
 .viewProfile .profile .logo-social a {
@@ -399,7 +406,8 @@ int currentUserID = (int) Authentication.getCurrentUserID(request);
 				<h2 id="username">
 					<%=user.getUsername()%>
 				</h2>
-				<span id="contact"> <i class="fa-solid fa-phone"></i> Contact
+				<span id="contact"> <i class="fa-solid fa-phone text-sm"></i>
+					Contact
 				</span>
 				<p id="email">
 					<span>Email:</span>
