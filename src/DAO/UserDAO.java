@@ -15,32 +15,20 @@ import util.CustomLog;
 public class UserDAO extends BaseDAO {
 
 	public User getUserProfile(int currentUserID, int viewedUserID) {
-		String query = "SELECT " +
-			    "u.email, " +
-			    "u.username, " +
-			    "u.photo, " +
-			    "u.about, " +
-			    "sa.facebook_link, " +
-			    "sa.twitter_link, " +
-			    "sa.instagram_link, " +
-			    "sa.github_link, " +
-			    "COUNT(q.question_id) AS total_questions, " +
-			    "CASE " +
-			    "    WHEN fr.followed_user_id IS NOT NULL THEN 1 " +
-			    "    ELSE 0 " +
-			    "END AS is_following, " +
-			    "(SELECT COUNT(*) FROM following_relationships WHERE followed_user_id = ?) AS followers, " +
-			    "l.ward, " +
-			    "l.district, " +
-			    "l.province " +
-			    "FROM " +
-			    "users u " +
-			    "LEFT JOIN social_accounts sa ON u.user_id = sa.user_id " +
-			    "LEFT JOIN questions q ON u.user_id = q.user_id " +
-			    "LEFT JOIN following_relationships fr ON u.user_id = fr.followed_user_id AND fr.user_id = ? " +
-			    "LEFT JOIN locations l ON u.location_id = l.location_id " +
-			    "WHERE " +
-			    "u.user_id = ?";
+		String query = "SELECT " + "u.email, " + "u.username, " + "u.photo, "
+				+ "u.about, " + "sa.facebook_link, " + "sa.twitter_link, "
+				+ "sa.instagram_link, " + "sa.github_link, "
+				+ "COUNT(q.question_id) AS total_questions, " + "CASE "
+				+ "    WHEN fr.followed_user_id IS NOT NULL THEN 1 "
+				+ "    ELSE 0 " + "END AS is_following, "
+				+ "(SELECT COUNT(*) FROM following_relationships WHERE followed_user_id = ?) AS followers, "
+				+ "l.ward, " + "l.district, " + "l.province " + "FROM "
+				+ "users u "
+				+ "LEFT JOIN social_accounts sa ON u.user_id = sa.user_id "
+				+ "LEFT JOIN questions q ON u.user_id = q.user_id "
+				+ "LEFT JOIN following_relationships fr ON u.user_id = fr.followed_user_id AND fr.user_id = ? "
+				+ "LEFT JOIN locations l ON u.location_id = l.location_id "
+				+ "WHERE " + "u.user_id = ?";
 
 		try {
 			ResultSet result = executeQuery(query, viewedUserID, currentUserID,
@@ -210,21 +198,34 @@ public class UserDAO extends BaseDAO {
 		return null;
 	}
 
-	public ArrayList<User> getUsers(int rowsPerPage, int currentPage) {
+	public ArrayList<User> getUsers(int rowsPerPage, int currentPage,
+			String searchKey) {
 		ArrayList<User> user = new ArrayList<>();
-		String query = "SELECT * FROM users WHERE role <> 'admin' "
-				+ "LIMIT  ?  OFFSET ? ;";
-
+		boolean hasSearchKey = searchKey != null && !searchKey.isEmpty();
+		String query = "";
+		searchKey = "%" + searchKey + "%";
 		try {
-			PreparedStatement ps = connection.prepareStatement(query);
-			ps.setInt(1, rowsPerPage);
-			ps.setInt(2, (currentPage - 1) * rowsPerPage);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				int userID = rs.getInt("user_id");
-				String userName = rs.getString("username");
-				String email = rs.getString("email");
-				String photo = rs.getString("photo");
+			ResultSet result = null;
+			if (hasSearchKey) {
+				query = "SELECT * FROM users WHERE role <> 'admin' AND username LIKE ? "
+						+ "LIMIT  ?  OFFSET ?";
+
+				result = executeQuery(query, searchKey, rowsPerPage,
+						(currentPage - 1) * rowsPerPage);
+
+			} else {
+				query = "SELECT * FROM users WHERE role <> 'admin' "
+						+ "LIMIT  ?  OFFSET ?";
+				result = executeQuery(query, rowsPerPage,
+						(currentPage - 1) * rowsPerPage);
+
+			}
+
+			while (result.next()) {
+				int userID = result.getInt("user_id");
+				String userName = result.getString("username");
+				String email = result.getString("email");
+				String photo = result.getString("photo");
 				User users = new User(userID, userName, email, photo);
 				user.add(users);
 			}
@@ -279,6 +280,25 @@ public class UserDAO extends BaseDAO {
 	}
 	public int getTotalUsers() {
 		return getTotalRecordsUser();
+	}
+
+	public int getTotalUsersWithSearchKey(String searchKey) {
+		searchKey = "%" + searchKey + "%";
+		String query = "SELECT COUNT(*) AS total_records FROM users WHERE role <> 'admin' AND username LIKE ?";
+		try {
+			ResultSet result = executeQuery(query, searchKey);
+			if (result.next()) {
+				int totalUsers = result.getInt("total_records");
+
+				return totalUsers;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+
 	}
 
 	public boolean followUser(int currentUserID, int followedUserID)
@@ -430,9 +450,9 @@ public class UserDAO extends BaseDAO {
 			e.printStackTrace();
 		}
 		return null;
-		
+
 	}
-public static void main(String[] args) {
-	System.out.println(new UserDAO().getUserProfile(19, 19));
-}
+	public static void main(String[] args) {
+		System.out.println(new UserDAO().getUsers(2, 1, ""));
+	}
 }

@@ -72,7 +72,7 @@ public class ReportController extends HttpServlet {
 	private void getQuestionReportsHandler(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 
-		int rowsPerPage = 2;
+		int rowsPerPage = 5;
 
 		int currentPage = request.getParameter("page") == null
 				? 1

@@ -41,7 +41,7 @@ public class QuestionController extends HttpServlet {
 		String path = request.getServletPath();
 		switch (path) {
 			case "/questions" :
-				getQuestions(request, response);
+				getQuestionsHandler(request, response);
 				break;
 			case "/question-detail" :
 				getQuestionDetailHandler(request, response);
@@ -189,7 +189,7 @@ public class QuestionController extends HttpServlet {
 		response.getWriter().write(json);
 
 	}
-	private void getQuestions(HttpServletRequest request,
+	private void getQuestionsHandler(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String activeTopic = request.getParameter("activeTopic");
 

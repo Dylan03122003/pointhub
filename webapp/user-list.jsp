@@ -188,15 +188,17 @@ html {
 
 <%
 ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
+String searchKey = request.getAttribute("searchKey") != null ? (String) request.getAttribute("searchKey") : "";
 %>
 <body>
 	<jsp:include page="navbar.jsp" />
 
 	<div class="userList">
-		<div class="searchItem">
-			<input type="text" placeholder="Search user name"> <i
+		<form class="searchItem" action="user-list">
+			<input type="text" placeholder="Search user name" name="searchKey"
+				value="<%=searchKey%>"> <i
 				class="fa-solid fa-magnifying-glass"></i>
-		</div>
+		</form class="searchItem">
 		<div class="div-btn">
 			<a class="btnAdd" href="add-user.jsp">ADD NEW+</a>
 		</div>
@@ -241,7 +243,7 @@ ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 		<div class="flex items-center justify-center gap-6">
 			<c:choose>
 				<c:when test="${currentUserPage > 1}">
-					<a href="user-list?page=${currentUserPage - 1}"
+					<a href="user-list?page=${currentUserPage - 1}&searchKey=<%=searchKey%>"
 						class="bg-orange-400 text-white px-3 py-1 rounded-md"> <i
 						class="fa-solid fa-arrow-left"></i> <span class="ml-1">Previous</span>
 					</a>
@@ -255,14 +257,14 @@ ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 			</c:choose>
 			<div class="flex items-center justify-center gap-5 flex-wrap">
 				<c:forEach var="i" begin="1" end="${totalUserPages}">
-					<a href="user-list?page=${i}"
+					<a href="user-list?page=${i}&searchKey=<%=searchKey%>"
 						class="flex items-center justify-center border border-solid  rounded-md w-8 h-8 ${i == currentUserPage ? 'bg-orange-100 text-orange-500 border-orange-400' : 'text-gray-500 border-gray-400'}">${i}
 					</a>
 				</c:forEach>
 			</div>
 			<c:choose>
 				<c:when test="${currentUserPage < totalUserPages}">
-					<a href="user-list?page=${currentUserPage + 1}"
+					<a href="user-list?page=${currentUserPage + 1}&searchKey=<%=searchKey%>"
 						class="bg-orange-400 text-white px-3 py-1 rounded-md"> <span
 						class="mr-1">Next</span> <i class="fa-solid fa-arrow-right"></i></a>
 				</c:when>
