@@ -11,7 +11,10 @@
 
 <style>
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;900&display=swap');
+
+@import
+	url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;900&display=swap')
+	;
 
 body {
 	background-color: rgb(250, 250, 250);
@@ -19,18 +22,19 @@ body {
 }
 
 * {
-	
 	box-sizing: border-box;
 	font-family: 'Roboto';
 }
 
 .register-form {
-	display: flex;
+	margin-top: -30px; 
+	display : flex;
 	text-align: center;
 	justify-content: center;
 	align-items: center;
 	min-height: 80vh;
 	font-family: Roboto;
+	display: flex;
 }
 
 .register-form img {
@@ -97,13 +101,11 @@ body {
 	transition: all 0.3s ease-in-out;
 }
 
-.form-group input:focus+label,
-.form-group input:valid+label {
+.form-group input:focus+label, .form-group input:valid+label {
 	top: 9px;
 	font-size: 9px;
 	background-color: #fff;
 }
-
 
 #btn-register {
 	font-size: 15px;
@@ -115,7 +117,6 @@ body {
 	font-weight: 600;
 	border: none;
 	border-radius: 5px;
-
 	padding: 12px 0px 11px 0px;
 	border-radius: 5px;
 	border-radius: 5px;
@@ -139,82 +140,66 @@ body {
 	margin-left: 2px;
 }
 
-
-@media (min-width: 1440px) {
+@media ( min-width : 1440px) {
 	.register-form img {
 		width: 63%;
 		height: 96vh;
-
 	}
-
 	.register {
 		width: 400px;
 	}
-
 	.register {
 		padding: 0 30px;
 		min-width: 480px;
 		margin: auto;
 		width: 500px;
 	}
-
 	.register h2 {
 		font-size: 28px;
 	}
-
 	.register p {
 		font-size: 20px;
 	}
-
 	.form-group {
 		margin-bottom: 22px;
 	}
-
 	.register label {
 		font-size: 16px;
 	}
-
 	.form-group input {
 		font-size: 18px;
 		height: 52px;
 	}
-
-	.form-group input:focus+label,
-	.form-group input:valid+label {
+	.form-group input:focus+label, .form-group input:valid+label {
 		top: 10px;
 		font-size: 12px;
 	}
-
-
 	#btn-register {
 		height: 52px;
 		font-size: 18px;
 		margin-top: 13px;
 	}
-
-
 }
 
-@media (max-width: 900px) {
+@media ( max-width : 900px) {
 	.register-form img {
 		width: 40%;
 	}
 }
 
-@media (max-width: 700px) {
+@media ( max-width : 700px) {
 	.register-form img {
 		display: none;
 	}
 }
 
-@media (max-width: 400px) {
+@media ( max-width : 400px) {
 	.register-form {
 		/* padding: 20px; */
 		width: 390px;
 		box-sizing: border-box;
 	}
 }
-
 </style>
 
 </head>

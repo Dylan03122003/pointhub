@@ -35,22 +35,48 @@ body {
 
 .Left-Form {
 	max-width: 800px;
-	height: 700px;
-	padding: 20px 80px;
+	height: fit-content;
+	padding: 30px 80px;
 	background-color: #FFFFFF;
 	border: 1px solid #EAEAEA;
 	box-shadow: 0px 0px 5px 0px #0000000D;
+	box-shadow: 2px 1px 5px 0px rgba(0, 0, 0, 0.15);
+
+	
 }
 
 .content input {
 	width: 100%;
 	border: 2px solid #e2ddd9;
 	border-radius: 4px;
-	height: 30px;
+	margin-top: 5px;
+	color: #444;
+	padding: 6px 10px;
+	margin-bottom: 15px;
+	border: 2px solid rgba(204, 204, 204, 0.5);
+	border-radius: 5px;
+	width: 100%;
+	font-size: 16px;
+	font-weight: 500;
+	letter-spacing: 0.24px;
+	padding: 6px 10px;
+	margin-bottom: 15px;
+	border: 2px solid rgba(204, 204, 204, 0.5);
+	border-radius: 5px;
+	width: 100%;
 }
 
 .content {
 	padding: 15px;
+}
+
+.content label {
+	margin-bottom: 3px;
+	color: #808080;
+	font-size: 17px;
+	font-style: normal;
+	font-weight: 600;
+	letter-spacing: 0.24px;
 }
 
 .content div {
@@ -101,11 +127,14 @@ body {
 .Right-Form {
 	text-align: center;
 	max-width: 450px;
-	height: 580px;
-	padding: 10px 20px;
+	height: fit-content;
+	padding: 20px 20px;
 	background-color: #FFFFFF;
 	border: 1px solid #EAEAEA;
 	box-shadow: 0px 0px 5px 0px #0000000D;
+	box-shadow: 2px 1px 5px 0px rgba(0, 0, 0, 0.15);
+
+	
 }
 
 .Right-Form .User-Avatar img {
@@ -180,9 +209,9 @@ input[type=file]::-webkit-file-upload-button {
 	.Left-Form {
 		order: 2;
 		width: 100%;
-		padding: 10px;
+		padding: 20px;
 		box-sizing: border-box;
-		height: 980px;
+		height: fit-content;
 	}
 	.Left-Form input, .Left-Form button {
 		width: 100%;
@@ -218,8 +247,8 @@ input[type=file]::-webkit-file-upload-button {
 		border: 6px solid #eaeaea;
 	}
 	.Left-Form {
-		width: 650px;
-		padding: 10px;
+		width: fir-content;
+		padding: 20px;
 		box-sizing: border-box;
 	}
 }
@@ -248,7 +277,7 @@ input[type=file]::-webkit-file-upload-button {
 	.Left-Form {
 		align-items: center;
 		width: 500px;
-		height: 850px;
+		height: fit-content;
 		padding: 10px;
 		box-sizing: border-box;
 	}
@@ -272,47 +301,45 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 			<form class="content" action="update-profile" method="post">
 
 				<div>
-					<label for="InputEmail">Email</label><br> <input
-						style="padding: 0 10px" type="email" id="InputEmail" name="email"
-						value="<%=userProfile.getEmail()%>">
+					<label for="InputEmail">Email</label><br> <input type="email"
+						id="InputEmail" name="email" value="<%=userProfile.getEmail()%>">
 				</div>
 
 				<div class="name">
 					<div>
 						<label for="InputFirstname">FirstName</label><br> <input
-							style="padding: 0 10px" type="text" id="InputFirstname"
-							name="firstname" value="<%=userProfile.getFirstName()%>">
+							type="text" id="InputFirstname" name="firstname"
+							value="<%=userProfile.getFirstName()%>">
 					</div>
 
 					<div>
-						<labelfor="InputLastname">LastName</label> <br>
-						<input style="padding: 0 10px" type=text id="InputLastname"
-							name="lastname" value="<%=userProfile.getLastName()%>">
+						<label for="InputLastname">LastName</label> <br> <input
+							type=text id="InputLastname" name="lastname"
+							value="<%=userProfile.getLastName()%>">
 					</div>
 				</div>
 
 				<div>
-					<label for="InputAbout">About</label><br> <input
-						style="padding: 0 10px" type="text" id="InputAbout" name="about"
-						value="<%=userProfile.getAbout()%>">
+					<label for="InputAbout">About</label><br> <input type="text"
+						id="InputAbout" name="about" value="<%=userProfile.getAbout()%>">
 				</div>
 
 				<div>
 					<label for="InputFaceLink">Facebook</label><br> <input
-						style="padding: 0 10px" type="text" id="InputFacelink"
-						name="facebook-link" value="<%=userProfile.getFacebookLink()%>">
+						type="text" id="InputFacelink" name="facebook-link"
+						value="<%=userProfile.getFacebookLink()%>">
 				</div>
 
 				<div>
 					<label for="InputTwitterlink">Twitter</label><br> <input
-						style="padding: 0 10px" type="text" id="InputTwitterlink"
-						name="twitter-link" value="<%=userProfile.getTwitterLink()%>">
+						type="text" id="InputTwitterlink" name="twitter-link"
+						value="<%=userProfile.getTwitterLink()%>">
 				</div>
 
 				<div>
 					<label for="InputInstagramlink">Instagram</label><br> <input
-						style="padding: 0 10px" type="text" id="InputInstagramlink"
-						name="insta_link" value="<%=userProfile.getInstagramLink()%>">
+						type="text" id="InputInstagramlink" name="insta_link"
+						value="<%=userProfile.getInstagramLink()%>">
 				</div>
 
 				<div>
@@ -322,21 +349,20 @@ boolean isAdmin = isLoggedIn && role.equals("admin");
 				</div>
 				<div class="location">
 					<div>
-						<label for="InputWard">Ward</label><br> <input
-							style="padding: 0 10px" type="text" name="ward"
-							value="<%=userProfile.getWard()%>">
+						<label for="InputWard">Ward</label><br> <input type="text"
+							name="ward" value="<%=userProfile.getWard()%>">
 					</div>
 
 					<div>
 						<label for="InputDistrict">District</label><br> <input
-							style="padding: 0 10px" type="text" name="district"
+							type="text" name="district"
 							value="<%=userProfile.getDistrict()%>">
 					</div>
 
 
 					<div>
 						<label for="InputProvince">Province</label><br> <input
-							style="padding: 0 10px" type="text" name="province"
+							type="text" name="province"
 							value="<%=userProfile.getProvince()%>">
 					</div>
 				</div>
