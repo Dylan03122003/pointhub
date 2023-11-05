@@ -55,41 +55,45 @@
 				data-dismiss="modal">&times;</button>
 		</div>
 	</div>
-	
-  <div class="bg-[#FAFAFA] h-[860px]">
-	<table class="w-[600px] sm:w-[90%] mx-auto divide-y divide-gray-200">
-		<thead>
-			<tr>
-				<th
-					class="px-6 py-3 bg-white text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
-					Question Title</th>
-				<th
-					class="px-6 py-3 bg-white text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
-					Number of reporting users</th>
-				<th
-					class="px-6 py-3 bg-white text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
-					Action</th>
 
-			</tr>
-		</thead>
-		<tbody class="bg-white divide-y divide-gray-200">
-			<c:forEach var="report" items="${reports}">
-				<tr>
-					<td class="px-6 py-4 whitespace-no-wrap"><a
-						href="<c:url value='/question-detail'>
+	<div class="bg-[#FAFAFA] h-[860px] w-full">
+		<div
+			class="overflow-x-scroll ">
+			<table class="w-[800px] md:w-[90%]  mx-auto divide-y  divide-gray-200">
+				<thead>
+					<tr>
+						<th
+							class="px-6 py-3 bg-white text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+							Question Title</th>
+						<th
+							class="px-6 py-3 bg-white text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+							Number of reporting users</th>
+						<th
+							class="px-6 py-3 bg-white text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+							Action</th>
+
+					</tr>
+				</thead>
+				<tbody class="bg-white divide-y divide-gray-200">
+					<c:forEach var="report" items="${reports}">
+						<tr>
+							<td class="px-6 py-4 whitespace-no-wrap"><a
+								href="<c:url value='/question-detail'>
                       <c:param name='question_id' value='${report.getQuestionID()}' />
                       <c:param name='user_id' value='${report.getReportedUserID()}' />
                     </c:url>"
-						class="text-blue-500 hover:underline">${report.getTitle()} </a></td>
-					<td class="px-6 py-4">${report.getUsersReported()}</td>
-					<td class="px-6 py-4">
-						<button data-questionid="${report.getQuestionID()}"
-							class="see-report-detail-btn">See more detail</button>
-					</td>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
+								class="text-blue-500 hover:underline">${report.getTitle()} </a></td>
+							<td class="px-6 py-4 ">${report.getUsersReported()}</td>
+							<td class="px-6 py-4">
+								<button data-questionid="${report.getQuestionID()}"
+									class="see-report-detail-btn bg-orange-100 text-orange-500 w-[100px] py-1 rounded-md">See
+									detail</button>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
 
 		<div class="mt-4 flex items-center justify-center gap-6">
 			<c:choose>

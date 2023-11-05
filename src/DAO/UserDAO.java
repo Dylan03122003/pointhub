@@ -343,7 +343,7 @@ public class UserDAO extends BaseDAO {
 				+ "FROM following_relationships f "
 				+ "JOIN users u ON f.followed_user_id = u.user_id "
 				+ "GROUP BY f.followed_user_id, u.username, u.photo "
-				+ "ORDER BY follower_count DESC " + "LIMIT 5;";
+				+ "ORDER BY follower_count DESC, u.created_at ASC LIMIT 5;";
 
 		try {
 			ResultSet resultSet = executeQuery(query);
@@ -361,6 +361,57 @@ public class UserDAO extends BaseDAO {
 			e.printStackTrace();
 		}
 		return topFivePopularUsers;
+	}
+	public ArrayList<User> getFollowers(int followedUserID, int limit,
+			int currentFollowersSize) {
+		ArrayList<User> followers = new ArrayList<User>();
+		String query = "SELECT f.user_id, u.username, u.email, u.photo "
+				+ "FROM following_relationships AS f "
+				+ "JOIN users AS u ON f.user_id = u.user_id "
+				+ "WHERE f.followed_user_id = ? LIMIT ? OFFSET ?";
+
+		try {
+			ResultSet result = executeQuery(query, followedUserID, limit,
+					currentFollowersSize);
+			while (result.next()) {
+				int userID = result.getInt("user_id");
+				String username = result.getString("username");
+				String email = result.getString("email");
+				String photo = result.getString("photo");
+
+				User user = new User(userID, username, email, photo);
+
+				followers.add(user);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return followers;
+	}
+
+	public User getUserForNotification(int userID) {
+		String query = "SELECT username, photo FROM users WHERE user_id = ?";
+		try {
+			ResultSet result = executeQuery(query, userID);
+			if (result.next()) {
+				String username = result.getString("username");
+				String photo = result.getString("photo");
+
+				User user = new User();
+				user.setUserID(userID);
+				user.setUsername(username);
+				user.setPhoto(photo);
+
+				return user;
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

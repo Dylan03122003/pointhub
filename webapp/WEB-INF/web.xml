@@ -111,6 +111,8 @@
     <url-pattern>/update-profile</url-pattern>
     <url-pattern>/user-profile</url-pattern>
     <url-pattern>/follow-user</url-pattern>
+    <url-pattern>/view-followers</url-pattern>
+    <url-pattern>/check-notification</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -133,5 +135,15 @@
     <url-pattern>/topics</url-pattern>
     <url-pattern>/add-topic</url-pattern>
     <url-pattern>/update-topic</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>TestController</display-name>
+    <servlet-name>TestController</servlet-name>
+    <servlet-class>controller.TestController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TestController</servlet-name>
+    <url-pattern>/test-route</url-pattern>
   </servlet-mapping>
 </web-app>
