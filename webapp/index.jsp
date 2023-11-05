@@ -287,7 +287,29 @@ width: 100%;
 	margin-right: 20px;
 }
 
+.users a div {
+position: relative;
+}
 
+.users a div .icon-medal-container {
+position: absolute;
+bottom: -10px;
+right: 20px;
+}
+
+.users a div .icon-medal-container .icon-medal {
+width: 25px;
+}
+
+.users a div .icon-medal-container p {
+position: absolute;
+width: 8px;
+text-align: center;
+font-weight: 550;
+right: 29px;
+bottom: 13px;
+font-size: 12px;
+}
 
 </style>
 </head>
@@ -313,12 +335,24 @@ ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
 				users</h2>
 			<div class="users"
 				style="max-width: 1000px; display: flex; justify-content: center; flex-wrap: wrap; padding: 10px; margin-bottom: 30px; margin-inline: auto">
+				<c:set var="counter" value="0" scope="page"></c:set>
 				<c:forEach var="user" items="<%=topFivePopularUsers%>">
+				<c:set var="index" value="${counter}" scope="page"></c:set>
 					<a href="user-profile?userID=${user.getUserID()}"
 						style="display: inline-block; padding: 15px 20px"
-						class="popular-user-profile"> <img alt=""
+						class="popular-user-profile"> 
+						<div>
+						<img alt=""
 						src="img/${user.getPhoto()}" style="margin: auto"
 						class="w-[70px] h-[70px] object-cover rounded-full">
+						<div class="icon-medal-container">
+						
+						<img class="icon-medal" alt="" src="img/medal.png">
+						<p>${ counter + 1}<p>
+						</div>
+						</div>
+						
+						
 						<div style="padding-top: 8px; margin: auto">
 							<p style="color: #888; text-align: center; font-size: 16px; font-weight: 450">${user.getUsername()}</p>
 							<p style="color: #888; text-align: center; font-size: 15px">
@@ -326,6 +360,7 @@ ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
 							</p>
 						</div>
 					</a>
+					 <c:set var="counter" value="${counter + 1}" scope="page"></c:set>
 				</c:forEach>
 			</div>
 		</div>
