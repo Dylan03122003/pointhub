@@ -204,20 +204,34 @@ public class UserController extends HttpServlet {
 		if ((!userDAO.isAdmin(Authentication.getCurrentUserID(request)))) {
 		} else {
 			if (userDAO.isAdmin(Authentication.getCurrentUserID(request))) {
-				int rowsPerPage = 2;
+				int rowsPerPage = 5;
+				String searchKey = request.getParameter("searchKey");
+
+				boolean hasSearchKey = searchKey != null
+						&& !searchKey.isEmpty();
 
 				int currentPage = request.getParameter("page") == null
 						? 1
 						: Integer.parseInt(request.getParameter("page"));
-				double totalUserPages = (double) Math
-						.ceil((double) userDAO.getTotalUsers()
-								/ (double) rowsPerPage);
+				double totalUserPages = 0;
+
+				if (hasSearchKey) {
+					totalUserPages = (double) Math.ceil((double) userDAO
+							.getTotalUsersWithSearchKey(searchKey)
+							/ (double) rowsPerPage);
+				} else {
+					totalUserPages = (double) Math
+							.ceil((double) userDAO.getTotalUsers()
+									/ (double) rowsPerPage);
+				}
 
 				ArrayList<User> users = userDAO.getUsers(rowsPerPage,
-						currentPage);
+						currentPage, searchKey);
 				request.setAttribute("users", users);
 				request.setAttribute("currentUserPage", currentPage);
 				request.setAttribute("totalUserPages", totalUserPages);
+				request.setAttribute("searchKey", searchKey);
+
 				RequestDispatcher dispatcher = request
 						.getRequestDispatcher("user-list.jsp");
 				dispatcher.forward(request, response);
