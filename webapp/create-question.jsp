@@ -37,9 +37,9 @@
 <title>Post Edit</title>
 
 <style>
+
 @import
-	url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap')
-	;
+	url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 * {
 	margin: 0;
@@ -194,38 +194,139 @@ ArrayList<Topic> topics = new TopicDAO().getTopics();
 		<div class="small-container">
 			<form class="content" action="create-question" method="post">
 				<label>Your topic<i class="fa-solid fa-star-of-life"></i></label> <select
-					required="required" name="questionTopic" id="">
+					required="required" name="questionTopic" id="questionTopicSelect">
+
 					<option value="">Choose one topic</option>
 					<c:forEach var="topic" items="<%=topics%>">
 						<option value="${topic.getTopicID()}">${topic.getTopicName()}</option>
 					</c:forEach>
-				</select>
-				<div class="input-item">
-					<label>Your title<i class="fa-solid fa-star-of-life"></i></label> <input
-						required="required" name="title" type="text"
-						placeholder="Type catching attention title" />
-				</div>
-				<label>Your tag<i class="fa-solid fa-star-of-life"></i>
-				</label> <input required="required" name="tags" type="text"
-					placeholder="Type tags (comma-separated)" /> <label>Your
-					question<i class="fa-solid fa-star-of-life"></i>
+
+				</select> <span id="error-topic" style="display: block; color: red; font-size: 14px; margin-bottom: 15px;"></span>
+				 <label>Your
+					title<i class="fa-solid fa-star-of-life"></i>
+				</label> <input required="required" name="title" id="question-title"
+					type="text" placeholder="Type catching attention title" /> <span
+					id="error-title"
+					style="display: block; color: red; font-size: 14px; margin-bottom: 15px;"></span>
+
+				<label>Your tag<i class="fa-solid fa-star-of-life"></i></label> <input
+					required="required" name="tags" type="text" id="question-tag"
+					placeholder="Type tags (comma-separated)" value="" />
+					<span id="error-tag" style="display: block; color: red; font-size: 14px; margin-bottom: 15px;"></span>
+					
+					
+					 <label>Your question<i class="fa-solid fa-star-of-life"></i>
 				</label>
 				<textarea required="required" name="question_content"
 					id="second-input" cols="86" rows="10"
 					placeholder="Type your question"></textarea>
+
+				<span id="error-content"
+					style="display: block; color: red; font-size: 14px; margin-bottom: 15px;"></span>
 
 				<label>Your code</label>
 				<textarea name="code_block" id="secorond-input" cols="86" rows="10"
 					placeholder="Paste your code"></textarea>
 
 				<div class="btn-toggle">
-					<button class="btn" type="submit">
+					<button class="btn" id="publish-btn" type="button">
 						<i class="bx bx-send"></i>Publish
 					</button>
 				</div>
 			</form>
 		</div>
 	</div>
+
+	<script>
+      // const toggleBtn = document.getElementById("title-btn");
+      const publishBtn = document.getElementById("publish-btn");
+      const errorTitle = document.getElementById("error-title");
+      const errorContent = document.getElementById("error-content");
+      const questionTitle = document.getElementById("question-title");
+      const questionTag = document.getElementById("question-tag");
+      const errorTag = document.getElementById("error-tag");
+      const questionContent = document.getElementById("second-input");
+      const questionTopicSelect = document.getElementById("questionTopicSelect");
+      const errorTopic = document.getElementById("error-topic");
+      
+      let tags;
+      // toggleBtn.addEventListener("click", function (e) {
+      //   e.preventDefault();
+      //   console.log(questionTitle.value);
+      // });
+
+      
+        publishBtn.addEventListener("click", function (e) {
+        	let isValid = true;
+        	 e.preventDefault();
+        	 if(questionTopicSelect.value === "") {
+           	  errorTopic.innerHTML = "Please select a topic.";
+           	  isValid = false;
+             } else {
+           	  errorTopic.innerHTML = "";
+             }
+        	 
+        	 if(questionTag.value === "") {
+        		 errorTag.innerHTML = "Please fill in tag.";
+              	  isValid = false;
+                } else {
+                	errorTag.innerHTML = "";
+                }
+        	 
+          if (
+            questionTitle.value.trim().length < 5 ||
+            questionTitle.value.trim().length > 100
+          ) {
+            errorTitle.innerHTML = "Tittle must be between 5 and 100 characters .";
+            isValid = false;
+     // Prevent form submission
+          } else {
+        	  errorTitle.innerHTML ="";
+        	// Continue with form submission
+          }
+          
+         
+
+          
+
+          if (questionContent.value.length < 20) {
+            errorContent.innerHTML = "Content must be more than 20 characters.";
+            isValid = false;     // Prevent form submission
+          } else {
+        	  errorContent.innerHTML = "";
+        	// Continue with form submission
+          }
+          
+          tags = questionTag.value
+          .split(",")
+          .map((tag) => tag.trim())
+          .join(",");
+
+          console.log(questionTitle.value);
+          console.log(tags);
+
+         questionTag.value = tags;
+         
+         if (isValid) {
+         	  // If all validations pass, you can submit the form
+           document.querySelector("form").submit();
+           }
+         
+         
+        });
+        
+        
+      // toggleBtn.addEventListener("click", () => {
+      //   console.log(questionTitle.value);
+      // });
+
+      
+     // 	questionTitle.value = "";
+       //  questionTag.value = "";
+       //  questionContent.value = "";
+       //  errorContent.innerHTML = "";
+       //  errorTitle.innerHTML ="";
+    </script>
 </body>
 </html>
 
