@@ -15,20 +15,32 @@ import util.CustomLog;
 public class UserDAO extends BaseDAO {
 
 	public User getUserProfile(int currentUserID, int viewedUserID) {
-		String query = "SELECT " + "    u.email, " + "    u.username, "
-				+ "    u.photo, " + "    u.about, " + "    sa.facebook_link, "
-				+ "    sa.twitter_link, " + "    sa.instagram_link, "
-				+ "    sa.github_link, "
-				+ "    COUNT(q.question_id) AS total_questions, " + "    CASE "
-				+ "        WHEN fr.followed_user_id IS NOT NULL THEN 1 "
-				+ "        ELSE 0 " + "    END AS is_following, "
-				+ "    (SELECT COUNT(*) FROM following_relationships WHERE followed_user_id = ?) AS followers "
-				+ "FROM " + "    users u " + "LEFT JOIN "
-				+ "    social_accounts sa ON u.user_id = sa.user_id "
-				+ "LEFT JOIN " + "    questions q ON u.user_id = q.user_id "
-				+ "LEFT JOIN "
-				+ "    following_relationships fr ON u.user_id = fr.followed_user_id AND fr.user_id = ? "
-				+ "WHERE " + "    u.user_id = ?";
+		String query = "SELECT " +
+			    "u.email, " +
+			    "u.username, " +
+			    "u.photo, " +
+			    "u.about, " +
+			    "sa.facebook_link, " +
+			    "sa.twitter_link, " +
+			    "sa.instagram_link, " +
+			    "sa.github_link, " +
+			    "COUNT(q.question_id) AS total_questions, " +
+			    "CASE " +
+			    "    WHEN fr.followed_user_id IS NOT NULL THEN 1 " +
+			    "    ELSE 0 " +
+			    "END AS is_following, " +
+			    "(SELECT COUNT(*) FROM following_relationships WHERE followed_user_id = ?) AS followers, " +
+			    "l.ward, " +
+			    "l.district, " +
+			    "l.province " +
+			    "FROM " +
+			    "users u " +
+			    "LEFT JOIN social_accounts sa ON u.user_id = sa.user_id " +
+			    "LEFT JOIN questions q ON u.user_id = q.user_id " +
+			    "LEFT JOIN following_relationships fr ON u.user_id = fr.followed_user_id AND fr.user_id = ? " +
+			    "LEFT JOIN locations l ON u.location_id = l.location_id " +
+			    "WHERE " +
+			    "u.user_id = ?";
 
 		try {
 			ResultSet result = executeQuery(query, viewedUserID, currentUserID,
@@ -46,12 +58,18 @@ public class UserDAO extends BaseDAO {
 				boolean isFollowedByCurrentUser = result
 						.getBoolean("is_following");
 				int numberOfFollowers = result.getInt("followers");
+				String ward = result.getString("ward");
+				String district = result.getString("district");
+				String province = result.getString("province");
 
 				User user = new User(viewedUserID, username, email, photo,
 						about, facebookLink, twitterLink, instagramLink,
 						githubLink, totalQuestions);
 				user.setFollowedByCurrentUser(isFollowedByCurrentUser);
 				user.setNumberOfFollowers(numberOfFollowers);
+				user.setWard(ward);
+				user.setDistrict(district);
+				user.setProvince(province);
 
 				return user;
 			}
@@ -412,6 +430,9 @@ public class UserDAO extends BaseDAO {
 			e.printStackTrace();
 		}
 		return null;
+		
 	}
-
+public static void main(String[] args) {
+	System.out.println(new UserDAO().getUserProfile(19, 19));
+}
 }
