@@ -9,13 +9,18 @@ import model.Topic;
 public class TopicDAO extends BaseDAO {
 	public ArrayList<Topic> getTopics() {
 		ArrayList<Topic> topics = new ArrayList<Topic>();
-		String query = "SELECT * FROM topics";
+		String query = "SELECT t.topic_id, t.topic_name, COUNT(q.topic_id) AS question_count "
+				+ "FROM topics t "
+				+ "LEFT JOIN questions q ON t.topic_id = q.topic_id "
+				+ "GROUP BY t.topic_id, t.topic_name"
+				+ "";
 		try {
 			ResultSet result = executeQuery(query);
 			while (result.next()) {
 				int topicID = result.getInt("topic_id");
 				String topicName = result.getString("topic_name");
-				topics.add(new Topic(topicID, topicName));
+				int countQuestion = result.getInt("question_count");
+				topics.add(new Topic(topicID, topicName, countQuestion));
 			}
 
 		} catch (SQLException e) {
@@ -23,7 +28,9 @@ public class TopicDAO extends BaseDAO {
 		}
 		return topics;
 	}
-
+	
+	
+   
 	public String getTopicNameByID(int topicID) {
 		String topicName = "";
 		String query = "SELECT topic_name FROM topics WHERE topic_id = ?";
@@ -54,9 +61,5 @@ public class TopicDAO extends BaseDAO {
 
 	}
 
-	public static void main(String[] args) {
 
-		// CustomLog.logList(new TopicDAO().getAllTopics());
-
-	}
 }
