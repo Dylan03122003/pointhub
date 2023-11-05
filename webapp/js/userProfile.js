@@ -63,13 +63,19 @@ const handleShowNav = (event) => {
 	about.style.display = "none";
 	question.style.display = "none";
 	bookmark.style.display = "none";
-	questionNav.style.opacity = "0.5";
-	if (bookmarkNav)
-		bookmarkNav.style.opacity = "0.5";
-	aboutNav.style.opacity = "0.5";
+	questionNav.style.color = "#bdbdbd";
+	questionNav.style.borderBottom = "none";
+
+	if (bookmarkNav) {
+		bookmarkNav.style.color = "#bdbdbd";
+		bookmarkNav.style.borderBottom = "none";
+	}
+	aboutNav.style.color = "#bdbdbd";
+	aboutNav.style.borderBottom = "none";
 
 	content.style.display = "block";
-	event.target.style.opacity = "1";
+	event.target.style.color = "#ff9800";
+	event.target.style.borderBottom = "2px solid";
 }
 
 
@@ -92,11 +98,15 @@ function handleFollowUser() {
 			if (isFollowed) {
 				button.text("Following");
 				followersSumElm.text(followersSum + 1)
-				btnfollow.style.background = "#9E9E9E";
+				btnfollow.style.background = "rgb(219,219,219)";
+				btnfollow.style.color = "#37474f";
+
 			} else {
 				button.text("Follow");
 				followersSumElm.text(followersSum - 1)
-				btnfollow.style.background = "#F48023";
+				btnfollow.style.background = "#f4802347";
+				btnfollow.style.color = "#f48023";
+
 			}
 
 		},
@@ -314,7 +324,8 @@ $("#bookmarks-nav").click(function(event) {
 })
 
 if (btnfollow && btnfollow.innerText == "Following") {
-	btnfollow.style.background = "#9E9E9E";
+	btnfollow.style.background = "rgb(219,219,219)";
+	btnfollow.style.color = "#37474f";
 }
 
 $("#follow-btn").click(handleFollowUser)
@@ -329,3 +340,4 @@ $(".view-more-followers-btn").click(handleViewMoreFollowers)
 requireLoginModal.click(closeRequireLoginModal)
 $(".require-login-close-btn").click(closeRequireLoginModal)
 $("#followers-sum-container").click(handleShowFollowers)
+$("#followers-sum-container2").click(handleShowFollowers)

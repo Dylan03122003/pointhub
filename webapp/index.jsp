@@ -92,6 +92,8 @@
 	display: inline-block;
 	margin: 6px;
 	text-decoration: none;
+	background: #f5f5f5;
+	color: #616161;
 }
 
 .right-small-container .category .active-topic {
@@ -156,6 +158,7 @@
 .question-item .question-content p {
 	font-size: 14px;
 	margin-bottom: 16px;
+	color: #616161;
 }
 
 .question-item .question-category {
@@ -170,8 +173,8 @@
 	margin-bottom: 8px;
 	margin-right: 8px;
 	border-radius: 5px;
-	background-color: #eaeaea;
-	color: #808080;
+	color: #ff9800;
+	background: #fff3e0;
 }
 
 #menu-bar-right {
@@ -275,29 +278,28 @@
 }
 
 .users a div {
-position: relative;
+	position: relative;
 }
 
 .users a div .icon-medal-container {
-position: absolute;
-bottom: -10px;
-right: 20px;
+	position: absolute;
+	bottom: -10px;
+	right: 20px;
 }
 
 .users a div .icon-medal-container .icon-medal {
-width: 25px;
+	width: 25px;
 }
 
 .users a div .icon-medal-container p {
-position: absolute;
-width: 8px;
-text-align: center;
-font-weight: 550;
-right: 29px;
-bottom: 13px;
-font-size: 12px;
+	position: absolute;
+	width: 8px;
+	text-align: center;
+	font-weight: 550;
+	right: 29px;
+	bottom: 13px;
+	font-size: 12px;
 }
-
 </style>
 </head>
 
@@ -318,35 +320,35 @@ ArrayList<User> topFivePopularUsers = new UserDAO().getTopFivePopularUsers();
 
 		<div class="popular-users">
 			<h2
-				style="color: #888; font-weight: 550; text-align: center; font-size: 1.2rem; margin-left: 15px">Top
+				style="color: #fb8c00; font-weight: 600; text-align: center; font-size: 1.2rem; margin-left: 15px">Top
 				5 popular users</h2>
 			<div class="users"
 				style="max-width: 1000px; display: flex; justify-content: center; flex-wrap: wrap; padding: 10px; margin-bottom: 30px; margin-inline: auto">
 				<c:set var="counter" value="0" scope="page"></c:set>
 				<c:forEach var="user" items="<%=topFivePopularUsers%>">
-				<c:set var="index" value="${counter}" scope="page"></c:set>
+					<c:set var="index" value="${counter}" scope="page"></c:set>
 					<a href="user-profile?userID=${user.getUserID()}"
 						style="display: inline-block; padding: 15px 20px"
-						class="popular-user-profile"> 
+						class="popular-user-profile">
 						<div>
-						<img alt=""
-						src="img/${user.getPhoto()}" style="margin: auto"
-						class="w-[70px] h-[70px] object-cover rounded-full">
-						<div class="icon-medal-container">
-						
-						<img class="icon-medal" alt="" src="img/medal.png">
-						<p>${ counter + 1}<p>
-						</div>
+							<img alt="" src="img/${user.getPhoto()}" style="margin: auto"
+								class="w-[70px] h-[70px] object-cover rounded-full">
+							<div class="icon-medal-container">
+
+								<img class="icon-medal" alt="" src="img/medal.png">
+								<p>${ counter + 1}
+								<p>
+							</div>
 						</div>
 						<div style="padding-top: 8px; margin: auto">
 							<p
-								style="color: #888; text-align: center; font-size: 16px; font-weight: 450">${user.getUsername()}</p>
-							<p style="color: #888; text-align: center; font-size: 15px">
+								style="color: #757575; text-align: center; font-size: 16px; font-weight: 450">${user.getUsername()}</p>
+							<p style="color: #757575; text-align: center; font-size: 15px">
 								<span>${user.getNumberOfFollowers()}</span> <span>followers</span>
 							</p>
 						</div>
 					</a>
-					 <c:set var="counter" value="${counter + 1}" scope="page"></c:set>
+					<c:set var="counter" value="${counter + 1}" scope="page"></c:set>
 				</c:forEach>
 			</div>
 

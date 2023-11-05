@@ -31,32 +31,36 @@ function handleUpdateTopic() {
 	const topicNameElm = topicContainer.find('.topic-name');
 	const topicID = topicContainer.data('topicid');
 	const updateButton = $(this); // Save a reference to the "Update" button
-
+	
+	const topicTotalElm = $(`#Total[data-topicid="${topicID}"]`);
+	topicTotalElm.addClass("hidden")
 	// Create an input field to edit the topic name
 	const topicNameInput = $("<input>").attr({
 		type: "text",
-		class: "border-[2px] px-2 border-solid border-gray sm:w-[215px] w-[120px]",
+		class: "border-[2px] px-[5px] border-solid border-gray ml-[33px] w-[110px]",
 		value: topicNameElm.text()
 	});
 
 	// Create a "Save" button
 	const saveButton = $("<button>").attr({
 		type: "button",
-		class: "bg-[#2980b9] text-white px-3 py-1 rounded-md lg:ml-[300px] md:ml-[300px] sm:ml-[205px] ml-[50px]"
+		class: "bg-[#2980b9] text-[12px] text-white px-[5px] mt-[15px] py-[5px] rounded-md h-[30px] w-[50px] mr-[5px] "
 	}).text("Save");
 
 	// Create a "Cancel" button
 	const cancelButton = $("<button>").attr({
 		type: "button",
-		class: "bg-red-400 text-white px-3 py-1 rounded-md ml-[5px]"
+		class: "bg-red-400 text-[12px] text-white px-[5px] py-[5px] rounded-md h-[30px] w-[53px] mt-[15px]"
 	}).text("Cancel");
 
 
 
 	// Replace the topic name element with the input field
-	topicNameElm.replaceWith(topicNameInput, saveButton);
+	topicNameElm.replaceWith(topicNameInput, "<div></div>");
 
+	topicContainer.append(saveButton)
 	topicContainer.append(cancelButton)
+
 
 	// Hide the "Update" button
 	updateButton.addClass("hidden")
@@ -79,6 +83,7 @@ function handleUpdateTopic() {
 					saveButton.remove();
 					cancelButton.remove();
 					updateButton.removeClass("hidden");
+					topicTotalElm.removeClass("hidden")
 				} else {
 					showToast("Updated successfully!", true)
 					topicNameElm.text(updatedTopicName)
@@ -86,6 +91,7 @@ function handleUpdateTopic() {
 					saveButton.remove();
 					cancelButton.remove();
 					updateButton.removeClass("hidden");
+					topicTotalElm.removeClass("hidden")
 				}
 			},
 			error: function() {
@@ -101,6 +107,7 @@ function handleUpdateTopic() {
 		topicNameInput.replaceWith(topicNameElm);
 		saveButton.remove();
 		cancelButton.remove();
+		topicTotalElm.removeClass("hidden")
 		updateButton.removeClass("hidden"); // Show the "Update" button using the reference
 	});
 }

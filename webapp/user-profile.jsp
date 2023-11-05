@@ -19,7 +19,7 @@
 	integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!--  link rel="stylesheet" href="css/user_profile.css">-->
-<script defer="defer" type="module" src="js/user-profile.js"></script>
+<script defer="defer" type="module" src="js/userProfile.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 
 <title>Document</title>
@@ -30,10 +30,6 @@
 @import
 	url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&family=Roboto:wght@100;400&display=swap')
 	;
-
-* {
-	transition: 0.2s linear;
-}
 
 html {
 	background: #FAFAFA;
@@ -73,13 +69,12 @@ html {
 	color: #37474f;
 	font-weight: 500;
 	letter-spacing: 1px;
-		margin-bottom: 20px;
-	
+	margin-bottom: 20px;
 }
 
 .viewProfile .profile #contact {
-	margin-top: 20px; 
-	font-size : 18px;
+	margin-top: 20px;
+	font-size: 18px;
 	font-weight: 600;
 	letter-spacing: 1px;
 	color: #212121;
@@ -97,15 +92,35 @@ html {
 }
 
 .viewProfile .profile .logo-social {
-	gap: 13px;
 	display: flex;
-	font-size: 16px;
+	font-size: 19px;
 	margin-bottom: 30px;
 	margin-top: 10px;
+	align-items: center;
+}
+
+.viewProfile .profile .logo-social i {
+	margin-right: 13px;
 }
 
 .viewProfile .profile .logo-social a {
 	color: #000;
+}
+
+#face {
+	width: 18px;
+	height: 18px;
+	object-fit: cover;
+	margin-bottom: 1px;
+	margin-right: 15px;
+}
+
+#ins {
+	width: 27px;
+	height: 27px;
+	object-fit: cover;
+	margin-right: 15px;
+	object-fit: cover;
 }
 
 .viewProfile .profile .stats {
@@ -114,14 +129,15 @@ html {
 	height: 70px;
 	align-items: center;
 	justify-content: space-around;
-	background-color: #FFBF8C;
+	background-color: #fff3e0;
+	color: #ff9800;
 	border-radius: 25px;
 }
 
 .viewProfile .profile .stats span {
 	font-weight: 600;
 	display: flex;
-	gap: 1rem;
+	gap: 7px;
 	font-size: 15px;
 	align-items: center
 }
@@ -141,15 +157,20 @@ html {
 	font-weight: 600;
 	padding: 12px 13px;
 	letter-spacing: 0.5px;
-	background-color: #F48023;
+	color: #ff9800;
+	background-color: #fff3e0;
 	border-radius: 5px;
+}
+
+#btn-update i {
+	margin-right: 4px;
 }
 
 #follow-btn {
 	position: absolute;
 	top: 0;
 	right: 0;
-	color: #fff;
+	color: #f48023;
 	text-decoration: none;
 	display: block;
 	border: none;
@@ -157,7 +178,7 @@ html {
 	font-weight: 500;
 	padding: 9px 15px;
 	letter-spacing: 0.5px;
-	background-color: #F48023;
+	background-color: #f4802347;
 	border-radius: 5px;
 }
 
@@ -168,36 +189,35 @@ html {
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	font-size: 18px;
 	border-radius: 5px;
-	border-top: none;
+	padding: 15px;
 }
 
 .profile-nav ul {
-	margin: 0;
+	margin-bottom: 10px;
 	padding: 0;
 	display: flex;
-	gap: 2px;
-	padding: 3px 0 0 0;
+	padding: 0 0 0 0;
 	list-style-type: none;
-	background-color: #ffbf8c63;
-	border-radius: 5px;
+	border-bottom: 1px solid #bdbdbd;
 }
 
 .profile-nav ul li {
-	background-color: #FFBF8C;
-	font-weight: 600;
-	color: #333;
+	font-weight: 500;
+	color: #ff9800;
 	padding: 10px 20px;
-	border-radius: 3px;
-	box-shadow: 0 0.5px 1.5px rgba(0, 0, 0, 0.1);
-	box-shadow: 2px 1px 5px 0px rgba(0, 0, 0, 0.15);
 }
 
 .body-item .content {
 	display: none;
+	color: #616161;
 }
 
-.body-item #posts-nav {
-	opacity: 0.5;
+#about-nav {
+	border-bottom: 2px solid;
+}
+
+.body-item #posts-nav, #bookmarks-nav {
+	color: #bdbdbd;
 }
 
 .body-item #about {
@@ -228,7 +248,7 @@ html {
 
 @media ( max-width : 732px) {
 	.viewProfile {
-		margin: 10px;
+		margin: 20px;
 	}
 	.viewProfile .profile .stats1 {
 		display: none;
@@ -241,7 +261,10 @@ html {
 		margin-bottom: auto;
 	}
 	.body-item {
-		width: 500px;
+		width: 100%;
+	}
+	#btn-update {
+		top: -15px;
 	}
 }
 
@@ -249,6 +272,7 @@ html {
 	.viewProfile .profile {
 		justify-content: center;
 		text-align: center;
+		gap: 30px;
 	}
 	.viewProfile {
 		margin: auto;
@@ -262,9 +286,32 @@ html {
 	}
 	.body-item {
 		width: 450px;
+		margin-left: auto;
+		margin-right: auto;
 	}
 	.viewProfile .profile img {
 		margin-top: 33px;
+	}
+	#face {
+		margin: auto;
+		margin-bottom: 1px;
+		margin-right: 15px;
+	}
+	#ins {
+		margin: auto;
+		margin-bottom: 1px;
+		margin-right: 14px;
+	}
+	.profile-nav ul {
+		justify-content: center;
+		letter-spacing: 0.3px;
+	}
+	.body-item #about p {
+		text-align: justify;
+		letter-spacing: 0.5px;
+	}
+	#btn-update {
+		top: 0px;
 	}
 }
 
@@ -340,6 +387,11 @@ html {
 User user = (User) request.getAttribute("userProfile");
 boolean isCurrentUser = (boolean) request.getAttribute("isCurrentUser");
 int currentUserID = (int) Authentication.getCurrentUserID(request);
+String ward = user.getWard();
+String district = user.getDistrict();
+String province = user.getProvince();
+
+System.out.println(ward);
 %>
 <body data-userprofileid="<%=user.getUserID()%>"
 	data-currentuserid="<%=currentUserID%>">
@@ -361,13 +413,15 @@ int currentUserID = (int) Authentication.getCurrentUserID(request);
 					<div>
 						<h2 class="font-medium text-gray-700">@DuongCao</h2>
 						<p class="text-gray-600">duong@gmail.com</p>
+						<button class="p-[10px] bg-gray">Follow</button>
+
 					</div>
 				</a>
+
 			</div>
 
 			<button class="view-more-followers-btn text-gray-600">View
 				more</button>
-
 			<button
 				class="followers-modal-btn text-3xl text-gray-700 absolute top-4 right-4"
 				data-dismiss="modal">&times;</button>
@@ -413,15 +467,30 @@ int currentUserID = (int) Authentication.getCurrentUserID(request);
 					<span>Email:</span>
 					<%=user.getEmail()%>
 				</p>
+				<p id="email">
+					<span>Address:</span>
+					<c:set var="ward" value="<%=user.getWard()%>" />
+					<c:set var="district" value="<%=user.getDistrict()%>" />
+					<c:set var="province" value="<%=user.getProvince()%>" />
+					<%=user.getWard()%>
+					<c:if test="${ward != '' && district != ''}">, </c:if>
+					<%=user.getDistrict()%>
+					<c:if test="${province != '' && (district != '' || ward != '')}">, </c:if>
+					<%=user.getProvince()%>
+				</p>
+
 				<div class="logo-social">
-					<a target="_blank" href="<%=user.getFacebookLink()%>"><i
-						class="fa-brands fa-facebook"></i></a> <a target="_blank"
+					<a target="_blank" href="<%=user.getFacebookLink()%>"><img
+						id="face" alt=""
+						src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Facebook_Logo_2023.png"
+						style=""> </a> <a target="_blank"
 						href="<%=user.getTwitterLink()%>"><i
 						class="fa-brands fa-square-x-twitter"></i></a> <a target="_blank"
-						href="<%=user.getInstagramLink()%>"><i
-						class="fa-brands fa-instagram"></i></a> <a target="_blank"
+						href="<%=user.getInstagramLink()%>"><img id="ins" alt=""
+						src="https://cdn-icons-png.flaticon.com/512/3621/3621435.png"
+						style=""></a> <a target="_blank"
 						href="<%=user.getGithubLink()%>"><i
-						class="fa-brands fa-github"></i></a>
+						class="fa-brands fa-github" style="margin-left: -4px;"></i></a>
 				</div>
 				<div class="stats stats1">
 					<span> <i class="fa-regular fa-circle-question"></i> <span><%=user.getTotalQuestions()%></span>
@@ -434,9 +503,8 @@ int currentUserID = (int) Authentication.getCurrentUserID(request);
 			</div>
 			<c:if test="<%=isCurrentUser%>">
 				<a id="btn-update"
-					href="retrieve-profile?userID=<%=user.getUserID()%>"> <i
-					class="fa-regular fa-pen-to-square"></i>
-				</a>
+					href="retrieve-profile?userID=<%=user.getUserID()%>"><i
+					class="fa-regular fa-pen-to-square"></i> Update </a>
 			</c:if>
 
 			<c:if test="<%=!isCurrentUser%>">
@@ -445,8 +513,8 @@ int currentUserID = (int) Authentication.getCurrentUserID(request);
 			<div class="stats stats2">
 				<span> <i class="fa-regular fa-circle-question"></i> <span><%=user.getTotalQuestions()%></span>
 					Questions
-				</span> <span id="followers-sum-container"> <i
-					class="fa-solid fa-user-group"></i> <span id="followers-sum"><%=user.getNumberOfFollowers()%>
+				</span> <span id="followers-sum-container2" class="cursor-pointer">
+					<i class="fa-solid fa-user-group"></i> <span id="followers-sum"><%=user.getNumberOfFollowers()%>
 				</span> Followers
 				</span>
 			</div>

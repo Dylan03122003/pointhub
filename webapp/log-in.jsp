@@ -33,6 +33,7 @@ body {
 }
 
 .login-form {
+	margin-top: -30px; 
 	display: flex;
 	text-align: center;
 	justify-content: space-between;
@@ -105,7 +106,6 @@ body {
 .form-group input:focus+label, .form-group input:valid+label {
 	top: 9px;
 	font-size: 9px;
-	background-color: #fff;
 }
 
 #btn-login {
@@ -116,7 +116,7 @@ body {
 	color: white;
 	font-weight: 600;
 	border: none;
-	padding: 12px 0px 11px 0px;
+	padding: 10px 0px 11px 0px;
 	border-radius: 5px;
 	background: var(--Primary-2, #F48023);
 }

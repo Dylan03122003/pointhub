@@ -23,6 +23,7 @@
 	href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200&family=Roboto:wght@100;300;400;500;700&family=Rubik:wght@300;400;500;600&display=swap"
 	rel="stylesheet" />
 
+
 <!-- ICONS -->
 <script src="https://kit.fontawesome.com/e28a5c6413.js"
 	crossorigin="anonymous"></script>
@@ -36,6 +37,10 @@
 <title>Post Edit</title>
 
 <style>
+
+@import
+	url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
 * {
 	margin: 0;
 	padding: 0;
@@ -72,21 +77,33 @@
 .content select, .content input {
 	display: block;
 	width: 100%;
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 	border: 2px solid rgba(204, 204, 204, 0.5);
+	font-size: 16px;
+	font-weight: 500;
+	letter-spacing: 0.24px;
 }
 
 .content select, .content input, .content textarea {
-	font-size: 15px;
+	color: #444;
 	padding: 6px 10px;
-	color: rgb(141, 141, 141);
+	margin-bottom: 15px;
+	border: 2px solid rgba(204, 204, 204, 0.5);
 	border-radius: 5px;
+	width: 100%;
+	font-size: 16px;
+	font-weight: 500;
+	letter-spacing: 0.24px;
 }
 
 .content label {
 	display: block;
-	font-size: 14px;
 	margin-bottom: 3px;
+	color: #808080;
+	font-size: 17px;
+	font-style: normal;
+	font-weight: 600;
+	letter-spacing: 0.24px;
 }
 
 .content label i {
@@ -178,10 +195,12 @@ ArrayList<Topic> topics = new TopicDAO().getTopics();
 			<form class="content" action="create-question" method="post">
 				<label>Your topic<i class="fa-solid fa-star-of-life"></i></label> <select
 					required="required" name="questionTopic" id="questionTopicSelect">
+
 					<option value="">Choose one topic</option>
 					<c:forEach var="topic" items="<%=topics%>">
 						<option value="${topic.getTopicID()}">${topic.getTopicName()}</option>
 					</c:forEach>
+
 				</select> <span id="error-topic" style="display: block; color: red; font-size: 14px; margin-bottom: 15px;"></span>
 				 <label>Your
 					title<i class="fa-solid fa-star-of-life"></i>
@@ -196,8 +215,7 @@ ArrayList<Topic> topics = new TopicDAO().getTopics();
 					<span id="error-tag" style="display: block; color: red; font-size: 14px; margin-bottom: 15px;"></span>
 					
 					
-					 <label>Your
-					question<i class="fa-solid fa-star-of-life"></i>
+					 <label>Your question<i class="fa-solid fa-star-of-life"></i>
 				</label>
 				<textarea required="required" name="question_content"
 					id="second-input" cols="86" rows="10"
